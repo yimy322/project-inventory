@@ -56,6 +56,7 @@ public class FormMain extends JFrame {
 	 * Create the frame.
 	 */
 	public FormMain() {
+		setResizable(false);
 		setBackground(new Color(255, 255, 255));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 630);
@@ -68,7 +69,7 @@ public class FormMain extends JFrame {
 		
 		conteiner = new JPanel(new BorderLayout());
 		conteiner.setBackground(new Color(255, 255, 255));
-		conteiner.setBounds(0, 75, 1186, 476);
+		conteiner.setBounds(0, 75, 1200, 476);
 		contentPane.add(conteiner);
 		
 		// Instanciar el nuevo panel
@@ -87,7 +88,7 @@ public class FormMain extends JFrame {
         
         JPanel panel_header = new JPanel();
         panel_header.setBackground(new Color(198, 225, 241));
-        panel_header.setBounds(0, 0, 1186, 78);
+        panel_header.setBounds(0, 0, 1200, 78);
         contentPane.add(panel_header);
         panel_header.setLayout(null);
         
@@ -249,7 +250,7 @@ public class FormMain extends JFrame {
         
         JPanel panel_footer = new JPanel();
         panel_footer.setBackground(new Color(186, 199, 197));
-        panel_footer.setBounds(0, 552, 1186, 41);
+        panel_footer.setBounds(0, 552, 1200, 41);
         contentPane.add(panel_footer);
         panel_footer.setLayout(null);
         
