@@ -123,7 +123,7 @@ public class vCustomers extends JPanel {
         sp.setVisible(true);
         add(sp);
         
-        btnExcel = new JButton("Exportar", new ImageIcon("/home/yimy/Documents/universidad/project-inventory/src/main/resources/images/excel.png"));
+        btnExcel = new JButton("Exportar", new ImageIcon(getClass().getResource("/images/excel.png")));
         btnExcel.setBounds(1020, 430, 130, 25);
 		add(btnExcel);
 		
