@@ -61,7 +61,7 @@ public class vProducts extends JPanel {
 		add(textId);
 		textId.setColumns(10);
 		
-		lblNombre = new JLabel("Nombre");
+		lblNombre = new JLabel("Nombres");
 		lblNombre.setBounds(185, 47, 70, 15);
 		lblNombre.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblNombre);
