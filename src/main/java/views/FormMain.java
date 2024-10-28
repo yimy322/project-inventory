@@ -70,7 +70,7 @@ public class FormMain extends JFrame {
 
 		conteiner = new JPanel(new BorderLayout());
 		conteiner.setBackground(new Color(255, 255, 255));
-		conteiner.setBounds(0, 75, 1200, 476);
+		conteiner.setBounds(0, 75, 1186, 476);
 		contentPane.add(conteiner);
 
 		// Instanciar el nuevo panel
@@ -89,7 +89,7 @@ public class FormMain extends JFrame {
 
 		JPanel panel_header = new JPanel();
 		panel_header.setBackground(new Color(198, 225, 241));
-		panel_header.setBounds(0, 0, 1200, 78);
+		panel_header.setBounds(0, 0, 1186, 78);
 		contentPane.add(panel_header);
 		panel_header.setLayout(null);
 
