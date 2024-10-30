@@ -1,5 +1,5 @@
 package main;
-
+//DE ESTA CLASE NACE EL PROYECTO , SE VA LLAMAR EL LOGIN
 import views.FormMain;
 public class Main {
 
