@@ -1,11 +1,15 @@
 package views;
 
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import javax.swing.JTextField;
+import javax.swing.JPanel;
+import java.awt.Color;
+import java.awt.Rectangle;
 
 public class FormLogin {
 
@@ -39,8 +43,14 @@ public class FormLogin {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setUndecorated(true);
 		frame.setBounds(100, 100, 837, 380);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frame.setLocationRelativeTo(null); //CENTRA EL FRAME
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(51, 102, 153));
+		frame.getContentPane().add(panel, BorderLayout.CENTER);
+		panel.setLayout(null);
 	}
 }
