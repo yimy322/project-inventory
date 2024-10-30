@@ -30,9 +30,9 @@ public class vProducts extends JPanel {
 	JLabel lblCantidad;
 	JTextField txtCantidad;
 	JLabel lblCategoria;
-	JComboBox cbCategoria;
+	JComboBox<String> cbCategoria;
 	JLabel lblProveedor;
-	JComboBox cbProveedor;
+	JComboBox<String> cbProveedor;
 	JButton btnGuardar, btnLimpiar;
 	JTable jTableProducts;
 	DefaultTableModel model;
@@ -106,7 +106,7 @@ public class vProducts extends JPanel {
 		lblCategoria.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblCategoria);
 		
-		cbCategoria = new JComboBox();
+		cbCategoria = new JComboBox<String>();
 		cbCategoria.setBounds(131, 103, 150, 24);
 		add(cbCategoria);
 		
@@ -115,7 +115,7 @@ public class vProducts extends JPanel {
 		lblProveedor.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblProveedor);
 		
-		cbProveedor = new JComboBox();
+		cbProveedor = new JComboBox<String>();
 		cbProveedor.setBounds(420, 103, 150, 24);
 		add(cbProveedor);
 		
