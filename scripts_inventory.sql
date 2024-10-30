@@ -30,6 +30,7 @@ CREATE TABLE orders (
     id_order INT AUTO_INCREMENT PRIMARY KEY,
     order_date DATETIME,
     id_customer INT,
+    type INT,
     FOREIGN KEY (id_customer) REFERENCES customers(id_customer)
 );
 CREATE TABLE products (
