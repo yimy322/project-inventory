@@ -44,7 +44,7 @@ public class FormLogin {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setUndecorated(true);
-		frame.setBounds(100, 100, 837, 380);
+		frame.setBounds(100, 100, 800, 480); //MODIFICACION DEL TAMAÑO DEL JPANEL
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null); //CENTRA EL FRAME
 		
@@ -52,5 +52,10 @@ public class FormLogin {
 		panel.setBackground(new Color(51, 102, 153));
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 		panel.setLayout(null);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(51, 153, 204));
+		panel_1.setBounds(259, 49, 304, 384);
+		panel.add(panel_1);
 	}
 }
