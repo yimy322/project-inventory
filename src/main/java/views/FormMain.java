@@ -222,7 +222,7 @@ public class FormMain extends JFrame {
 		});
 		btnTransfers.setForegroundIcon(new Color(0, 0, 0));
 		btnTransfers.setForegroundText(new Color(0, 0, 0));
-		btnTransfers.setText("TRANSLADOS");
+		btnTransfers.setText("TRASLADOS");
 		btnTransfers.setIcons(ICONS.DIRECTIONS_WALK);
 		btnTransfers.setBackground(new Color(198, 225, 241));
 		btnTransfers.setBounds(910, 11, 170, 50);
