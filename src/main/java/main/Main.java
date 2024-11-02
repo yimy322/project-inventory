@@ -1,12 +1,13 @@
 package main;
-//DE ESTA CLASE NACE EL PROYECTO , SE VA LLAMAR EL LOGIN
-import views.FormMain;
+import controllers.LoginController;
+import views.FormLogin;
 public class Main {
 
 	public static void main(String[] args) {
 		
-		FormMain main = new FormMain();
-		main.run();
+		FormLogin form = new FormLogin();
+		LoginController loginController = new LoginController(form);
+		loginController.showView();
 	}
 
 }
