@@ -1,32 +1,17 @@
 package views;
 
-import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import subViews.*;
-import javax.swing.JTextField;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JToolBar;
-import java.awt.Component;
-import javax.swing.Box;
-import javax.swing.JInternalFrame;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.Timer;
-import javax.swing.JButton;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import javax.swing.ImageIcon;
 import RSMaterialComponent.RSButtonMaterialIconDos;
 import rojeru_san.efectos.ValoresEnum.ICONS;
 import rojeru_san.efectos.ValoresEnum.POSITIONICON;
@@ -36,22 +21,9 @@ import javax.swing.SwingConstants;
 
 public class FormMain extends JFrame {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane, conteiner;
-	private JLabel lblDate, lblHour;
-
-	/**
-	 * Create the method of init the frame
-	 */
-	public void run() {
-		try {
-			FormMain frame = new FormMain();
-			frame.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
+	public static final long serialVersionUID = 1L;
+	public JPanel contentPane, conteiner;
+	public JLabel lblDate, lblHour;
 
 	/**
 	 * Create the frame.
@@ -60,6 +32,7 @@ public class FormMain extends JFrame {
 		setResizable(false);
 		setBackground(new Color(255, 255, 255));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
 		setBounds(100, 100, 1200, 630);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(192, 192, 192));
