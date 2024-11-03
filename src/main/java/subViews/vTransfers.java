@@ -40,6 +40,7 @@ public class vTransfers extends JPanel {
 	 * Create the panel.
 	 */
 	public vTransfers() {
+		setLocation(0, 0);
 		setBackground(new Color(228, 233, 232));
 		setSize(1200, 480);
 		setLayout(null);

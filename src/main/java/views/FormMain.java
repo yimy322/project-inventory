@@ -24,7 +24,7 @@ public class FormMain extends JFrame {
 	public static final long serialVersionUID = 1L;
 	public JPanel contentPane, conteiner;
 	public JLabel lblDate, lblHour;
-
+	public RSButtonMaterialIconDos btnSales, btnCustomers, btnProducts, btnInventory, btnSuppliers, btnTransfers, btnSettings;
 	/**
 	 * Create the frame.
 	 */
@@ -66,20 +66,7 @@ public class FormMain extends JFrame {
 		contentPane.add(panel_header);
 		panel_header.setLayout(null);
 
-		RSButtonMaterialIconDos btnSales = new RSButtonMaterialIconDos();
-		btnSales.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Instanciar el nuevo panel y repetir los pasos
-				vSales sales = new vSales();
-				sales.setBackground(new Color(228, 233, 232));
-				sales.setSize(1186, 518);
-				sales.setLocation(0, 0);
-				conteiner.removeAll();
-				conteiner.add(sales, BorderLayout.CENTER);
-				conteiner.revalidate();
-				conteiner.repaint();
-			}
-		});
+		btnSales = new RSButtonMaterialIconDos();
 		btnSales.setForegroundText(new Color(0, 0, 0));
 		btnSales.setForegroundIconHover(new Color(255, 255, 255));
 		btnSales.setForegroundIcon(new Color(0, 0, 0));
@@ -91,20 +78,7 @@ public class FormMain extends JFrame {
 		btnSales.setBounds(10, 11, 170, 50);
 		panel_header.add(btnSales);
 
-		RSButtonMaterialIconDos btnCustomers = new RSButtonMaterialIconDos();
-		btnCustomers.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Instanciar el nuevo panel y repetir los pasos
-				vCustomers customers = new vCustomers();
-				customers.setBackground(new Color(228, 233, 232));
-				customers.setSize(1186, 518);
-				customers.setLocation(0, 0);
-				conteiner.removeAll();
-				conteiner.add(customers, BorderLayout.CENTER);
-				conteiner.revalidate();
-				conteiner.repaint();
-			}
-		});
+		btnCustomers = new RSButtonMaterialIconDos();
 		btnCustomers.setForegroundIcon(new Color(0, 0, 0));
 		btnCustomers.setForegroundText(new Color(0, 0, 0));
 		btnCustomers.setIcons(ICONS.PERSON_ADD);
@@ -113,20 +87,7 @@ public class FormMain extends JFrame {
 		btnCustomers.setBounds(190, 11, 170, 50);
 		panel_header.add(btnCustomers);
 
-		RSButtonMaterialIconDos btnProducts = new RSButtonMaterialIconDos();
-		btnProducts.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Instanciar el nuevo panel y repetir los pasos
-				vProducts products = new vProducts();
-				products.setBackground(new Color(228, 233, 232));
-				products.setSize(1186, 518);
-				products.setLocation(0, 0);
-				conteiner.removeAll();
-				conteiner.add(products, BorderLayout.CENTER);
-				conteiner.revalidate();
-				conteiner.repaint();
-			}
-		});
+		btnProducts = new RSButtonMaterialIconDos();
 		btnProducts.setForegroundText(new Color(0, 0, 0));
 		btnProducts.setForegroundIcon(new Color(0, 0, 0));
 		btnProducts.setText("PRODUCTOS");
@@ -135,20 +96,7 @@ public class FormMain extends JFrame {
 		btnProducts.setBounds(370, 11, 170, 50);
 		panel_header.add(btnProducts);
 
-		RSButtonMaterialIconDos btnInventory = new RSButtonMaterialIconDos();
-		btnInventory.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Instanciar el nuevo panel y repetir los pasos
-				vInventory inventory = new vInventory();
-				inventory.setBackground(new Color(228, 233, 232));
-				inventory.setSize(1186, 518);
-				inventory.setLocation(0, 0);
-				conteiner.removeAll();
-				conteiner.add(inventory, BorderLayout.CENTER);
-				conteiner.revalidate();
-				conteiner.repaint();
-			}
-		});
+		btnInventory = new RSButtonMaterialIconDos();
 		btnInventory.setForegroundIcon(new Color(0, 0, 0));
 		btnInventory.setForegroundText(new Color(0, 0, 0));
 		btnInventory.setText("INVENTARIO");
@@ -157,20 +105,7 @@ public class FormMain extends JFrame {
 		btnInventory.setBounds(550, 11, 170, 50);
 		panel_header.add(btnInventory);
 
-		RSButtonMaterialIconDos btnSuppliers = new RSButtonMaterialIconDos();
-		btnSuppliers.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Instanciar el nuevo panel y repetir los pasos
-				vSuppliers suppliers = new vSuppliers();
-				suppliers.setBackground(new Color(228, 233, 232));
-				suppliers.setSize(1186, 518);
-				suppliers.setLocation(0, 0);
-				conteiner.removeAll();
-				conteiner.add(suppliers, BorderLayout.CENTER);
-				conteiner.revalidate();
-				conteiner.repaint();
-			}
-		});
+		btnSuppliers = new RSButtonMaterialIconDos();
 		btnSuppliers.setForegroundText(new Color(0, 0, 0));
 		btnSuppliers.setForegroundIcon(new Color(0, 0, 0));
 		btnSuppliers.setText("PROVEEDORES");
@@ -179,20 +114,7 @@ public class FormMain extends JFrame {
 		btnSuppliers.setBounds(730, 11, 170, 50);
 		panel_header.add(btnSuppliers);
 
-		RSButtonMaterialIconDos btnTransfers = new RSButtonMaterialIconDos();
-		btnTransfers.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Instanciar el nuevo panel y repetir los pasos
-				vTransfers transfers = new vTransfers();
-				transfers.setBackground(new Color(228, 233, 232));
-				transfers.setSize(1186, 518);
-				transfers.setLocation(0, 0);
-				conteiner.removeAll();
-				conteiner.add(transfers, BorderLayout.CENTER);
-				conteiner.revalidate();
-				conteiner.repaint();
-			}
-		});
+		btnTransfers = new RSButtonMaterialIconDos();
 		btnTransfers.setForegroundIcon(new Color(0, 0, 0));
 		btnTransfers.setForegroundText(new Color(0, 0, 0));
 		btnTransfers.setText("TRASLADOS");
@@ -201,20 +123,7 @@ public class FormMain extends JFrame {
 		btnTransfers.setBounds(910, 11, 170, 50);
 		panel_header.add(btnTransfers);
 
-		RSButtonMaterialIconDos btnSettings = new RSButtonMaterialIconDos();
-		btnSettings.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Instanciar el nuevo panel y repetir los pasos
-				vSettings settings = new vSettings();
-				settings.setBackground(new Color(228, 233, 232));
-				settings.setSize(1186, 518);
-				settings.setLocation(0, 0);
-				conteiner.removeAll();
-				conteiner.add(settings, BorderLayout.CENTER);
-				conteiner.revalidate();
-				conteiner.repaint();
-			}
-		});
+		btnSettings = new RSButtonMaterialIconDos();
 		btnSettings.setForegroundIcon(new Color(0, 0, 0));
 		btnSettings.setPositionIcon(POSITIONICON.RIGHT);
 		btnSettings.setBounds(1090, 11, 66, 50);

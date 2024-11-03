@@ -42,7 +42,8 @@ public class vInventory extends JPanel {
 	public vInventory() {
 		
 		setBackground(new Color(228, 233, 232));
-		setSize(1200, 480);
+		setSize(1186, 518);
+		setLocation(0, 0);
 		setLayout(null);
 		setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
 				"Inventario"));

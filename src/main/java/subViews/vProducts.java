@@ -44,6 +44,7 @@ public class vProducts extends JPanel {
 	public vProducts() {
 		setBackground(new Color(228, 233, 232));
 		setSize(1200, 480);
+		setLocation(0, 0);
 		setLayout(null);
 		setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Administracion de Productos"));
 		

@@ -40,6 +40,8 @@ public class vSettings extends JPanel {
 	 * Create the panel.
 	 */
 	public vSettings() {
+		setSize(1186, 518);
+		setLocation(0, 0);
 		setBorder(new TitledBorder(null, "Ajustes del Sistema", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		setBackground(new Color(228, 233, 232));
 		setLayout(null);

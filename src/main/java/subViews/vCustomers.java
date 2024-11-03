@@ -38,7 +38,9 @@ public class vCustomers extends JPanel {
 	 * Create the panel.
 	 */
 	public vCustomers() {
-		
+		setBackground(new Color(228, 233, 232));
+		setSize(1186, 518);
+		setLocation(0, 0);
 		setBackground(new Color(228, 233, 232));
 		setSize(1200, 480);
 		setLayout(null);

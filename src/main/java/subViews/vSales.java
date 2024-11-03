@@ -31,6 +31,9 @@ public class vSales extends JPanel {
 	 * Create the panel.
 	 */
 	public vSales() {
+		setBackground(new Color(228, 233, 232));
+		setSize(1186, 518);
+		setLocation(0, 0);
 		setBorder(new TitledBorder(null, "Realizar ventas", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		setBackground(new Color(228, 233, 232));
 		setLayout(null);
