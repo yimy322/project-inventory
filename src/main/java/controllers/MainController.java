@@ -34,8 +34,7 @@ public class MainController implements ActionListener {
 		salesController.showView();
 		this.form.conteiner.removeAll();
 		this.form.conteiner.add(sales, BorderLayout.CENTER);
-		this.form.conteiner.revalidate();
-		this.form.conteiner.repaint();
+		refreshViews();
 	}
 	
 	public void showCustomers(){
@@ -44,8 +43,7 @@ public class MainController implements ActionListener {
 		customerController.showView();
 		this.form.conteiner.removeAll();
 		this.form.conteiner.add(customer, BorderLayout.CENTER);
-		this.form.conteiner.revalidate();
-		this.form.conteiner.repaint();
+		refreshViews();
 	}
 	
 	public void showProducts(){
@@ -54,8 +52,7 @@ public class MainController implements ActionListener {
 		productsController.showView();
 		this.form.conteiner.removeAll();
 		this.form.conteiner.add(product, BorderLayout.CENTER);
-		this.form.conteiner.revalidate();
-		this.form.conteiner.repaint();
+		refreshViews();
 	}
 	
 	public void showInventory(){
@@ -64,8 +61,7 @@ public class MainController implements ActionListener {
 		inventoryController.showView();
 		this.form.conteiner.removeAll();
 		this.form.conteiner.add(inventory, BorderLayout.CENTER);
-		this.form.conteiner.revalidate();
-		this.form.conteiner.repaint();
+		refreshViews();
 	}
 	
 	public void showSuppliers(){
@@ -74,8 +70,7 @@ public class MainController implements ActionListener {
 		supplierController.showView();
 		this.form.conteiner.removeAll();
 		this.form.conteiner.add(suppliers, BorderLayout.CENTER);
-		this.form.conteiner.revalidate();
-		this.form.conteiner.repaint();
+		refreshViews();
 	}
 	
 	public void showTransfers(){
@@ -84,8 +79,7 @@ public class MainController implements ActionListener {
 		transferController.showView();
 		this.form.conteiner.removeAll();
 		this.form.conteiner.add(transfers, BorderLayout.CENTER);
-		this.form.conteiner.revalidate();
-		this.form.conteiner.repaint();
+		refreshViews();
 	}
 	
 	public void showSetting(){
@@ -94,8 +88,7 @@ public class MainController implements ActionListener {
 		settingsController.showView();
 		this.form.conteiner.removeAll();
 		this.form.conteiner.add(settings, BorderLayout.CENTER);
-		this.form.conteiner.revalidate();
-		this.form.conteiner.repaint();
+		refreshViews();
 	}
 
 	@Override
@@ -116,6 +109,11 @@ public class MainController implements ActionListener {
 		}else if (press == this.form.btnSettings) {
 			showSetting();
 		}
+	}
+	
+	public void refreshViews() {
+		this.form.conteiner.revalidate();
+		this.form.conteiner.repaint();
 	}
 
 	public void showView() {
