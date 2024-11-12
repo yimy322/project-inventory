@@ -56,3 +56,9 @@ CREATE TABLE order_details (
     FOREIGN KEY (id_product) REFERENCES products(id_product),
     FOREIGN KEY (id_user) REFERENCES users(id_user)
 );
+CREATE TABLE roles (
+    id_rol INT AUTO_INCREMENT PRIMARY KEY,
+    rol VARCHAR(30) NOT NULL,
+    id_user INT,
+    FOREIGN KEY (id_user) REFERENCES users(id_user)
+);

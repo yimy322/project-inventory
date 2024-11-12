@@ -8,7 +8,7 @@ public class ConnectionDB {
 //  especificamos el usuario
 	private static final String JDBC_USER = "root";
 //  aca la contrasena de mysql
-	private static final String JDBC_PASSWORD = "root@322-ABC"; //CAMBIAR EL PASSWORD CON EL DE MYSQL DE MI LAPTOP
+	private static final String JDBC_PASSWORD = "root@322-ABC";
 //  obtenemos la conexion de la base de datos
 	public static Connection getConnection() throws SQLException {
 		return DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
