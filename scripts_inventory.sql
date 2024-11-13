@@ -1,11 +1,11 @@
 CREATE TABLE users (
     id_user INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(30) NOT NULL,
+    username VARCHAR(30) UNIQUE NOT NULL,
     password VARCHAR(30) NOT NULL,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
     phone INT NOT NULL,
-    email VARCHAR(30) NOT NULL
+    email VARCHAR(30) UNIQUE NOT NULL
 );
 CREATE TABLE suppliers (
     id_supplier INT AUTO_INCREMENT PRIMARY KEY,
@@ -62,3 +62,6 @@ CREATE TABLE roles (
     id_user INT,
     FOREIGN KEY (id_user) REFERENCES users(id_user)
 );
+INSERT INTO users(username, password, first_name, last_name, phone, email) values("ADMIN", "3b40b2f", "Yanina", "Manrique", 912367226, "yanina322@gmail.com");
+INSERT INTO roles(rol, id_user) values("ROLE_USER", 1);
+INSERT INTO roles(rol, id_user) values("ROLE_ADMIN", 1);
