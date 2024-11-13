@@ -5,12 +5,17 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
+import linkedList.LinkedList;
+import models.User;
+import services.UserService;
 import views.FormLogin;
 import views.FormMain;
 
 public class LoginController implements ActionListener {
 
 	private FormLogin form;
+	
+	UserService userService = new UserService();
 
 	public LoginController(FormLogin form) {
 		this.form = form;
@@ -26,28 +31,35 @@ public class LoginController implements ActionListener {
             JOptionPane.showMessageDialog(null, "Completa todas las casillas","Login", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        System.out.println(change(form.passwordField.getText().toUpperCase())+"-----");
-        
-		FormMain menu = new FormMain();
-		MainController menuController = new MainController(menu);
-		menuController.showView();
-		closeView();
-	}
-	//intercambia de posicion la contra, el primero con el ultimo, etc..
-	public String change(String pass) {
-		char[] caracteres = pass.toCharArray();
-		int i = 0;//inicio
-        int j = caracteres.length - 1;//final
-        while (i < j) {
-        	//intercambio
-            char temp = caracteres[i];
-            caracteres[i] = caracteres[j];
-            caracteres[j] = temp;
-            i++;
-            j--;
+        //trae los usuarios usando la lista enlazada
+        LinkedList usuarios = userService.findAll();
+        //iteramos hasta verificar si las credenciales existen en la bd
+        for (int i = 0; i < usuarios.size(); i++) {
+        	User usuario = (User) usuarios.get(i);
+        	System.out.println(usuario);
+        	if (form.textField.getText().equals(usuario.getUsername()) && hashMethod(form.passwordField.getText()).equals(usuario.getPassword())) {
+        		FormMain menu = new FormMain();
+        		MainController menuController = new MainController(menu);
+        		menuController.showView();
+        		closeView();
+        	}else {
+        		JOptionPane.showMessageDialog(null, "Usuario inexistente","Error", JOptionPane.ERROR_MESSAGE);
+        	}
         }
-		return new String(caracteres);
 	}
+	//es posible que haya colisiones
+	public String hashMethod(String input) {
+        long hashValue = 0;
+        //se recorre
+        for (int i = 0; i < input.length(); i++) {
+            //obtenemos el ascii
+            int charCode = input.charAt(i);
+            //formular para calc un valor hash
+            hashValue = (hashValue * 31) + charCode;
+        }
+        //convertimos a hexadecimal
+        return Long.toHexString(hashValue);
+    }
 
 	// metodo para salir al sistema
 	public void exit() {

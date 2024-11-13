@@ -69,4 +69,31 @@ public class LinkedList {
 		}
 		System.out.println("null");
 	}
+	//retorna el tamano
+	public int size() {
+		Node actual = head;
+		int tam = 0;
+		while(actual != null) {
+			tam++;
+			actual = actual.next;
+		}
+		return tam;
+	}
+	public Object get(int index) {
+        if (index < 0) {
+            throw new IndexOutOfBoundsException("indice no valido: " + index);
+        }
+        Node actual = head;
+        int cont = 0;
+        //iteramos
+        while (actual != null) {
+            if (cont == index) {
+                return actual.data;
+            }
+            actual = actual.next;
+            cont++;
+        }
+        //si el indice es mayor
+        throw new IndexOutOfBoundsException("indice fuera de rango: " + index);
+    }
 }

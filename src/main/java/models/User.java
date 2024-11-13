@@ -10,6 +10,18 @@ public class User {
 	private int phone;
 	private String email;
 	
+	public User(int idUser, String username, String password, String firstName, String lastName, int phone,
+			String email) {
+		super();
+		this.idUser = idUser;
+		this.username = username;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phone = phone;
+		this.email = email;
+	}
+	
 	public int getIdUser() {
 		return idUser;
 	}
@@ -51,6 +63,12 @@ public class User {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@Override
+	public String toString() {
+		return "User [idUser=" + idUser + ", username=" + username + ", password=" + password + ", firstName="
+				+ firstName + ", lastName=" + lastName + ", phone=" + phone + ", email=" + email + "]";
 	}
 	
 }
