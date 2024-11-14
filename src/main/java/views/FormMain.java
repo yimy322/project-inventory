@@ -23,7 +23,7 @@ public class FormMain extends JFrame {
 
 	public static final long serialVersionUID = 1L;
 	public JPanel contentPane, conteiner;
-	public JLabel lblDate, lblHour;
+	public JLabel lblDate, lblHour, lblActiveUser;
 	public RSButtonMaterialIconDos btnSales, btnCustomers, btnProducts, btnInventory, btnSuppliers, btnTransfers, btnSettings;
 	/**
 	 * Create the frame.
@@ -149,7 +149,7 @@ public class FormMain extends JFrame {
 		lblJovenesTalentosPeruanos.setBounds(243, 0, 118, 35);
 		panel_footer.add(lblJovenesTalentosPeruanos);
 
-		JLabel lblActiveUser = new JLabel("Unknown");
+		lblActiveUser = new JLabel("Unknown");
 		lblActiveUser.setHorizontalAlignment(SwingConstants.LEFT);
 		lblActiveUser.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblActiveUser.setBounds(577, 0, 118, 35);

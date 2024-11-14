@@ -15,6 +15,8 @@ public class LoginController implements ActionListener {
 
 	private FormLogin form;
 	
+	//variable global para usarlo en el main
+	public static User USER;
 	UserService userService = new UserService();
 
 	public LoginController(FormLogin form) {
@@ -24,7 +26,7 @@ public class LoginController implements ActionListener {
 		this.form.btnLogin.addActionListener(this);
 	}
 
-	// metodo para ingresar al sistema
+	// metodo para ingresar al sistema ADMIN ADMIN
 	public void login() {
 		//se valida las cajas
 		if (form.textField.getText().equals("") || form.passwordField.getText().equals("")) {
@@ -38,12 +40,15 @@ public class LoginController implements ActionListener {
         	User usuario = (User) usuarios.get(i);
         	System.out.println(usuario);
         	if (form.textField.getText().equals(usuario.getUsername()) && hashMethod(form.passwordField.getText()).equals(usuario.getPassword())) {
+        		System.out.println("credenciales encontradas");
+        		//guardamos el usuario en la global
+        		USER = usuario;
         		FormMain menu = new FormMain();
         		MainController menuController = new MainController(menu);
         		menuController.showView();
         		closeView();
         	}else {
-        		JOptionPane.showMessageDialog(null, "Usuario inexistente","Error", JOptionPane.ERROR_MESSAGE);
+        		JOptionPane.showMessageDialog(null, "Credenciales invalidas","Error", JOptionPane.ERROR_MESSAGE);
         	}
         }
 	}

@@ -35,7 +35,9 @@ public class vSettings extends JPanel {
 	private JPanel panel_help, panel_users, panel_myAccount, panel_security;
 	private JLayeredPane layeredPane;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
-
+	public JLabel lblNombreUsuario, lblPasswordUsuario, lblNombreCompleto, lblTelefonoUsuario, lblEmailUsuario, lblUsuarioSettings;
+	public RSButtonMaterialIconDos btnExit;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -153,21 +155,21 @@ public class vSettings extends JPanel {
 		btn_help.setBounds(10, 262, 155, 50);
 		panel_Ajustes.add(btn_help);
 		
-		RSButtonMaterialIconDos btn_exit = new RSButtonMaterialIconDos();
-		btn_exit.setText("Salir");
-		btn_exit.setRippleColor(new Color(198, 225, 241));
-		btn_exit.setIcons(ICONS.EXIT_TO_APP);
-		btn_exit.setForegroundText(Color.BLACK);
-		btn_exit.setForegroundIconHover(Color.BLACK);
-		btn_exit.setForegroundIcon(Color.BLACK);
-		btn_exit.setForegroundHover(Color.BLACK);
-		btn_exit.setForeground(Color.BLACK);
-		btn_exit.setFont(new Font("Dialog", Font.BOLD, 12));
-		btn_exit.backgroundHover = new Color(228, 233, 232);
-		btn_exit.setBackgroundHover(new Color(228, 233, 232));
-		btn_exit.setBackground(new Color(228, 233, 232));
-		btn_exit.setBounds(10, 338, 155, 50);
-		panel_Ajustes.add(btn_exit);
+		btnExit = new RSButtonMaterialIconDos();
+		btnExit.setText("Salir");
+		btnExit.setRippleColor(new Color(198, 225, 241));
+		btnExit.setIcons(ICONS.EXIT_TO_APP);
+		btnExit.setForegroundText(Color.BLACK);
+		btnExit.setForegroundIconHover(Color.BLACK);
+		btnExit.setForegroundIcon(Color.BLACK);
+		btnExit.setForegroundHover(Color.BLACK);
+		btnExit.setForeground(Color.BLACK);
+		btnExit.setFont(new Font("Dialog", Font.BOLD, 12));
+		btnExit.backgroundHover = new Color(228, 233, 232);
+		btnExit.setBackgroundHover(new Color(228, 233, 232));
+		btnExit.setBackground(new Color(228, 233, 232));
+		btnExit.setBounds(10, 338, 155, 50);
+		panel_Ajustes.add(btnExit);
 		
 		layeredPane = new JLayeredPane();
 		layeredPane.setBounds(195, 25, 983, 438);
@@ -197,11 +199,11 @@ public class vSettings extends JPanel {
 		lblNewLabel_2.setBounds(36, 292, 259, 21);
 		panel_myAccount.add(lblNewLabel_2);
 		
-		JLabel lblNewLabel_3 = new JLabel("UNKNOWN");
-		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_3.setBounds(36, 330, 259, 51);
-		panel_myAccount.add(lblNewLabel_3);
+		lblUsuarioSettings = new JLabel("UNKNOWN");
+		lblUsuarioSettings.setFont(new Font("Tahoma", Font.BOLD, 17));
+		lblUsuarioSettings.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUsuarioSettings.setBounds(36, 330, 259, 51);
+		panel_myAccount.add(lblUsuarioSettings);
 		
 		JLabel lblNewLabel_4 = new JLabel("DETALLES");
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -234,25 +236,30 @@ public class vSettings extends JPanel {
 		lblNewLabel_5_4.setBounds(446, 292, 183, 28);
 		panel_myAccount.add(lblNewLabel_5_4);
 		
-		JLabel lblNewLabel_5_5 = new JLabel("Nombre de Usuario:");
-		lblNewLabel_5_5.setBounds(665, 77, 265, 28);
-		panel_myAccount.add(lblNewLabel_5_5);
+		lblNombreUsuario = new JLabel("Nombre de Usuario:");
+		lblNombreUsuario.setForeground(Color.BLUE);
+		lblNombreUsuario.setBounds(665, 77, 265, 28);
+		panel_myAccount.add(lblNombreUsuario);
 		
-		JLabel lblNewLabel_5_5_1 = new JLabel("Password de Usuario:");
-		lblNewLabel_5_5_1.setBounds(665, 127, 265, 28);
-		panel_myAccount.add(lblNewLabel_5_5_1);
+		lblPasswordUsuario = new JLabel("Password de Usuario:");
+		lblPasswordUsuario.setForeground(Color.BLUE);
+		lblPasswordUsuario.setBounds(665, 127, 265, 28);
+		panel_myAccount.add(lblPasswordUsuario);
 		
-		JLabel lblNewLabel_5_5_2 = new JLabel("Nombre completo:");
-		lblNewLabel_5_5_2.setBounds(665, 180, 265, 28);
-		panel_myAccount.add(lblNewLabel_5_5_2);
+		lblNombreCompleto = new JLabel("Nombre completo:");
+		lblNombreCompleto.setForeground(Color.BLUE);
+		lblNombreCompleto.setBounds(665, 180, 265, 28);
+		panel_myAccount.add(lblNombreCompleto);
 		
-		JLabel lblNewLabel_5_5_3 = new JLabel("telefono de usuario:");
-		lblNewLabel_5_5_3.setBounds(665, 236, 265, 28);
-		panel_myAccount.add(lblNewLabel_5_5_3);
+		lblTelefonoUsuario = new JLabel("telefono de usuario:");
+		lblTelefonoUsuario.setForeground(Color.BLUE);
+		lblTelefonoUsuario.setBounds(665, 236, 265, 28);
+		panel_myAccount.add(lblTelefonoUsuario);
 		
-		JLabel lblNewLabel_5_5_4 = new JLabel("Email de usuario");
-		lblNewLabel_5_5_4.setBounds(665, 293, 265, 28);
-		panel_myAccount.add(lblNewLabel_5_5_4);
+		lblEmailUsuario= new JLabel("Email de usuario");
+		lblEmailUsuario.setForeground(Color.BLUE);
+		lblEmailUsuario.setBounds(665, 293, 265, 28);
+		panel_myAccount.add(lblEmailUsuario);
 		
 		RSButtonMaterialIconDos btnmtrlcndsAditar = new RSButtonMaterialIconDos();
 		btnmtrlcndsAditar.setIcons(ICONS.EDIT);

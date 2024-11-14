@@ -26,6 +26,11 @@ public class MainController implements ActionListener {
 		this.form.btnSuppliers.addActionListener(this);
 		this.form.btnTransfers.addActionListener(this);
 		this.form.btnSettings.addActionListener(this);
+		init();
+	}
+	
+	public void init() {
+		this.form.lblActiveUser.setText(LoginController.USER.getUsername());
 	}
 	
 	public void showSales(){
