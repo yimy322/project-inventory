@@ -65,3 +65,10 @@ CREATE TABLE roles (
 INSERT INTO users(username, password, first_name, last_name, phone, email) values("ADMIN", "3b40b2f", "Yanina", "Manrique", 912367226, "yanina322@gmail.com");
 INSERT INTO roles(rol, id_user) values("ROLE_USER", 1);
 INSERT INTO roles(rol, id_user) values("ROLE_ADMIN", 1);
+
+INSERT INTO categories(name, description) values("Electronica", "Dispositivos electronicos");
+INSERT INTO categories(name, description) values("Ropa", "Ropa y accesorios");
+INSERT INTO categories(name, description) values("Alimentos", "Productos alimenticios");
+INSERT INTO categories(name, description) values("Herramientas", "Herramientas y equipos");
+INSERT INTO categories(name, description) values("Medicamentos", "Productos farmaceuticos");
+INSERT INTO categories(name, description) values("Materiales", "Materiales de Construcción");

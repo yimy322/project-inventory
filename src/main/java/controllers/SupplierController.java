@@ -11,6 +11,11 @@ public class SupplierController implements ActionListener{
 
 	public SupplierController(vSuppliers form) {
 		this.form = form;
+		init();
+	}
+	
+	public void init() {
+		
 	}
 
 	@Override

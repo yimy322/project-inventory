@@ -30,7 +30,7 @@ public class vProducts extends JPanel {
 	JLabel lblCantidad;
 	JTextField txtCantidad;
 	JLabel lblCategoria;
-	JComboBox<String> cbCategoria;
+	public JComboBox<String> cbCategoria;
 	JLabel lblProveedor;
 	JComboBox<String> cbProveedor;
 	JButton btnGuardar, btnLimpiar;
