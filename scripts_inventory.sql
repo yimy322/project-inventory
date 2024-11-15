@@ -72,3 +72,5 @@ INSERT INTO categories(name, description) values("Alimentos", "Productos aliment
 INSERT INTO categories(name, description) values("Herramientas", "Herramientas y equipos");
 INSERT INTO categories(name, description) values("Medicamentos", "Productos farmaceuticos");
 INSERT INTO categories(name, description) values("Materiales", "Materiales de Construcción");
+
+UPDATE users u SET u.password = "SNRIF" WHERE u.id_user = 1;
