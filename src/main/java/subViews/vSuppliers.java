@@ -19,20 +19,20 @@ import javax.swing.JLabel;
 public class vSuppliers extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	JLabel lblId;
-	JTextField textId;
-	JLabel lblNombre;
-	JTextField txtNombre;
-	JLabel lblApellido;
-	JTextField txtApellido;
-	JLabel lblTelefono;
-	JTextField txtTelefono;
-	JLabel lblDireccion;
-	JTextField txtDireccion;
-	JButton btnGuardar, btnLimpiar;
-	JTable jTableCustomers;
-	DefaultTableModel model;
-	JButton btnExcel;
+	public JLabel lblId;
+	public JTextField textId;
+	public JLabel lblNombre;
+	public JTextField txtNombre;
+	public JLabel lblApellido;
+	public JTextField txtApellido;
+	public JLabel lblTelefono;
+	public JTextField txtTelefono;
+	public JLabel lblDireccion;
+	public JTextField txtDireccion;
+	public JButton btnGuardar, btnLimpiar;
+	public JTable jTableCustomers;
+	public DefaultTableModel model;
+	public JButton btnExcel;
 
 	/**
 	 * Create the panel.
@@ -115,7 +115,7 @@ public class vSuppliers extends JPanel {
 		model.addColumn("Nombres");
 		model.addColumn("Apellidos");
 		model.addColumn("Telefono");
-		model.addColumn("Email");
+		model.addColumn("Direccion");
 		jTableCustomers.setModel(model);
 
 		jTableCustomers.setPreferredScrollableViewportSize(new Dimension(610, 335));

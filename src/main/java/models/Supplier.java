@@ -8,6 +8,10 @@ public class Supplier {
 	private int phone;
 	private String lastName;
 	
+	public Supplier() {
+		super();
+	}
+
 	public Supplier(int idSupplier, String name, String address, int phone, String lastName) {
 		super();
 		this.idSupplier = idSupplier;

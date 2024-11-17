@@ -29,7 +29,7 @@ public class LoginController implements ActionListener {
 	// metodo para ingresar al sistema ADMIN ADMIN
 	public void login() {
 		// se valida las cajas
-		if (form.textField.getText().equals("") || form.passwordField.getText().equals("")) {
+		if (form.textField.getText().trim().isEmpty() || form.passwordField.getText().trim().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Completa todas las casillas", "Login", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
