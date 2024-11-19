@@ -100,11 +100,11 @@ public class vSuppliers extends JPanel {
 		add(txtDireccion);
 
 		btnGuardar = new JButton("Guardar");
-		btnGuardar.setBounds(490, 101, 100, 25);
+		btnGuardar.setBounds(490, 101, 115, 25);
 		add(btnGuardar);
 
 		btnLimpiar = new JButton("Limpiar");
-		btnLimpiar.setBounds(610, 101, 100, 25);
+		btnLimpiar.setBounds(610, 101, 115, 25);
 		add(btnLimpiar);
 
 		// creacion de la tabla

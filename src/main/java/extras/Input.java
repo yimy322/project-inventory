@@ -3,6 +3,7 @@ package extras;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.JButton;
 import javax.swing.JTextField;
 
 public class Input {

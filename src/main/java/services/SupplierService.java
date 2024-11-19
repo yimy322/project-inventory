@@ -13,6 +13,7 @@ public class SupplierService {
 
 	private static final String SQL_SELECT = "SELECT * FROM suppliers";
 	private static final String SQL_INSERT = "INSERT INTO suppliers(name, address, phone, last_name) VALUES (?,?,?,?)";
+	private static final String SQL_UPDATE = "UPDATE suppliers SET name = ?,address = ?,phone = ?,last_name = ? WHERE id_supplier= ?";
 
 	// traera en una lista enlazada toda la consulta de la tabla
 	public LinkedList findAll() {
@@ -66,6 +67,29 @@ public class SupplierService {
 			//se ejecuta y listo
 			registros = stmt.executeUpdate();
 		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			ConnectionDB.close(conn);	
+		}
+		return registros;
+	}
+	
+	//para actualizar
+	public int update(Supplier proveedor){
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		int registros = 0;
+		try {
+			//obtenemos la conexion
+			conn = ConnectionDB.getConnection();
+			stmt = conn.prepareStatement(SQL_UPDATE);
+			stmt.setString(1, proveedor.getName());
+            stmt.setString(2, proveedor.getAddress());
+            stmt.setInt(3, proveedor.getPhone());
+            stmt.setString(4, proveedor.getLastName());
+            stmt.setInt(5, proveedor.getIdSupplier());
+            registros = stmt.executeUpdate();
+		}catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
 			ConnectionDB.close(conn);	
