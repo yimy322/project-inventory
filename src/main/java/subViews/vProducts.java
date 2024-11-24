@@ -20,23 +20,23 @@ import javax.swing.JComboBox;
 public class vProducts extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	JTextField textId;
-	JTextField txtNombre;
-	JLabel lblNombre;
-	JTextField txtDescripcion;
-	JLabel lblDescripcion;
-	JLabel lblPrecio;
-	JTextField txtPrecio;
-	JLabel lblCantidad;
-	JTextField txtCantidad;
-	JLabel lblCategoria;
+	public JTextField textId;
+	public JTextField txtNombre;
+	public JLabel lblNombre;
+	public JTextField txtDescripcion;
+	public JLabel lblDescripcion;
+	public JLabel lblPrecio;
+	public JTextField txtPrecio;
+	public JLabel lblCantidad;
+	public JTextField txtCantidad;
+	public JLabel lblCategoria;
 	public JComboBox<String> cbCategoria;
-	JLabel lblProveedor;
-	JComboBox<String> cbProveedor;
-	JButton btnGuardar, btnLimpiar;
-	JTable jTableProducts;
-	DefaultTableModel model;
-	JButton btnExcel;
+	public JLabel lblProveedor;
+	public JComboBox<String> cbProveedor;
+	public JButton btnGuardar, btnLimpiar;
+	public JTable jTableProducts;
+	public DefaultTableModel model;
+	public JButton btnExcel;
 	
 	/**
 	 * Create the panel.
