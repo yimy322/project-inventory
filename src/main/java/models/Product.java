@@ -9,6 +9,9 @@ public class Product {
 	private int quantity;
 	private int idCategory;
 	private int idSupplier;
+	private String category;
+	private String sName;
+	private String sLastName;
 
 	public Product() {
 		super();
@@ -24,6 +27,21 @@ public class Product {
 		this.quantity = quantity;
 		this.idCategory = idCategory;
 		this.idSupplier = idSupplier;
+	}
+	
+	public Product(int idProduct, String name, String description, double price, int quantity, int idCategory,
+			int idSupplier, String category, String sname, String slastName) {
+		super();
+		this.idProduct = idProduct;
+		this.name = name;
+		this.description = description;
+		this.price = price;
+		this.quantity = quantity;
+		this.idCategory = idCategory;
+		this.idSupplier = idSupplier;
+		this.category = category;
+		sName = sname;
+		sLastName = slastName;
 	}
 
 	public int getIdProduct() {
@@ -80,6 +98,30 @@ public class Product {
 
 	public void setIdSupplier(int idSupplier) {
 		this.idSupplier = idSupplier;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getSname() {
+		return sName;
+	}
+
+	public void setSname(String sname) {
+		sName = sname;
+	}
+
+	public String getSlastName() {
+		return sLastName;
+	}
+
+	public void setSlastName(String slastName) {
+		sLastName = slastName;
 	}
 
 }

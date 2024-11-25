@@ -131,8 +131,8 @@ public class ProductsController implements ActionListener, MouseListener {
 			ob[2] = producto.getDescription();
 			ob[3] = producto.getPrice();
 			ob[4] = producto.getQuantity();
-			ob[5] = producto.getIdCategory();
-			ob[6] = producto.getIdSupplier();
+			ob[5] = producto.getCategory();
+			ob[6] = producto.getSname() + " " + producto.getSlastName() ;
 			this.form.model.addRow(ob);
 		}
 		// seteamos el model al jtable
