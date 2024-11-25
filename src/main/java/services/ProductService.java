@@ -75,4 +75,30 @@ public class ProductService {
 		}
 		return registros;
 	}
+
+	// para actualizar
+	public int update(Product producto) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		int registros = 0;
+		try {
+			// obtenemos la conexion
+			conn = ConnectionDB.getConnection();
+			stmt = conn.prepareStatement(SQL_UPDATE);
+			stmt.setString(1, producto.getName());
+			stmt.setString(2, producto.getDescription());
+			stmt.setDouble(3, producto.getPrice());
+			stmt.setInt(4, producto.getQuantity());
+			stmt.setInt(5, producto.getIdCategory());
+			stmt.setInt(6, producto.getIdSupplier());
+			stmt.setInt(7, producto.getIdProduct());
+			registros = stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionDB.close(conn);
+		}
+		return registros;
+	}
+
 }

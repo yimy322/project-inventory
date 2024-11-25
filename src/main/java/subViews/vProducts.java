@@ -62,7 +62,7 @@ public class vProducts extends JPanel {
 		add(textId);
 		textId.setColumns(10);
 		
-		lblNombre = new JLabel("Nombres");
+		lblNombre = new JLabel("Nombre");
 		lblNombre.setBounds(185, 47, 70, 15);
 		lblNombre.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblNombre);
@@ -121,11 +121,11 @@ public class vProducts extends JPanel {
 		add(cbProveedor);
 		
 		btnGuardar = new JButton("Guardar");
-		btnGuardar.setBounds(770, 101, 100, 25);
+		btnGuardar.setBounds(770, 101, 115, 25);
 		add(btnGuardar);
 		
 		btnLimpiar = new JButton("Limpiar");
-		btnLimpiar.setBounds(890, 101, 100, 25);
+		btnLimpiar.setBounds(890, 101, 115, 25);
 		add(btnLimpiar);
 		
 		jTableProducts = new JTable();
