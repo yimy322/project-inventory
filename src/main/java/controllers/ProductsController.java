@@ -8,6 +8,8 @@ import java.awt.event.MouseListener;
 import javax.swing.JOptionPane;
 
 import extras.Input;
+import hashTable.HashTable;
+import hashTable.Node;
 import linkedList.LinkedList;
 import models.Category;
 import models.Product;
@@ -47,7 +49,10 @@ public class ProductsController implements ActionListener, MouseListener {
 		// iteramos
 		for (int i = 0; i < categorias.size(); i++) {
 			Category categoria = (Category) categorias.get(i);
-			form.cbCategoria.addItem(categoria.getName());
+			//se crea el nodo
+			Node nodeCategoria = new Node(categoria.getIdCategory(), categoria);
+			//se agrega el nodo al combo, como tiene to string imprimira el tostring del value en este caso del category
+			form.cbCategoria.addItem(nodeCategoria);
 		}
 	}
 
@@ -56,9 +61,15 @@ public class ProductsController implements ActionListener, MouseListener {
 		form.cbProveedor.removeAllItems(); // Se limpia el combo
 		for (int i = 0; i < proveedores.size(); i++) {// Itera la lista de proveedores
 			Supplier proveedor = (Supplier) proveedores.get(i); // Retorna objeto de tipo proveedor
-			form.cbProveedor.addItem(proveedor.getName() + " " + proveedor.getLastName()); // Se agrega cada proveedor
-																							// al combo
+			//se crea el nodo
+			Node nodeProveedor = new Node(proveedor.getIdSupplier(), proveedor);
+			form.cbProveedor.addItem(nodeProveedor); // Se agrega cada proveedor al combo
 		}
+	}
+	//retorna el key del valor del parametro
+	public int searchIdCbm(Object obj) {
+		Node selectedItem = (Node) obj;
+		return selectedItem.key;
 	}
 
 	public void save() {
@@ -68,8 +79,9 @@ public class ProductsController implements ActionListener, MouseListener {
 			producto.setDescription(this.form.txtDescripcion.getText());
 			producto.setPrice(Double.parseDouble(this.form.txtPrecio.getText()));
 			producto.setQuantity(Integer.parseInt(this.form.txtCantidad.getText()));
-			producto.setIdCategory(1);
-			producto.setIdSupplier(1);
+			//se le pasa el valor del combo, y te retornara su clave
+			producto.setIdCategory(searchIdCbm(form.cbCategoria.getSelectedItem()));
+			producto.setIdSupplier(searchIdCbm(form.cbProveedor.getSelectedItem()));
 			if (this.form.textId.getText().isEmpty()) {
 				// se valida si guardar o no
 				int respuesta = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que deseas guardar el registro?",

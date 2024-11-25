@@ -8,6 +8,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 
+import hashTable.Node;
+
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -30,9 +32,9 @@ public class vProducts extends JPanel {
 	public JLabel lblCantidad;
 	public JTextField txtCantidad;
 	public JLabel lblCategoria;
-	public JComboBox<String> cbCategoria;
+	public JComboBox<Node> cbCategoria;
 	public JLabel lblProveedor;
-	public JComboBox<String> cbProveedor;
+	public JComboBox<Node> cbProveedor;
 	public JButton btnGuardar, btnLimpiar;
 	public JTable jTableProducts;
 	public DefaultTableModel model;
@@ -107,7 +109,7 @@ public class vProducts extends JPanel {
 		lblCategoria.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblCategoria);
 		
-		cbCategoria = new JComboBox<String>();
+		cbCategoria = new JComboBox<Node>();
 		cbCategoria.setBounds(131, 103, 150, 24);
 		add(cbCategoria);
 		
@@ -116,7 +118,7 @@ public class vProducts extends JPanel {
 		lblProveedor.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblProveedor);
 		
-		cbProveedor = new JComboBox<String>();
+		cbProveedor = new JComboBox<Node>();
 		cbProveedor.setBounds(420, 103, 150, 24);
 		add(cbProveedor);
 		

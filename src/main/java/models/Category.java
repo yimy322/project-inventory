@@ -1,24 +1,24 @@
 package models;
 
 public class Category {
-	
-	private int id_category;
+
+	private int idCategory;
 	private String name;
 	private String description;
-	
-	public Category(int id_category, String name, String description) {
+
+	public Category(int idCategory, String name, String description) {
 		super();
-		this.id_category = id_category;
+		this.idCategory = idCategory;
 		this.name = name;
 		this.description = description;
 	}
 
-	public int getId_category() {
-		return id_category;
+	public int getIdCategory() {
+		return idCategory;
 	}
 
-	public void setId_category(int id_category) {
-		this.id_category = id_category;
+	public void setIdCategory(int idCategory) {
+		this.idCategory = idCategory;
 	}
 
 	public String getName() {
@@ -36,5 +36,12 @@ public class Category {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 	
+	
+
 }
