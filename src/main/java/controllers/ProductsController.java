@@ -1,11 +1,21 @@
 package controllers;
 
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import extras.Input;
 import hashTable.HashTable;
@@ -25,11 +35,15 @@ public class ProductsController implements ActionListener, MouseListener {
 	CategoryService categoryService = new CategoryService();
 	SupplierService supplierService = new SupplierService();
 	ProductService productService = new ProductService();
+	// un default para el combo
+	Node nodeDefault = new Node(0, "<SELECCIONAR>");
+	Node noEditable = new Node(0, "No editable");
 
 	public ProductsController(vProducts form) {
 		this.form = form;
 		this.form.btnGuardar.addActionListener(this);
 		this.form.btnLimpiar.addActionListener(this);
+		this.form.btnExcel.addActionListener(this);
 		this.form.jTableProducts.addMouseListener(this);
 		init();
 	}
@@ -46,12 +60,15 @@ public class ProductsController implements ActionListener, MouseListener {
 		LinkedList categorias = categoryService.findAll();
 		// limpiamos el combo
 		form.cbCategoria.removeAllItems();// se duplica en un caso por eso se limpia
+		// un default para el combo
+		form.cbCategoria.addItem(nodeDefault);
 		// iteramos
 		for (int i = 0; i < categorias.size(); i++) {
 			Category categoria = (Category) categorias.get(i);
-			//se crea el nodo
+			// se crea el nodo
 			Node nodeCategoria = new Node(categoria.getIdCategory(), categoria);
-			//se agrega el nodo al combo, como tiene to string imprimira el tostring del value en este caso del category
+			// se agrega el nodo al combo, como tiene to string imprimira el tostring del
+			// value en este caso del category
 			form.cbCategoria.addItem(nodeCategoria);
 		}
 	}
@@ -59,14 +76,17 @@ public class ProductsController implements ActionListener, MouseListener {
 	public void loadSuppliers() {
 		LinkedList proveedores = supplierService.findAll();// Se obtiene una lista de proveedores de la base de datos
 		form.cbProveedor.removeAllItems(); // Se limpia el combo
+		// un default para el combo
+		form.cbProveedor.addItem(nodeDefault);
 		for (int i = 0; i < proveedores.size(); i++) {// Itera la lista de proveedores
 			Supplier proveedor = (Supplier) proveedores.get(i); // Retorna objeto de tipo proveedor
-			//se crea el nodo
+			// se crea el nodo
 			Node nodeProveedor = new Node(proveedor.getIdSupplier(), proveedor);
 			form.cbProveedor.addItem(nodeProveedor); // Se agrega cada proveedor al combo
 		}
 	}
-	//retorna el key del valor del parametro
+
+	// retorna el key del valor del parametro
 	public int searchIdCbm(Object obj) {
 		Node selectedItem = (Node) obj;
 		return selectedItem.key;
@@ -79,7 +99,7 @@ public class ProductsController implements ActionListener, MouseListener {
 			producto.setDescription(this.form.txtDescripcion.getText());
 			producto.setPrice(Double.parseDouble(this.form.txtPrecio.getText()));
 			producto.setQuantity(Integer.parseInt(this.form.txtCantidad.getText()));
-			//se le pasa el valor del combo, y te retornara su clave
+			// se le pasa el valor del combo, y te retornara su clave
 			producto.setIdCategory(searchIdCbm(form.cbCategoria.getSelectedItem()));
 			producto.setIdSupplier(searchIdCbm(form.cbProveedor.getSelectedItem()));
 			if (this.form.textId.getText().isEmpty()) {
@@ -132,7 +152,7 @@ public class ProductsController implements ActionListener, MouseListener {
 			ob[3] = producto.getPrice();
 			ob[4] = producto.getQuantity();
 			ob[5] = producto.getCategory();
-			ob[6] = producto.getSname() + " " + producto.getSlastName() ;
+			ob[6] = producto.getSname() + " " + producto.getSlastName();
 			this.form.model.addRow(ob);
 		}
 		// seteamos el model al jtable
@@ -145,13 +165,18 @@ public class ProductsController implements ActionListener, MouseListener {
 		this.form.txtDescripcion.setText("");
 		this.form.txtPrecio.setText("");
 		this.form.txtCantidad.setText("");
+		loadCategories();
+		loadSuppliers();
+		this.form.cbCategoria.setEnabled(true);
+		this.form.cbProveedor.setEnabled(true);
 		this.form.btnGuardar.setText("Guardar");
 	}
 
 	public boolean validate() {
 		if (!this.form.txtNombre.getText().trim().isEmpty() && !this.form.txtDescripcion.getText().trim().isEmpty()
-				&& !this.form.txtPrecio.getText().trim().isEmpty()
-				&& !this.form.txtCantidad.getText().trim().isEmpty()) {
+				&& !this.form.txtPrecio.getText().trim().isEmpty() && !this.form.txtCantidad.getText().trim().isEmpty()
+				&& !this.form.cbCategoria.getSelectedItem().equals(nodeDefault)
+				&& !this.form.cbProveedor.getSelectedItem().equals(nodeDefault)) {
 			return true;
 		} else {
 			return false;
@@ -165,6 +190,71 @@ public class ProductsController implements ActionListener, MouseListener {
 			save();
 		} else if (press == this.form.btnLimpiar) {
 			clear();
+		} else if (press == this.form.btnExcel) {
+			exportExcel();
+		}
+	}
+
+	public void exportExcel() {
+		try {
+			// instanciamos la clase, el JFileChooser sirve para seleccionar el directorio
+			JFileChooser chooser = new JFileChooser();
+			// el metodo showsavediaolog es el que muestra el cuadro de dialogo
+			chooser.showSaveDialog(this.form);
+			// capturamos el archivo
+			File guardar = chooser.getSelectedFile();
+			// validamos que se haya capturado una ruta
+			if (guardar != null) {
+				// le pasamos la extension al archivo, file guardara una cadena
+				guardar = new File(guardar.toString() + ".xlsx");
+				// aca creamos un libro de excel
+				Workbook wb = new XSSFWorkbook();
+				// creamos una hoja dentro el libro de excel
+				Sheet sheet = wb.createSheet("customer");
+				// se crea una fila dentro de la hoja
+				Row rowCol = sheet.createRow(0);
+				// recoremos las columnas de nuestra tabla
+				for (int i = 0; i < this.form.jTableProducts.getColumnCount(); i++) {
+					// creamos las celdas dentro del excel
+					Cell cell = rowCol.createCell(i);
+					// asignamos un valor a las celdas
+					cell.setCellValue(this.form.jTableProducts.getColumnName(i));
+				}
+				for (int j = 0; j < this.form.jTableProducts.getRowCount(); j++) {
+					Row row = sheet.createRow(j);
+					for (int k = 0; k < this.form.jTableProducts.getColumnCount(); k++) {
+						Cell cell = row.createCell(k);
+						if (this.form.jTableProducts.getValueAt(j, k) != null) {
+							cell.setCellValue(this.form.jTableProducts.getValueAt(j, k).toString());
+						}
+					}
+				}
+				// escribimos los resultados en un fichero excel
+				FileOutputStream out = new FileOutputStream(new File(guardar.toString()));
+				wb.write(out);
+				// aca cerramos
+				wb.close();
+				out.close();
+				openFile(guardar.toString());
+			} else {
+				// en caso de que no se haya guardado me mostrara un mensaje
+				JOptionPane.showMessageDialog(null, "Error al generar archivo", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println(e);
+		} catch (IOException ie) {
+			System.out.println(ie);
+		}
+	}
+
+	//funcion para abrir el excel una vez lo hayamos guardado
+	public void openFile(String file) {
+		try {
+			File ruta = new File(file);
+			//este metodo permite abrir e imprimir ficheros
+			Desktop.getDesktop().open(ruta);
+		} catch (IOException e) {
+			System.out.println(e);
 		}
 	}
 
@@ -181,6 +271,13 @@ public class ProductsController implements ActionListener, MouseListener {
 		this.form.txtDescripcion.setText(this.form.model.getValueAt(filaSeleccionada, 2).toString());
 		this.form.txtPrecio.setText(this.form.model.getValueAt(filaSeleccionada, 3).toString());
 		this.form.txtCantidad.setText(this.form.model.getValueAt(filaSeleccionada, 4).toString());
+		// se le pone el default al combo y se deshabilita
+		form.cbCategoria.addItem(noEditable);
+		form.cbProveedor.addItem(noEditable);
+		this.form.cbCategoria.setSelectedItem(noEditable);
+		this.form.cbProveedor.setSelectedItem(noEditable);
+		this.form.cbCategoria.setEnabled(false);
+		this.form.cbProveedor.setEnabled(false);
 		this.form.btnGuardar.setText("Actualizar");
 	}
 

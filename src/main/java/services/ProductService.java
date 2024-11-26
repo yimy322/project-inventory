@@ -12,7 +12,7 @@ import models.Product;
 public class ProductService {
 	private static final String SQL_SELECT = "SELECT p.*, c.name as category, s.name as s_name, s.last_name as s_last_name from products p join categories c on p.id_category = c.id_category join suppliers s on p.id_supplier = s.id_supplier";
 	private static final String SQL_INSERT = "INSERT INTO products(name, description, price, quantity, id_category, id_supplier) VALUES (?,?,?,?,?,?)";
-	private static final String SQL_UPDATE = "UPDATE products SET name = ?,description = ?,price = ?,quantity = ?,id_category = ?,id_supplier = ? WHERE id_product= ?";
+	private static final String SQL_UPDATE = "UPDATE products SET name = ?,description = ?,price = ?,quantity = ? WHERE id_product= ?";
 
 	// traera en una lista enlazada toda la consulta de la tabla
 	public LinkedList findAll() {
@@ -92,9 +92,7 @@ public class ProductService {
 			stmt.setString(2, producto.getDescription());
 			stmt.setDouble(3, producto.getPrice());
 			stmt.setInt(4, producto.getQuantity());
-			stmt.setInt(5, producto.getIdCategory());
-			stmt.setInt(6, producto.getIdSupplier());
-			stmt.setInt(7, producto.getIdProduct());
+			stmt.setInt(5, producto.getIdProduct());
 			registros = stmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

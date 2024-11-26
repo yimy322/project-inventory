@@ -111,6 +111,7 @@ public class vProducts extends JPanel {
 		
 		cbCategoria = new JComboBox<Node>();
 		cbCategoria.setBounds(131, 103, 150, 24);
+		cbCategoria.setEditable(false);
 		add(cbCategoria);
 		
 		lblProveedor = new JLabel("Proveedor");
@@ -120,6 +121,7 @@ public class vProducts extends JPanel {
 		
 		cbProveedor = new JComboBox<Node>();
 		cbProveedor.setBounds(420, 103, 150, 24);
+		cbProveedor.setEditable(false);
 		add(cbProveedor);
 		
 		btnGuardar = new JButton("Guardar");
