@@ -37,6 +37,7 @@ public class vInventory extends JPanel {
 	public JLabel lblUtlSalida;
 	public JTextField textUtlSalida;
 	public JButton btnOrdenar;
+	public JButton btnOrdenarId;
 	/**
 	 * Create the panel.
 	 */
@@ -67,6 +68,10 @@ public class vInventory extends JPanel {
 		btnOrdenar = new JButton("Ordenar por nombre");
 		btnOrdenar.setBounds(250, 38, 180, 25);
 		add(btnOrdenar);
+		
+		btnOrdenarId = new JButton("Ordenar por Id");
+		btnOrdenarId.setBounds(450, 38, 180, 25);
+		add(btnOrdenarId);
 		
 		ImageIcon iconExcel = new ImageIcon(getClass().getResource("/images/excel.png"));
 		btnExcel = new JButton(iconExcel);
