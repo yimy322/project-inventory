@@ -1,15 +1,28 @@
 package controllers;
 
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import linkedList.LinkedList;
 import linkedList.Node;
 import models.Product;
 import services.ProductService;
 import subViews.vInventory;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class InventoryController implements ActionListener, KeyListener {
 
@@ -128,7 +141,7 @@ public class InventoryController implements ActionListener, KeyListener {
 		refreshTable();
 	}
 
-	//metodo de busqueda binaria
+	// metodo de busqueda binaria
 	public int search(String valor) {
 		productos = productService.findAll();
 		shell();
@@ -150,9 +163,80 @@ public class InventoryController implements ActionListener, KeyListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent ae) {
 		// TODO Auto-generated method stub
 
+		Object press = ae.getSource();
+		if (press == this.form.btnOrdenar) {
+			sortByName();
+		} else if (press == this.form.btnOrdenarId) {
+			sortById();
+		} else if (press == this.form.btnExcel) {
+			exportExcel();
+		}
+	}
+
+	public void exportExcel() {
+		try {
+			// instanciamos la clase, el JFileChooser sirve para seleccionar el directorio
+			JFileChooser chooser = new JFileChooser();
+			// el metodo showsavediaolog es el que muestra el cuadro de dialogo
+			chooser.showSaveDialog(this.form);
+			// capturamos el archivo
+			File guardar = chooser.getSelectedFile();
+			// validamos que se haya capturado una ruta
+			if (guardar != null) {
+				// le pasamos la extension al archivo, file guardara una cadena
+				guardar = new File(guardar.toString() + ".xlsx");
+				// aca creamos un libro de excel
+				Workbook wb = new XSSFWorkbook();
+				// creamos una hoja dentro el libro de excel
+				Sheet sheet = wb.createSheet("customer");
+				// se crea una fila dentro de la hoja
+				Row rowCol = sheet.createRow(0);
+				// recoremos las columnas de nuestra tabla
+				for (int i = 0; i < this.form.jTableProducts.getColumnCount(); i++) {
+					// creamos las celdas dentro del excel
+					Cell cell = rowCol.createCell(i);
+					// asignamos un valor a las celdas
+					cell.setCellValue(this.form.jTableProducts.getColumnName(i));
+				}
+				for (int j = 0; j < this.form.jTableProducts.getRowCount(); j++) {
+					Row row = sheet.createRow(j);
+					for (int k = 0; k < this.form.jTableProducts.getColumnCount(); k++) {
+						Cell cell = row.createCell(k);
+						if (this.form.jTableProducts.getValueAt(j, k) != null) {
+							cell.setCellValue(this.form.jTableProducts.getValueAt(j, k).toString());
+						}
+					}
+				}
+				// escribimos los resultados en un fichero excel
+				FileOutputStream out = new FileOutputStream(new File(guardar.toString()));
+				wb.write(out);
+				// aca cerramos
+				wb.close();
+				out.close();
+				openFile(guardar.toString());
+			} else {
+				// en caso de que no se haya guardado me mostrara un mensaje
+				JOptionPane.showMessageDialog(null, "Error al generar archivo", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println(e);
+		} catch (IOException ie) {
+			System.out.println(ie);
+		}
+	}
+
+	// funcion para abrir el excel una vez lo hayamos guardado
+	public void openFile(String file) {
+		try {
+			File ruta = new File(file);
+			// este metodo permite abrir e imprimir ficheros
+			Desktop.getDesktop().open(ruta);
+		} catch (IOException e) {
+			System.out.println(e);
+		}
 	}
 
 	public void showView() {
