@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import linkedList.LinkedList;
+import linkedList.Node;
 import models.Product;
 import services.ProductService;
 import subViews.vInventory;
@@ -29,11 +30,10 @@ public class InventoryController implements ActionListener, KeyListener {
 
 	public void init() {
 		refreshTable();
-		
 
 	}
 
-	public void refreshTable() { //pinta los registros en la tabla de la vista
+	public void refreshTable() { // pinta los registros en la tabla de la vista
 		// antes de cargar los registros, borramos al data para que no se repita
 		for (int j = 0; j < this.form.jTableProducts.getRowCount(); j++) {
 			this.form.model.removeRow(j);
@@ -55,6 +55,67 @@ public class InventoryController implements ActionListener, KeyListener {
 		}
 		// seteamos el model al jtable
 		this.form.jTableProducts.setModel(this.form.model);
+	}
+
+	// intercambia la data del node, de la lista xd
+	private void intercambiar(Node i, Node j) {
+		Object temp = i.data;
+		i.data = j.data;
+		j.data = temp;
+	}
+
+	// ordena por nombre
+	public void shell() {
+		int intervalo, i, j, k;
+		int n = productos.size();
+		intervalo = n / 2;
+		while (intervalo > 0) {
+			for (i = intervalo; i < n; i++) {
+				j = i - intervalo;
+				while (j >= 0) {
+					k = j + intervalo;
+					Node iNode = productos.getNode(j);
+					Node JNode = productos.getNode(k);
+					Product primerValor = (Product) productos.get(j);
+					Product segundoValor = (Product) productos.get(k);
+					// el compareto retorna un int, si es menor significa que esta ordenado
+					// alfabeticamente, en caso se cambia de pos
+					if (primerValor.getName().compareTo(segundoValor.getName()) < 0)
+						j = -1;
+					else {
+						intercambiar(iNode, JNode);
+						j -= intervalo;
+					}
+				}
+			}
+			intervalo = intervalo / 2;
+		}
+	}
+
+	// metodo para ordenar por id
+	public void shellById() {
+		int intervalo, i, j, k;
+		int n = productos.size();
+		intervalo = n / 2;
+		while (intervalo > 0) {
+			for (i = intervalo; i < n; i++) {
+				j = i - intervalo;
+				while (j >= 0) {
+					k = j + intervalo;
+					Node iNode = productos.getNode(j);
+					Node JNode = productos.getNode(k);
+					Product primerValor = (Product) productos.get(j);
+					Product segundoValor = (Product) productos.get(k);
+					if (primerValor.getIdProduct() < segundoValor.getIdProduct())
+						j = -1;
+					else {
+						intercambiar(iNode, JNode);
+						j -= intervalo;
+					}
+				}
+			}
+			intervalo = intervalo / 2;
+		}
 	}
 
 	@Override
