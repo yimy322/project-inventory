@@ -118,6 +118,37 @@ public class InventoryController implements ActionListener, KeyListener {
 		}
 	}
 
+	public void sortByName() {
+		shell();
+		refreshTable();
+	}
+
+	public void sortById() {
+		shellById();
+		refreshTable();
+	}
+
+	//metodo de busqueda binaria
+	public int search(String valor) {
+		productos = productService.findAll();
+		shell();
+		int central, bajo, alto;
+		Product valorCentral;
+		bajo = 0;
+		alto = productos.size() - 1;
+		while (bajo <= alto) {
+			central = (bajo + alto) / 2;
+			valorCentral = (Product) productos.get(central);
+			if (valorCentral.getName().matches("(?i)(.*)" + valor + "(.*)"))
+				return central;
+			else if (valor.compareTo(valorCentral.getName()) < 0)
+				alto = central - 1;
+			else
+				bajo = central + 1;
+		}
+		return -1; // elemento no encontrado
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
