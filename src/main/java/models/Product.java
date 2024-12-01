@@ -124,4 +124,9 @@ public class Product {
 		sLastName = slastName;
 	}
 
+	@Override
+	public String toString() {
+		return "name=" + name ;
+	}
+
 }

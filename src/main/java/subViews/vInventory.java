@@ -19,23 +19,24 @@ import javax.swing.JLabel;
 public class vInventory extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	JTextField textBusqueda;
-	JLabel lblLupa;
-	JTable jTableProducts;
-	DefaultTableModel model;
-	JButton btnExcel, btnCsv,btnJson;
-	JLabel lblTotal;
-	JTextField textTotal;
-	JLabel lblValor;
-	JTextField textValor;
-	JLabel lblMasCategoria;
-	JTextField textMasCategoria;
-	JLabel lblMenosCategoria;
-	JTextField textMenosCategoria;
-	JLabel lblUltIngreso;
-	JTextField textUltIngreso;
-	JLabel lblUtlSalida;
-	JTextField textUtlSalida;
+	public JTextField textBusqueda;
+	public JLabel lblLupa;
+	public JTable jTableProducts;
+	public DefaultTableModel model;
+	public JButton btnExcel, btnCsv,btnJson;
+	public 	JLabel lblTotal;
+	public JTextField textTotal;
+	public 	JLabel lblValor;
+	public JTextField textValor;
+	public JLabel lblMasCategoria;
+	public JTextField textMasCategoria;
+	public 	JLabel lblMenosCategoria;
+	public JTextField textMenosCategoria;
+	public 	JLabel lblUltIngreso;
+	public JTextField textUltIngreso;
+	public JLabel lblUtlSalida;
+	public JTextField textUtlSalida;
+	public JButton btnOrdenar;
 	/**
 	 * Create the panel.
 	 */
@@ -63,6 +64,10 @@ public class vInventory extends JPanel {
 		add(lblLupa);
 		
 		//buttons
+		btnOrdenar = new JButton("Ordenar por nombre");
+		btnOrdenar.setBounds(250, 38, 180, 25);
+		add(btnOrdenar);
+		
 		ImageIcon iconExcel = new ImageIcon(getClass().getResource("/images/excel.png"));
 		btnExcel = new JButton(iconExcel);
 		btnExcel.setBounds(1118, 38, 50, 25);
