@@ -252,12 +252,36 @@ public class InventoryController implements ActionListener, KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
+		sortById();
 
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
+		if (this.form.textBusqueda.getText().trim().isEmpty()) {
+			System.out.println("esta vacio");
+			productos = productService.findAll();
+			refreshTable();
+		} else {
+			LinkedList nuevoProductos = new LinkedList();
+			Product producto = null;
+			try {
+				if (search(this.form.textBusqueda.getText()) != -1) {
+					producto = (Product) productos.get(search(this.form.textBusqueda.getText()));
+					nuevoProductos.addLast(producto);
+				}
+			} catch (Exception ea) {
+				ea.getMessage();
+			}
+			if (nuevoProductos.size() > 0) {
+				productos = nuevoProductos;
+			} else {
+				productos = null;
+			}
+			refreshTable();
+			System.out.println(search(this.form.textBusqueda.getText()));
+		}
 
 	}
 
