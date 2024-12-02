@@ -43,7 +43,9 @@ public class InventoryController implements ActionListener, KeyListener {
 
 	public void init() {
 		refreshTable();
-
+		this.form.textTotal.setText(totalProducts() + "");
+		this.form.textValor.setText("S/. " + totalValue() + "");
+		this.form.textUltIngreso.setText(lastEntrY());
 	}
 
 	public void refreshTable() { // pinta los registros en la tabla de la vista
@@ -283,6 +285,34 @@ public class InventoryController implements ActionListener, KeyListener {
 			System.out.println(search(this.form.textBusqueda.getText()));
 		}
 
+	}
+
+	public int totalProducts() {
+		return productos.size();
+	}
+
+	public double totalValue() {
+		int acumulador = 0;
+		if (productos != null) {
+			for (int i = 0; i < productos.size(); i++) {
+				Product producto = (Product) productos.get(i);
+				double valor = producto.getPrice() * producto.getQuantity();
+				acumulador += valor;
+			}
+		}
+		return acumulador;
+	}
+
+	public String lastEntrY() {
+		String ultimoProducto = "";
+		sortById();
+		if (productos != null) {
+			for (int i = 0; i < productos.size(); i++) {
+				Product producto = (Product) productos.get(i);
+				ultimoProducto = producto.getName();
+			}
+		}
+		return ultimoProducto;
 	}
 
 }

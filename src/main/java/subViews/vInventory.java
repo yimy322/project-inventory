@@ -113,7 +113,7 @@ public class vInventory extends JPanel {
 		textTotal = new JTextField();
 		textTotal.setBounds(30, 430, 150, 30);
 		textTotal.setColumns(10);
-		textTotal.setEnabled(false);
+		textTotal.setEditable(false); // 
 		add(textTotal);
 		
 		lblValor = new JLabel("Valor total");
@@ -124,7 +124,7 @@ public class vInventory extends JPanel {
 		textValor = new JTextField();
 		textValor.setBounds(225, 430, 150, 30);
 		textValor.setColumns(10);
-		textValor.setEnabled(false);
+		textValor.setEditable(false);
 		add(textValor);
 		
 		lblMasCategoria = new JLabel("Cate. mas popular");
@@ -135,7 +135,7 @@ public class vInventory extends JPanel {
 		textMasCategoria = new JTextField();
 		textMasCategoria.setBounds(425, 430, 150, 30);
 		textMasCategoria.setColumns(10);
-		textMasCategoria.setEnabled(false);
+		textMasCategoria.setEditable(false);
 		add(textMasCategoria);
 		
 		lblMenosCategoria = new JLabel("Cate. menos popular");
@@ -146,7 +146,7 @@ public class vInventory extends JPanel {
 		textMenosCategoria = new JTextField();
 		textMenosCategoria.setBounds(625, 430, 150, 30);
 		textMenosCategoria.setColumns(10);
-		textMenosCategoria.setEnabled(false);
+		textMenosCategoria.setEditable(false);
 		add(textMenosCategoria);
 		
 		lblUltIngreso = new JLabel("Ultimo ingreso");
@@ -157,7 +157,7 @@ public class vInventory extends JPanel {
 		textUltIngreso = new JTextField();
 		textUltIngreso.setBounds(825, 430, 150, 30);
 		textUltIngreso.setColumns(10);
-		textUltIngreso.setEnabled(false);
+		textUltIngreso.setEditable(false);
 		add(textUltIngreso);
 		
 		lblUtlSalida = new JLabel("Ultima salida");
@@ -168,7 +168,7 @@ public class vInventory extends JPanel {
 		textUtlSalida = new JTextField();
 		textUtlSalida.setBounds(1024, 430, 150, 30);
 		textUtlSalida.setColumns(10);
-		textUtlSalida.setEnabled(false);
+		textUtlSalida.setEditable(false);
 		add(textUtlSalida);
 		
 	}
