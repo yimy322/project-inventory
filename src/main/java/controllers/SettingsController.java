@@ -1,7 +1,11 @@
 package controllers;
 
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.LinkOption;
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +17,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import RSMaterialComponent.RSButtonMaterialIconDos;
+import hashTable.Node;
 import linkedList.LinkedList;
+import models.Category;
 import models.Roles;
 import models.User;
 import rojeru_san.efectos.ValoresEnum.ICONS;
@@ -25,11 +31,19 @@ public class SettingsController implements ActionListener {
 
 	private vSettings form;
 	private String[] usOld;
-
+	private boolean[] rolOld;
+	LoginController loginController = new LoginController();
+	UserService userServiceSQL = new UserService();
+	RoleService roleServiceSQL = new RoleService();
+	Node nodeDefault = new Node(0, "<SELECCIONAR>");
+	Node noEditable = new Node(0, "No editable");
+	
 	public SettingsController(vSettings form) {
 		this.form = form;
-		List<RSButtonMaterialIconDos> buttons = Arrays.asList(this.form.btnExit, this.form.btnAccountEditar, this.form.btnUsers, this.form.btnSecurity, this.form.btnAddUser, this.form.btnDeleteUser);
+		List<RSButtonMaterialIconDos> buttons = Arrays.asList(this.form.btnExit, this.form.btnAccountEditar, this.form.btnUsers, this.form.btnSecurity, this.form.btnAddUser,
+				this.form.btnDeleteUser, this.form.btnBackUp, this.form.btnRestore, this.form.btnSaveRole, this.form.btnGoVideo, this.form.btnSend);
 		buttons.forEach(button -> button.addActionListener(this));
+		this.form.cbxUsers.addActionListener(this);
 		init();
 	}
 	//LoginController loginAction = new LoginController();
@@ -42,10 +56,11 @@ public class SettingsController implements ActionListener {
 		this.form.txtTelefonoUsuario.setText(String.valueOf(LoginController.USER.getPhone()));
 		this.form.txtEmailUsuario.setText(LoginController.USER.getEmail());
 		this.form.lblUsuarioSettings.setText(LoginController.USER.getUsername());
-		boolean enableADMIN = this.form.txtNombreUsuario.getText().equals("ADMIN");
+		boolean enableADMIN = isAdmin();
 		List<RSButtonMaterialIconDos> buttons = Arrays.asList(this.form.btnUsers, this.form.btnSecurity);
 		buttons.forEach(button -> button.setEnabled(enableADMIN));
 		loadUserTable();
+		loadCbxUsers();
 	}
 
 	public void exit() {
@@ -56,6 +71,18 @@ public class SettingsController implements ActionListener {
 		}
 	}
 
+	//VALIDA QUE SE HABILITEN OPCIONES DE ADMINISTRADOR SOLAMENTE PARA USUARIOS CON PERMISO DE ADMINISTRADOR
+	public boolean isAdmin() {
+		int idUser = LoginController.USER.getIdUser();
+		LinkedList roles = roleServiceSQL.findAll();
+		for(int i=0; i<roles.size(); i++) {
+			Roles role = (Roles) roles.get(i);
+			if(role.getIdUser() == idUser && role.getRole().equals("ROLE_ADMIN"))
+				return true;
+		}
+		return false;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		// aca se captura el obj que llama al evento
@@ -68,6 +95,14 @@ public class SettingsController implements ActionListener {
 			saveInsertUser();
 		}else if(press == this.form.btnDeleteUser) {
 			deleteUser();
+		}else if(press == this.form.cbxUsers){
+			loadCbxRole();
+		}else if(press == this.form.btnSaveRole) {
+			saveModifiedRole();
+		}else if(press == this.form.btnGoVideo){
+			openTutorial();
+		}else if(press == this.form.btnSend) {
+			sendEmail();
 		}
 	}
 
@@ -86,13 +121,12 @@ public class SettingsController implements ActionListener {
 
 	// PERMITE HABILITAR LA EDICION DE LA CAJA DE TEXTO DEPENDIENDO DEL ESTADO
 	public void enableTextAccount() {
-		LoginController loginAction = new LoginController();
 		boolean opcion = this.form.btnAccountEditar.getText().toString().equals("Editar");
 		List<JTextField> txtFields = Arrays.asList(this.form.txtNombreUsuario, this.form.txtPasswordUsuario,
 				this.form.txtFirstName, this.form.txtLastName, this.form.txtTelefonoUsuario, this.form.txtEmailUsuario);
 		txtFields.forEach(field -> field.setEditable(!opcion));
 		if(!opcion)
-			this.form.txtPasswordUsuario.setText(loginAction.desencryptor(LoginController.USER.getPassword(), 5));
+			this.form.txtPasswordUsuario.setText(loginController.desencryptor(LoginController.USER.getPassword(), 5));
 		else
 			this.form.txtPasswordUsuario.setText(LoginController.USER.getPassword());
 	}
@@ -112,14 +146,13 @@ public class SettingsController implements ActionListener {
 	// PERMITE COMPARA LOS DATOS ANTIGUOS Y LOS NUEVOS PARA VERIFICAR SI HAY CAMBIOS
 	public boolean isModified(String[] usOld, String[] usNew) {
 		boolean opcion = this.form.btnAccountEditar.getText().toString().equals("Editar");
-		LoginController loginAction = new LoginController();
 	    for (int i = 1; i < usNew.length; i++) {
 	        if (!Objects.equals(usOld[i], usNew[i])) {
 	            return true;
 	        }
 	    }
 	    if(!opcion) {
-	    	if(!Objects.equals(loginAction.encryptor(usNew[0], 5), usOld[0])) {
+	    	if(!Objects.equals(loginController.encryptor(usNew[0], 5), usOld[0])) {
 	    		return true;
 	    	}
 	    }
@@ -136,8 +169,7 @@ public class SettingsController implements ActionListener {
 			String[] usNew = getUserActive();
 			if(isModified(usOld, usNew)) {
 				if(!usOld[1].equals("ADMIN")) {
-					UserService serviceSQL = new UserService();
-					serviceSQL.updateUser(getUserAccount());
+					userServiceSQL.updateUser(getUserAccount());
 				}
 			}
 			usOld = getUserActive();
@@ -150,22 +182,20 @@ public class SettingsController implements ActionListener {
 	
 	//PERMITE ALMACENAR EL VALOR DE LOS REGISTROS EN LA CUENTA ACTIVA EN UN OBJETO
 	public User getUserAccount() {
-		LoginController loginService = new LoginController();
 		String nickName = this.form.txtNombreUsuario.getText();
 		String password = this.form.txtPasswordUsuario.getText();
 		String firstName = this.form.txtFirstName.getText();
 		String lastName = this.form.txtLastName.getText();
 		int phone = Integer.parseInt(this.form.txtTelefonoUsuario.getText());
 		String email = this.form.txtEmailUsuario.getText();
-		User user = new User(LoginController.USER.getIdUser(), nickName, loginService.encryptor(password, 5), firstName, lastName, phone, email);
+		User user = new User(LoginController.USER.getIdUser(), nickName, loginController.encryptor(password, 5), firstName, lastName, phone, email);
 		return user;
 	}
 	
 	//PERMITE CARGAR LA TABLA DE LISTA DE USUARIOS EN LA BASE DE DATOS
 	public void loadUserTable() {
-		UserService userService = new UserService();
 		DefaultTableModel model = new DefaultTableModel(new String[] {"NickName", "Password", "Nombre", "Apellido", "Telefono", "Email"},0);
-		LinkedList usuarios = userService.findAll();
+		LinkedList usuarios = userServiceSQL.findAll();
 		for(int i=0; i<usuarios.size(); i++) {
 			User us = (User)usuarios.get(i);
 			model.addRow(new Object[] {
@@ -182,14 +212,13 @@ public class SettingsController implements ActionListener {
 	
 	//PERMITE ALAMCANAR EN UN OBJECTO LOS REGISTRO NUEVOS REFERENTES AL NUEVO USUARIO
 	public User getUserInsert() {
-		LoginController loginService = new LoginController();
 		String nickName = this.form.txtUNickName.getText();
 		String password = this.form.txtUPassword.getText();
 		String firstName = this.form.txtUFirstName.getText();
 		String lastName = this.form.txtULastName.getText();
 		int phone = Integer.parseInt(this.form.txtUPhone.getText());
 		String email = this.form.txtUEmail.getText();
-		User user = new User(0, nickName, loginService.encryptor(password, 5), firstName, lastName, phone, email);
+		User user = new User(0, nickName, loginController.encryptor(password, 5), firstName, lastName, phone, email);
 		return user;
 	}
 	
@@ -202,25 +231,21 @@ public class SettingsController implements ActionListener {
 	}
 	
 	//PERMITE ASIGNAR UN ROL AL USUARIO
-	public void insertRole(String tipeRole) {
-		RoleService serviceSQL = new RoleService();
+	public void insertRole(String typeRole) {
 		loadUserTable();
-		UserService userService = new UserService();
-		LinkedList users = userService.findAll();
+		LinkedList users = userServiceSQL.findAll();
 		User user = (User) users.get(users.size()-1);
-		Roles role = new Roles(user.getIdUser(), tipeRole);
-		serviceSQL.insertRole(role);
+		Roles role = new Roles(0, typeRole, user.getIdUser());
+		roleServiceSQL.insertRole(role);
 	}
 	
 	//PERMITE GUARDAR UN NUEVO REGISTRO DE USUARIOS, SIN PRIVILEGIOS DE ADMIN
 	public void saveInsertUser() {
-		LoginController loginService = new LoginController();
 		if(isComplete()) {
 			User user = getUserInsert();
-			String password = loginService.encryptor(String.valueOf(JOptionPane.showInputDialog("CONFIRME SU PASSWORD, PORFAVOR!")), 5);
+			String password = loginController.encryptor(String.valueOf(JOptionPane.showInputDialog("CONFIRME SU PASSWORD, PORFAVOR!")), 5);
 			if(password.equals(user.getPassword())) {
-				UserService serviceSQL = new UserService();
-				serviceSQL.insertUser(user);
+				userServiceSQL.insertUser(user);
 				insertRole("ROLE_USER");
 			}
 		}
@@ -229,17 +254,14 @@ public class SettingsController implements ActionListener {
 	
 	//PERMITE REASIGNAR PERMISOS DE USUARIOS (ADMIN, USER)
 	public void deleteRoles(String rol, int idUser) {
-		RoleService serviceSQL = new RoleService();
-		serviceSQL.deleteRole(rol, idUser);
+		roleServiceSQL.deleteRole(rol, idUser);
 	}
 	
 	//PERMITE ELIMINAR UN USUARIO DADO SU ID
 	public void deleteUser() {
 		if(this.form.tableUsers.getSelectedRow()<0)
 			return;
-		
-		UserService userService = new UserService();
-		LinkedList usuarios = userService.findAll();
+		LinkedList usuarios = userServiceSQL.findAll();
 		
 		int opcion = JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar la seleccion?", "Alerta", JOptionPane.YES_NO_OPTION);
 		if(opcion == JOptionPane.YES_OPTION) {
@@ -249,15 +271,137 @@ public class SettingsController implements ActionListener {
 				JOptionPane.showMessageDialog(null, "El elemento no se encuentra en la lista");
 				return;
 			}else {
-				UserService serviceSQL = new UserService();
 				deleteRoles("ROLE_USER", user.getIdUser());
 				deleteRoles("ROLE_ADMIN", user.getIdUser());
-				serviceSQL.deleteUser(user.getIdUser());
+				userServiceSQL.deleteUser(user.getIdUser());
+				loadUserTable();
 			}
 		}
-		loadUserTable();
 	}
 	
+	//METODO PERMITE LLENAR EL COMBO BOX PARA EL ADMINISTRADOR, EN CASO DESEA CAMBIAR PERMISOS
+	public void loadCbxUsers() {
+		LinkedList users = userServiceSQL.findAll();
+		// limpiamos el combo
+		this.form.cbxUsers.removeAllItems();
+		// un default para el combo
+		this.form.cbxUsers.addItem(nodeDefault);
+		// iteramos
+		for (int i = 1; i < users.size(); i++) {
+			User user = (User) users.get(i);
+			// se crea el nodo
+			Node nodeUser = new Node(user.getIdUser(), user.getUsername());
+			// se agrega el nodo al combo, como tiene to string imprimira el tostring
+			this.form.cbxUsers.addItem(nodeUser);
+		}
+	}
+	
+	//METODO PERMITE ASIGNAR LOS ROLES DE CADA USUARIO UNA VEZ SE SELECCIONES UN ITEM DEL COMBO BOX (USUARIO)
+	public void loadCbxRole() {
+		this.form.chckbxRoleAdmin.setSelected(false);
+		this.form.chckbxRoleUser.setSelected(false);
+		User user = getSelectedCbxUser();
+		if(user == null) return;
+		LinkedList roles = roleServiceSQL.findAll();
+		for(int i=0; i<roles.size(); i++){
+			Roles role = (Roles) roles.get(i);
+			if(role.getIdUser() == user.getIdUser()) {
+				if(role.getRole().equals("ROLE_ADMIN") && role.getRole().equals("ROLE_USER")) {
+					this.form.chckbxRoleAdmin.setSelected(true);
+					this.form.chckbxRoleUser.setSelected(true);
+				}else if(role.getRole().equals("ROLE_ADMIN")) {
+					this.form.chckbxRoleAdmin.setSelected(true);
+				}else if(role.getRole().endsWith("ROLE_USER")){
+					this.form.chckbxRoleUser.setSelected(true);
+				}else {
+					this.form.chckbxRoleAdmin.setSelected(false);
+					this.form.chckbxRoleUser.setSelected(false);
+				}
+				rolOld = getRolesUser();
+			}
+		}
+	}
+	
+	//PERMITE OBTENER EL OBJETO QUE HACE REFERENCIA AL ITEM DEL COMBO BOX
+	public User getSelectedCbxUser() {
+		if (this.form.cbxUsers.getSelectedIndex() == 0)
+			return null;
+		LinkedList users = userServiceSQL.findAll();
+		for (int i = 0; i < users.size(); i++) {
+			User user = (User) users.get(i);
+			if (user.getUsername().equals(this.form.cbxUsers.getSelectedItem().toString()))
+				return user;
+		}
+		return null;
+	}
+	
+	//PERMITE OBTENER UN ARREGLO DE BOOLEANOS QUE QUE VALIDAD SI LOS ROLES ADMIN O USER ESTAN ACTIVOS
+	public boolean[] getRolesUser() {
+		boolean[] roles = {
+				this.form.chckbxRoleAdmin.isSelected(),		//estado administrador si es true
+				this.form.chckbxRoleUser.isSelected()		//estado usuarios si es true
+		};
+		return roles;
+	}
+	
+	//PERMITE IDENTIFICAR SI SE HA MODIFICADO LOS PERMISOS
+	public boolean isModifiedRoles(boolean[] rolsOld, boolean[] rolsNew) {
+		if(rolsNew[0] != rolsOld[0] || rolsNew[1] != rolsOld[1])
+			return true;
+		return false;
+	}
+	
+	//PERMITE ALMACENCAR EN LA BD LOS NUEVOS ROLES DEL USUARIOS, SI HAY MODIFICACIONES
+	public void saveModifiedRole() {
+		if(rolOld == null) return;
+		boolean[] rolNew = getRolesUser();
+		if(isModifiedRoles(rolOld, rolNew)) {
+			if(rolNew[0]==false && rolNew[0]==false) {
+				JOptionPane.showMessageDialog(null, "Seleccione al menos un rol para el usuario");
+				return;
+			}	
+			String rolAdmin = "";
+			User user = getSelectedCbxUser();
+			
+			if(rolNew[0] != rolOld[0]) {
+				rolAdmin = rolNew[0] ? "ROLE_ADMIN" : "";
+			}
+			
+			String rolUser = "";
+			if(rolNew[1] != rolOld[1]) {
+				rolUser = rolNew[1] ? "ROLE_USER" : "";
+			}
+			
+			if(!rolAdmin.isEmpty()) {
+				roleServiceSQL.insertRole(new Roles(0, rolAdmin, user.getIdUser()));
+			}else {
+				roleServiceSQL.deleteRole("ROLE_ADMIN", user.getIdUser());
+			}
+			
+			if(!rolUser.isEmpty()) {
+				roleServiceSQL.insertRole(new Roles(0, rolUser, user.getIdUser()));
+			}else {
+				roleServiceSQL.deleteRole("ROLE_USER", user.getIdUser());
+			}
+		}
+	}
+	
+	//PERMITE VISUALIZAR UN VIDEO EXPLICATICO A YOUTUBE SOBRE EL FUNCIONAMIENTO DEL PROGRAMA
+	public void openTutorial() {
+		String youtubeURL = "https://www.youtube.com/watch?v=EE-xtCF3T94";
+		try {
+			Desktop.getDesktop().browse(new URI(youtubeURL));
+		} catch (IOException | URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	//PERMITE ENCIAR UN CORREO A SOPORTE CON LA CONSULTA DEL PROGRAMA, el metodo puede extenderse a enviar correos reales, oero siendo
+	//para usos explicativos, conviene solo expresar que se envio el mensaje de forma de confirmacion y sin logica por demas.
+	public void sendEmail() {
+		JOptionPane.showMessageDialog(null, "Enviado correctamente!, pronto nos contactaremos contigo.");
+	}
 	public void showView() {
 		form.setVisible(true);
 	}

@@ -12,6 +12,8 @@ import java.awt.Font;
 import java.awt.Image;
 import javax.swing.SwingConstants;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+
 import java.awt.CardLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -21,6 +23,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
+import javax.swing.JComboBox;
+import javax.swing.JCheckBox;
 
 public class vSettings extends JPanel {
 
@@ -29,11 +33,11 @@ public class vSettings extends JPanel {
 	public JTextField txtUNickName, txtUPassword, txtUFirstName, txtULastName, txtUPhone, txtUEmail;
 	private JPanel panel_help, panel_users, panel_myAccount, panel_security;
 	private JLayeredPane layeredPane;
-	private final ButtonGroup buttonGroup = new ButtonGroup();
 	public JTextField txtNombreUsuario, txtPasswordUsuario, txtFirstName, txtLastName, txtTelefonoUsuario, txtEmailUsuario;
 	public JLabel lblUsuarioSettings;
-	public RSButtonMaterialIconDos btnExit, btnAccountEditar, btnUsers, btnSecurity, btnAddUser, btnDeleteUser;
-	
+	public RSButtonMaterialIconDos btnExit, btnAccountEditar, btnUsers, btnSecurity, btnAddUser, btnDeleteUser, btnSaveRole, btnRestore, btnBackUp, btnSend, btnGoVideo;
+	public JComboBox cbxUsers;
+	public JCheckBox chckbxRoleAdmin, chckbxRoleUser;
 	/**
 	 * Create the panel.
 	 */
@@ -402,12 +406,12 @@ public class vSettings extends JPanel {
 		lblNewLabel_8_1.setBounds(67, 68, 248, 25);
 		panel_help.add(lblNewLabel_8_1);
 		
-		RSButtonMaterialIconDos btnmtrlcndsVerVideo = new RSButtonMaterialIconDos();
-		btnmtrlcndsVerVideo.setIcons(ICONS.PLAY_ARROW);
-		btnmtrlcndsVerVideo.setBackground(new Color(255, 0, 0));
-		btnmtrlcndsVerVideo.setText("VER VIDEO");
-		btnmtrlcndsVerVideo.setBounds(77, 141, 182, 50);
-		panel_help.add(btnmtrlcndsVerVideo);
+		btnGoVideo = new RSButtonMaterialIconDos();
+		btnGoVideo.setIcons(ICONS.PLAY_ARROW);
+		btnGoVideo.setBackground(new Color(255, 0, 0));
+		btnGoVideo.setText("VER VIDEO");
+		btnGoVideo.setBounds(77, 141, 182, 50);
+		panel_help.add(btnGoVideo);
 		
 		JLabel lblNewLabel_9 = new JLabel("Si cuentas con dudas del funcionamiento del sistema, consulta al video tutorial.");
 		lblNewLabel_9.setFont(new Font("Monospaced", Font.PLAIN, 14));
@@ -425,12 +429,12 @@ public class vSettings extends JPanel {
 		textArea.setBounds(77, 270, 647, 122);
 		panel_help.add(textArea);
 		
-		RSButtonMaterialIconDos btnmtrlcndsEnviar = new RSButtonMaterialIconDos();
-		btnmtrlcndsEnviar.setIcons(ICONS.SEND);
-		btnmtrlcndsEnviar.setText("ENVIAR");
-		btnmtrlcndsEnviar.setBackground(new Color(0, 158, 234));
-		btnmtrlcndsEnviar.setBounds(747, 310, 173, 50);
-		panel_help.add(btnmtrlcndsEnviar);
+		btnSend = new RSButtonMaterialIconDos();
+		btnSend.setIcons(ICONS.SEND);
+		btnSend.setText("ENVIAR");
+		btnSend.setBackground(new Color(0, 158, 234));
+		btnSend.setBounds(747, 310, 173, 50);
+		panel_help.add(btnSend);
 		
 		panel_security = new JPanel();
 		panel_security.setBorder(new TitledBorder(null, "Opciones de Seguridad", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -443,50 +447,47 @@ public class vSettings extends JPanel {
 		lblNewLabel_8.setBounds(51, 39, 169, 27);
 		panel_security.add(lblNewLabel_8);
 		
-		JLabel lbl_userActive = new JLabel("UNKNOWN");
-		lbl_userActive.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lbl_userActive.setBounds(208, 104, 130, 27);
-		panel_security.add(lbl_userActive);
-		
-		JRadioButton rdbtn_operator = new JRadioButton("OPERADOR");
-		buttonGroup.add(rdbtn_operator);
-		rdbtn_operator.setBackground(new Color(255, 255, 255));
-		rdbtn_operator.setFont(new Font("Tahoma", Font.BOLD, 15));
-		rdbtn_operator.setBounds(374, 77, 169, 27);
-		panel_security.add(rdbtn_operator);
-		
-		JRadioButton rdbtn_admin = new JRadioButton("ADMINISTRADOR");
-		buttonGroup.add(rdbtn_admin);
-		rdbtn_admin.setFont(new Font("Tahoma", Font.BOLD, 15));
-		rdbtn_admin.setBackground(Color.WHITE);
-		rdbtn_admin.setBounds(374, 128, 169, 27);
-		panel_security.add(rdbtn_admin);
-		
 		JLabel lblNewLabel_8_2 = new JLabel("Configuracion Avanzada:");
 		lblNewLabel_8_2.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblNewLabel_8_2.setBounds(66, 264, 232, 27);
 		panel_security.add(lblNewLabel_8_2);
 		
-		RSButtonMaterialIconDos btn_backUp = new RSButtonMaterialIconDos();
-		btn_backUp.setIcons(ICONS.PERM_DATA_SETTING);
-		btn_backUp.setText("RESPALDO");
-		btn_backUp.setBackground(new Color(0, 0, 0));
-		btn_backUp.setBounds(130, 323, 200, 50);
-		panel_security.add(btn_backUp);
+		btnBackUp = new RSButtonMaterialIconDos();
+		btnBackUp.setIcons(ICONS.PERM_DATA_SETTING);
+		btnBackUp.setText("RESPALDO");
+		btnBackUp.setBackground(new Color(0, 0, 0));
+		btnBackUp.setBounds(130, 323, 200, 50);
+		panel_security.add(btnBackUp);
 		
-		RSButtonMaterialIconDos btn_restore = new RSButtonMaterialIconDos();
-		btn_restore.setIcons(ICONS.RESTORE);
-		btn_restore.setText("RESTAURAR");
-		btn_restore.setBackground(Color.BLACK);
-		btn_restore.setBounds(600, 323, 200, 50);
-		panel_security.add(btn_restore);
+		btnRestore = new RSButtonMaterialIconDos();
+		btnRestore.setIcons(ICONS.RESTORE);
+		btnRestore.setText("RESTAURAR");
+		btnRestore.setBackground(Color.BLACK);
+		btnRestore.setBounds(600, 323, 200, 50);
+		panel_security.add(btnRestore);
 		
-		RSButtonMaterialIconDos btn_save = new RSButtonMaterialIconDos();
-		btn_save.setIcons(ICONS.SAVE);
-		btn_save.setText("GUARDAR");
-		btn_save.setBackground(Color.BLACK);
-		btn_save.setBounds(636, 88, 200, 50);
-		panel_security.add(btn_save);
+		btnSaveRole = new RSButtonMaterialIconDos();
+		btnSaveRole.setIcons(ICONS.SAVE);
+		btnSaveRole.setText("GUARDAR");
+		btnSaveRole.setBackground(Color.BLACK);
+		btnSaveRole.setBounds(636, 88, 200, 50);
+		panel_security.add(btnSaveRole);
+		
+		cbxUsers = new JComboBox();
+		cbxUsers.setBounds(103, 97, 169, 34);
+		panel_security.add(cbxUsers);
+		
+		chckbxRoleAdmin = new JCheckBox("ROLE_ADMIN");
+		chckbxRoleAdmin.setBackground(new Color(255, 255, 255));
+		chckbxRoleAdmin.setFont(new Font("Tahoma", Font.BOLD, 13));
+		chckbxRoleAdmin.setBounds(369, 71, 189, 34);
+		panel_security.add(chckbxRoleAdmin);
+		
+		chckbxRoleUser = new JCheckBox("ROLE_USER");
+		chckbxRoleUser.setFont(new Font("Tahoma", Font.BOLD, 13));
+		chckbxRoleUser.setBackground(new Color(255, 255, 255));
+		chckbxRoleUser.setBounds(369, 130, 189, 34);
+		panel_security.add(chckbxRoleUser);
 		
 	}
 }

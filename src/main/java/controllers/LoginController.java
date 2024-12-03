@@ -48,10 +48,10 @@ public class LoginController implements ActionListener {
 				MainController menuController = new MainController(menu);
 				menuController.showView();
 				closeView();
-			} else {
-				JOptionPane.showMessageDialog(null, "Credenciales invalidas", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
 			}
 		}
+		JOptionPane.showMessageDialog(null, "Credenciales invalidas", "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 	// Primer metodo encryptador, revertidor de texto - recursivo
