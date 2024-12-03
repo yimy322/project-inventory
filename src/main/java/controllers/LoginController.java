@@ -18,7 +18,8 @@ public class LoginController implements ActionListener {
 	// variable global para usarlo en el main
 	public static User USER;
 	UserService userService = new UserService();
-
+	public LoginController(){
+	}
 	public LoginController(FormLogin form) {
 		this.form = form;
 		// se le ponen las acciones a los buttons

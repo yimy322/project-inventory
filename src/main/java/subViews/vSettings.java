@@ -2,25 +2,20 @@ package subViews;
 
 import javax.swing.JPanel;
 import java.awt.Color;
-import java.awt.Container;
-
 import javax.swing.JLabel;
 import javax.swing.border.TitledBorder;
-import rojeru_san.rsbutton.RSButtonSelectedIcon;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.ImageIcon;
 import RSMaterialComponent.RSButtonMaterialIconDos;
 import rojeru_san.efectos.ValoresEnum.ICONS;
 import java.awt.Font;
 import java.awt.Image;
-
 import javax.swing.SwingConstants;
 import javax.swing.JLayeredPane;
 import java.awt.CardLayout;
-import javax.swing.JTabbedPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import java.awt.Cursor;
 import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -30,13 +25,14 @@ import javax.swing.ButtonGroup;
 public class vSettings extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JTable table;
-	private JTextField textField, textField_1, textField_2, textField_3, textField_4, textField_5, textField_6;
+	public JTable tableUsers;
+	public JTextField txtUNickName, txtUPassword, txtUFirstName, txtULastName, txtUPhone, txtUEmail;
 	private JPanel panel_help, panel_users, panel_myAccount, panel_security;
 	private JLayeredPane layeredPane;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
-	public JLabel lblNombreUsuario, lblPasswordUsuario, lblNombreCompleto, lblTelefonoUsuario, lblEmailUsuario, lblUsuarioSettings;
-	public RSButtonMaterialIconDos btnExit;
+	public JTextField txtNombreUsuario, txtPasswordUsuario, txtFirstName, txtLastName, txtTelefonoUsuario, txtEmailUsuario;
+	public JLabel lblUsuarioSettings;
+	public RSButtonMaterialIconDos btnExit, btnAccountEditar, btnUsers, btnSecurity, btnAddUser, btnDeleteUser;
 	
 	/**
 	 * Create the panel.
@@ -54,8 +50,8 @@ public class vSettings extends JPanel {
 		add(panel_Ajustes);
 		panel_Ajustes.setLayout(null);
 		
-		RSButtonMaterialIconDos btn_myAccount = new RSButtonMaterialIconDos();
-		btn_myAccount.addActionListener(new ActionListener() {
+		RSButtonMaterialIconDos btnMyAccount = new RSButtonMaterialIconDos();
+		btnMyAccount.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				layeredPane.removeAll();
 				layeredPane.add(panel_myAccount);
@@ -63,19 +59,19 @@ public class vSettings extends JPanel {
 				layeredPane.revalidate();
 			}
 		});
-		btn_myAccount.setForegroundIconHover(new Color(0, 0, 0));
-		btn_myAccount.setForeground(new Color(0, 0, 0));
-		btn_myAccount.setForegroundHover(new Color(0, 0, 0));
-		btn_myAccount.setRippleColor(new Color(198, 225, 241));
-		btn_myAccount.setForegroundIcon(new Color(0, 0, 0));
-		btn_myAccount.setForegroundText(new Color(0, 0, 0));
-		btn_myAccount.backgroundHover = new Color(228, 233, 232);
-		btn_myAccount.setBackground(new Color(228, 233, 232));
-		btn_myAccount.setFont(new Font("Dialog", Font.BOLD, 12));
-		btn_myAccount.setText("Mi Cuenta");
-		btn_myAccount.setIcons(ICONS.PERSON);
-		btn_myAccount.setBounds(10, 11, 155, 50);
-		panel_Ajustes.add(btn_myAccount);
+		btnMyAccount.setForegroundIconHover(new Color(0, 0, 0));
+		btnMyAccount.setForeground(new Color(0, 0, 0));
+		btnMyAccount.setForegroundHover(new Color(0, 0, 0));
+		btnMyAccount.setRippleColor(new Color(198, 225, 241));
+		btnMyAccount.setForegroundIcon(new Color(0, 0, 0));
+		btnMyAccount.setForegroundText(new Color(0, 0, 0));
+		btnMyAccount.backgroundHover = new Color(228, 233, 232);
+		btnMyAccount.setBackground(new Color(228, 233, 232));
+		btnMyAccount.setFont(new Font("Dialog", Font.BOLD, 12));
+		btnMyAccount.setText("Mi Cuenta");
+		btnMyAccount.setIcons(ICONS.PERSON);
+		btnMyAccount.setBounds(10, 11, 155, 50);
+		panel_Ajustes.add(btnMyAccount);
 		
 		JLabel lblNewLabel = new JLabel("---------------------------");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -83,8 +79,8 @@ public class vSettings extends JPanel {
 		lblNewLabel.setBounds(0, 82, 175, 14);
 		panel_Ajustes.add(lblNewLabel);
 		
-		RSButtonMaterialIconDos btn_users = new RSButtonMaterialIconDos();
-		btn_users.addActionListener(new ActionListener() {
+		btnUsers = new RSButtonMaterialIconDos();
+		btnUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				layeredPane.removeAll();
 				layeredPane.add(panel_users);
@@ -92,23 +88,23 @@ public class vSettings extends JPanel {
 				layeredPane.revalidate();
 			}
 		});
-		btn_users.setText("Usuarios");
-		btn_users.setRippleColor(new Color(198, 225, 241));
-		btn_users.setIcons(ICONS.PEOPLE);
-		btn_users.setForegroundText(Color.BLACK);
-		btn_users.setForegroundIconHover(Color.BLACK);
-		btn_users.setForegroundIcon(Color.BLACK);
-		btn_users.setForegroundHover(Color.BLACK);
-		btn_users.setForeground(Color.BLACK);
-		btn_users.setFont(new Font("Dialog", Font.BOLD, 12));
-		btn_users.backgroundHover = new Color(228, 233, 232);
-		btn_users.setBackgroundHover(new Color(228, 233, 232));
-		btn_users.setBackground(new Color(228, 233, 232));
-		btn_users.setBounds(10, 120, 155, 50);
-		panel_Ajustes.add(btn_users);
+		btnUsers.setText("Usuarios");
+		btnUsers.setRippleColor(new Color(198, 225, 241));
+		btnUsers.setIcons(ICONS.PEOPLE);
+		btnUsers.setForegroundText(Color.BLACK);
+		btnUsers.setForegroundIconHover(Color.BLACK);
+		btnUsers.setForegroundIcon(Color.BLACK);
+		btnUsers.setForegroundHover(Color.BLACK);
+		btnUsers.setForeground(Color.BLACK);
+		btnUsers.setFont(new Font("Dialog", Font.BOLD, 12));
+		btnUsers.backgroundHover = new Color(228, 233, 232);
+		btnUsers.setBackgroundHover(new Color(228, 233, 232));
+		btnUsers.setBackground(new Color(228, 233, 232));
+		btnUsers.setBounds(10, 120, 155, 50);
+		panel_Ajustes.add(btnUsers);
 		
-		RSButtonMaterialIconDos btn_security = new RSButtonMaterialIconDos();
-		btn_security.addActionListener(new ActionListener() {
+		btnSecurity = new RSButtonMaterialIconDos();
+		btnSecurity.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				layeredPane.removeAll();
 				layeredPane.add(panel_security);
@@ -116,23 +112,23 @@ public class vSettings extends JPanel {
 				layeredPane.revalidate();
 			}
 		});
-		btn_security.setText("Seguridad");
-		btn_security.setRippleColor(new Color(198, 225, 241));
-		btn_security.setIcons(ICONS.SECURITY);
-		btn_security.setForegroundText(Color.BLACK);
-		btn_security.setForegroundIconHover(Color.BLACK);
-		btn_security.setForegroundIcon(Color.BLACK);
-		btn_security.setForegroundHover(Color.BLACK);
-		btn_security.setForeground(Color.BLACK);
-		btn_security.setFont(new Font("Dialog", Font.BOLD, 12));
-		btn_security.backgroundHover = new Color(228, 233, 232);
-		btn_security.setBackgroundHover(new Color(228, 233, 232));
-		btn_security.setBackground(new Color(228, 233, 232));
-		btn_security.setBounds(10, 191, 155, 50);
-		panel_Ajustes.add(btn_security);
+		btnSecurity.setText("Seguridad");
+		btnSecurity.setRippleColor(new Color(198, 225, 241));
+		btnSecurity.setIcons(ICONS.SECURITY);
+		btnSecurity.setForegroundText(Color.BLACK);
+		btnSecurity.setForegroundIconHover(Color.BLACK);
+		btnSecurity.setForegroundIcon(Color.BLACK);
+		btnSecurity.setForegroundHover(Color.BLACK);
+		btnSecurity.setForeground(Color.BLACK);
+		btnSecurity.setFont(new Font("Dialog", Font.BOLD, 12));
+		btnSecurity.backgroundHover = new Color(228, 233, 232);
+		btnSecurity.setBackgroundHover(new Color(228, 233, 232));
+		btnSecurity.setBackground(new Color(228, 233, 232));
+		btnSecurity.setBounds(10, 191, 155, 50);
+		panel_Ajustes.add(btnSecurity);
 		
-		RSButtonMaterialIconDos btn_help = new RSButtonMaterialIconDos();
-		btn_help.addActionListener(new ActionListener() {
+		RSButtonMaterialIconDos btnHelp = new RSButtonMaterialIconDos();
+		btnHelp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				layeredPane.removeAll();
 				layeredPane.add(panel_help);
@@ -140,20 +136,20 @@ public class vSettings extends JPanel {
 				layeredPane.revalidate();
 			}
 		});
-		btn_help.setText("Ayuda");
-		btn_help.setRippleColor(new Color(198, 225, 241));
-		btn_help.setIcons(ICONS.HELP);
-		btn_help.setForegroundText(Color.BLACK);
-		btn_help.setForegroundIconHover(Color.BLACK);
-		btn_help.setForegroundIcon(Color.BLACK);
-		btn_help.setForegroundHover(Color.BLACK);
-		btn_help.setForeground(Color.BLACK);
-		btn_help.setFont(new Font("Dialog", Font.BOLD, 12));
-		btn_help.backgroundHover = new Color(228, 233, 232);
-		btn_help.setBackgroundHover(new Color(228, 233, 232));
-		btn_help.setBackground(new Color(228, 233, 232));
-		btn_help.setBounds(10, 262, 155, 50);
-		panel_Ajustes.add(btn_help);
+		btnHelp.setText("Ayuda");
+		btnHelp.setRippleColor(new Color(198, 225, 241));
+		btnHelp.setIcons(ICONS.HELP);
+		btnHelp.setForegroundText(Color.BLACK);
+		btnHelp.setForegroundIconHover(Color.BLACK);
+		btnHelp.setForegroundIcon(Color.BLACK);
+		btnHelp.setForegroundHover(Color.BLACK);
+		btnHelp.setForeground(Color.BLACK);
+		btnHelp.setFont(new Font("Dialog", Font.BOLD, 12));
+		btnHelp.backgroundHover = new Color(228, 233, 232);
+		btnHelp.setBackgroundHover(new Color(228, 233, 232));
+		btnHelp.setBackground(new Color(228, 233, 232));
+		btnHelp.setBounds(10, 262, 155, 50);
+		panel_Ajustes.add(btnHelp);
 		
 		btnExit = new RSButtonMaterialIconDos();
 		btnExit.setText("Salir");
@@ -194,6 +190,8 @@ public class vSettings extends JPanel {
 		panel_myAccount.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("USUARIO ACTIVO");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_2.setForeground(new Color(0, 0, 255));
 		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_2.setIcon(new ImageIcon(vSettings.class.getResource("/necesario/ver1.png")));
 		lblNewLabel_2.setBounds(36, 292, 259, 21);
@@ -236,42 +234,53 @@ public class vSettings extends JPanel {
 		lblNewLabel_5_4.setBounds(446, 292, 183, 28);
 		panel_myAccount.add(lblNewLabel_5_4);
 		
-		lblNombreUsuario = new JLabel("Nombre de Usuario:");
-		lblNombreUsuario.setForeground(Color.BLUE);
-		lblNombreUsuario.setBounds(665, 77, 265, 28);
-		panel_myAccount.add(lblNombreUsuario);
+		txtNombreUsuario = new JTextField("Nombre de Usuario:");
+		txtNombreUsuario.setEditable(false);
+		txtNombreUsuario.setForeground(Color.BLUE);
+		txtNombreUsuario.setBounds(665, 77, 265, 28);
+		panel_myAccount.add(txtNombreUsuario);
 		
-		lblPasswordUsuario = new JLabel("Password de Usuario:");
-		lblPasswordUsuario.setForeground(Color.BLUE);
-		lblPasswordUsuario.setBounds(665, 127, 265, 28);
-		panel_myAccount.add(lblPasswordUsuario);
+		txtPasswordUsuario = new JTextField("Password de Usuario:");
+		txtPasswordUsuario.setEditable(false);
+		txtPasswordUsuario.setForeground(Color.BLUE);
+		txtPasswordUsuario.setBounds(665, 127, 265, 28);
+		panel_myAccount.add(txtPasswordUsuario);
 		
-		lblNombreCompleto = new JLabel("Nombre completo:");
-		lblNombreCompleto.setForeground(Color.BLUE);
-		lblNombreCompleto.setBounds(665, 180, 265, 28);
-		panel_myAccount.add(lblNombreCompleto);
+		txtFirstName = new JTextField("Nombre completo:");
+		txtFirstName.setEditable(false);
+		txtFirstName.setForeground(Color.BLUE);
+		txtFirstName.setBounds(665, 180, 128, 28);
+		panel_myAccount.add(txtFirstName);
 		
-		lblTelefonoUsuario = new JLabel("telefono de usuario:");
-		lblTelefonoUsuario.setForeground(Color.BLUE);
-		lblTelefonoUsuario.setBounds(665, 236, 265, 28);
-		panel_myAccount.add(lblTelefonoUsuario);
+		txtTelefonoUsuario = new JTextField("telefono de usuario:");
+		txtTelefonoUsuario.setEditable(false);
+		txtTelefonoUsuario.setForeground(Color.BLUE);
+		txtTelefonoUsuario.setBounds(665, 236, 265, 28);
+		panel_myAccount.add(txtTelefonoUsuario);
 		
-		lblEmailUsuario= new JLabel("Email de usuario");
-		lblEmailUsuario.setForeground(Color.BLUE);
-		lblEmailUsuario.setBounds(665, 293, 265, 28);
-		panel_myAccount.add(lblEmailUsuario);
+		txtEmailUsuario= new JTextField("Email de usuario");
+		txtEmailUsuario.setEditable(false);
+		txtEmailUsuario.setForeground(Color.BLUE);
+		txtEmailUsuario.setBounds(665, 293, 265, 28);
+		panel_myAccount.add(txtEmailUsuario);
 		
-		RSButtonMaterialIconDos btnmtrlcndsAditar = new RSButtonMaterialIconDos();
-		btnmtrlcndsAditar.setIcons(ICONS.EDIT);
-		btnmtrlcndsAditar.setText("EDITAR");
-		btnmtrlcndsAditar.setForegroundText(new Color(0, 0, 0));
-		btnmtrlcndsAditar.setForegroundIconHover(new Color(0, 0, 0));
-		btnmtrlcndsAditar.setForegroundIcon(new Color(0, 0, 0));
-		btnmtrlcndsAditar.setForegroundHover(new Color(0, 0, 0));
-		btnmtrlcndsAditar.setForeground(new Color(0, 0, 0));
-		btnmtrlcndsAditar.setBackground(new Color(0, 158, 234));
-		btnmtrlcndsAditar.setBounds(560, 351, 200, 50);
-		panel_myAccount.add(btnmtrlcndsAditar);
+		btnAccountEditar = new RSButtonMaterialIconDos();
+		btnAccountEditar.setIcons(ICONS.EDIT);
+		btnAccountEditar.setText("EDITAR");
+		btnAccountEditar.setForegroundText(new Color(0, 0, 0));
+		btnAccountEditar.setForegroundIconHover(new Color(0, 0, 0));
+		btnAccountEditar.setForegroundIcon(new Color(0, 0, 0));
+		btnAccountEditar.setForegroundHover(new Color(0, 0, 0));
+		btnAccountEditar.setForeground(new Color(0, 0, 0));
+		btnAccountEditar.setBackground(new Color(0, 158, 234));
+		btnAccountEditar.setBounds(560, 351, 200, 50);
+		panel_myAccount.add(btnAccountEditar);
+		
+		txtLastName = new JTextField("Nombre completo:");
+		txtLastName.setForeground(Color.BLUE);
+		txtLastName.setEditable(false);
+		txtLastName.setBounds(803, 181, 128, 28);
+		panel_myAccount.add(txtLastName);
 		
 		panel_users = new JPanel();
 		panel_users.setBorder(new TitledBorder(null, "Usuarios", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -283,8 +292,8 @@ public class vSettings extends JPanel {
 		scrollPane.setBounds(10, 196, 963, 231);
 		panel_users.add(scrollPane);
 		
-		table = new JTable();
-		scrollPane.setViewportView(table);
+		tableUsers = new JTable();
+		scrollPane.setViewportView(tableUsers);
 		
 		JLabel lblNewLabel_6 = new JLabel("User Name:");
 		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -296,94 +305,85 @@ public class vSettings extends JPanel {
 		lblNewLabel_6_1.setBounds(72, 83, 84, 22);
 		panel_users.add(lblNewLabel_6_1);
 		
-		JLabel lblNewLabel_6_2 = new JLabel("Password:");
-		lblNewLabel_6_2.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblNewLabel_6_2.setBounds(370, 28, 84, 22);
-		panel_users.add(lblNewLabel_6_2);
-		
 		JLabel lblNewLabel_6_3 = new JLabel("Firt Name:");
 		lblNewLabel_6_3.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblNewLabel_6_3.setBounds(370, 85, 84, 22);
+		lblNewLabel_6_3.setBounds(72, 139, 84, 22);
 		panel_users.add(lblNewLabel_6_3);
 		
 		JLabel lblNewLabel_6_4 = new JLabel("Last Name:");
 		lblNewLabel_6_4.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblNewLabel_6_4.setBounds(671, 28, 84, 22);
+		lblNewLabel_6_4.setBounds(370, 34, 84, 22);
 		panel_users.add(lblNewLabel_6_4);
 		
 		JLabel lblNewLabel_6_5 = new JLabel("Telephone:");
 		lblNewLabel_6_5.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblNewLabel_6_5.setBounds(671, 85, 84, 22);
+		lblNewLabel_6_5.setBounds(677, 32, 84, 22);
 		panel_users.add(lblNewLabel_6_5);
 		
 		JLabel lblNewLabel_6_5_1 = new JLabel("Email:");
 		lblNewLabel_6_5_1.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblNewLabel_6_5_1.setBounds(72, 138, 84, 22);
+		lblNewLabel_6_5_1.setBounds(370, 79, 84, 22);
 		panel_users.add(lblNewLabel_6_5_1);
 		
-		textField = new JTextField();
-		textField.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField.setBounds(166, 30, 149, 28);
-		panel_users.add(textField);
-		textField.setColumns(10);
+		txtUNickName = new JTextField();
+		txtUNickName.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txtUNickName.setBounds(166, 30, 149, 28);
+		panel_users.add(txtUNickName);
+		txtUNickName.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField_1.setColumns(10);
-		textField_1.setBounds(166, 81, 149, 28);
-		panel_users.add(textField_1);
+		txtUPassword = new JTextField();
+		txtUPassword.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txtUPassword.setColumns(10);
+		txtUPassword.setBounds(166, 81, 149, 28);
+		panel_users.add(txtUPassword);
 		
-		textField_2 = new JTextField();
-		textField_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField_2.setColumns(10);
-		textField_2.setBounds(464, 26, 149, 28);
-		panel_users.add(textField_2);
+		txtUFirstName = new JTextField();
+		txtUFirstName.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txtUFirstName.setColumns(10);
+		txtUFirstName.setBounds(166, 137, 149, 28);
+		panel_users.add(txtUFirstName);
 		
-		textField_3 = new JTextField();
-		textField_3.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField_3.setColumns(10);
-		textField_3.setBounds(464, 83, 149, 28);
-		panel_users.add(textField_3);
+		txtULastName = new JTextField();
+		txtULastName.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txtULastName.setColumns(10);
+		txtULastName.setBounds(464, 32, 149, 28);
+		panel_users.add(txtULastName);
 		
-		textField_4 = new JTextField();
-		textField_4.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField_4.setColumns(10);
-		textField_4.setBounds(765, 26, 149, 28);
-		panel_users.add(textField_4);
+		txtUPhone = new JTextField();
+		txtUPhone.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txtUPhone.setColumns(10);
+		txtUPhone.setBounds(771, 30, 149, 28);
+		panel_users.add(txtUPhone);
 		
-		textField_5 = new JTextField();
-		textField_5.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField_5.setColumns(10);
-		textField_5.setBounds(765, 83, 149, 28);
-		panel_users.add(textField_5);
+		txtUEmail = new JTextField();
+		txtUEmail.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txtUEmail.setColumns(10);
+		txtUEmail.setBounds(464, 77, 456, 28);
+		panel_users.add(txtUEmail);
 		
-		textField_6 = new JTextField();
-		textField_6.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField_6.setColumns(10);
-		textField_6.setBounds(166, 136, 149, 28);
-		panel_users.add(textField_6);
+		btnAddUser = new RSButtonMaterialIconDos();
+		btnAddUser.setText("AGREGAR");
+		btnAddUser.setForegroundText(new Color(0, 0, 0));
+		btnAddUser.setForegroundIconHover(new Color(0, 0, 0));
+		btnAddUser.setForegroundIcon(new Color(0, 0, 0));
+		btnAddUser.setForegroundHover(new Color(0, 0, 0));
+		btnAddUser.setForeground(new Color(0, 0, 0));
+		btnAddUser.setBackground(new Color(0, 158, 234));
+		btnAddUser.setBounds(445, 135, 200, 50);
+		panel_users.add(btnAddUser);
 		
-		RSButtonMaterialIconDos btnmtrlcndsAgregar = new RSButtonMaterialIconDos();
-		btnmtrlcndsAgregar.setText("AGREGAR");
-		btnmtrlcndsAgregar.setForegroundText(new Color(0, 0, 0));
-		btnmtrlcndsAgregar.setForegroundIconHover(new Color(0, 0, 0));
-		btnmtrlcndsAgregar.setForegroundIcon(new Color(0, 0, 0));
-		btnmtrlcndsAgregar.setForegroundHover(new Color(0, 0, 0));
-		btnmtrlcndsAgregar.setForeground(new Color(0, 0, 0));
-		btnmtrlcndsAgregar.setBackground(new Color(0, 158, 234));
-		btnmtrlcndsAgregar.setBounds(445, 135, 200, 50);
-		panel_users.add(btnmtrlcndsAgregar);
-		
-		RSButtonMaterialIconDos btnmtrlcndsEliminar = new RSButtonMaterialIconDos();
-		btnmtrlcndsEliminar.setText("ELIMINAR");
-		btnmtrlcndsEliminar.setForegroundText(Color.BLACK);
-		btnmtrlcndsEliminar.setForegroundIconHover(Color.BLACK);
-		btnmtrlcndsEliminar.setForegroundIcon(Color.BLACK);
-		btnmtrlcndsEliminar.setForegroundHover(Color.BLACK);
-		btnmtrlcndsEliminar.setForeground(Color.BLACK);
-		btnmtrlcndsEliminar.setBackground(new Color(255, 0, 128));
-		btnmtrlcndsEliminar.setBounds(701, 135, 200, 50);
-		panel_users.add(btnmtrlcndsEliminar);
+		btnDeleteUser = new RSButtonMaterialIconDos();
+		btnDeleteUser.backgroundHover = new Color(255, 0, 128);
+		btnDeleteUser.setBackgroundHover(new Color(255, 128, 128));
+		btnDeleteUser.setText("ELIMINAR");
+		btnDeleteUser.setForegroundText(Color.BLACK);
+		btnDeleteUser.setForegroundIconHover(Color.BLACK);
+		btnDeleteUser.setForegroundIcon(Color.BLACK);
+		btnDeleteUser.setForegroundHover(Color.BLACK);
+		btnDeleteUser.setForeground(Color.BLACK);
+		btnDeleteUser.setBackground(new Color(255, 0, 128));
+		btnDeleteUser.setBounds(701, 135, 200, 50);
+		panel_users.add(btnDeleteUser);
 		
 		panel_help = new JPanel();
 		panel_help.setBorder(new TitledBorder(null, "Soporte y Ayuda", TitledBorder.LEADING, TitledBorder.TOP, null, null));
