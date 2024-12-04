@@ -19,23 +19,25 @@ import javax.swing.JLabel;
 public class vInventory extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	JTextField textBusqueda;
-	JLabel lblLupa;
-	JTable jTableProducts;
-	DefaultTableModel model;
-	JButton btnExcel, btnCsv,btnJson;
-	JLabel lblTotal;
-	JTextField textTotal;
-	JLabel lblValor;
-	JTextField textValor;
-	JLabel lblMasCategoria;
-	JTextField textMasCategoria;
-	JLabel lblMenosCategoria;
-	JTextField textMenosCategoria;
-	JLabel lblUltIngreso;
-	JTextField textUltIngreso;
-	JLabel lblUtlSalida;
-	JTextField textUtlSalida;
+	public JTextField textBusqueda;
+	public JLabel lblLupa;
+	public JTable jTableProducts;
+	public DefaultTableModel model;
+	public JButton btnExcel, btnCsv,btnJson;
+	public 	JLabel lblTotal;
+	public JTextField textTotal;
+	public 	JLabel lblValor;
+	public JTextField textValor;
+	public JLabel lblMasCategoria;
+	public JTextField textMasCategoria;
+	public 	JLabel lblMenosCategoria;
+	public JTextField textMenosCategoria;
+	public 	JLabel lblUltIngreso;
+	public JTextField textUltIngreso;
+	public JLabel lblUtlSalida;
+	public JTextField textUtlSalida;
+	public JButton btnOrdenar;
+	public JButton btnOrdenarId;
 	/**
 	 * Create the panel.
 	 */
@@ -63,6 +65,14 @@ public class vInventory extends JPanel {
 		add(lblLupa);
 		
 		//buttons
+		btnOrdenar = new JButton("Ordenar por nombre");
+		btnOrdenar.setBounds(250, 38, 180, 25);
+		add(btnOrdenar);
+		
+		btnOrdenarId = new JButton("Ordenar por Id");
+		btnOrdenarId.setBounds(450, 38, 180, 25);
+		add(btnOrdenarId);
+		
 		ImageIcon iconExcel = new ImageIcon(getClass().getResource("/images/excel.png"));
 		btnExcel = new JButton(iconExcel);
 		btnExcel.setBounds(1118, 38, 50, 25);
@@ -103,7 +113,7 @@ public class vInventory extends JPanel {
 		textTotal = new JTextField();
 		textTotal.setBounds(30, 430, 150, 30);
 		textTotal.setColumns(10);
-		textTotal.setEnabled(false);
+		textTotal.setEditable(false); // 
 		add(textTotal);
 		
 		lblValor = new JLabel("Valor total");
@@ -114,7 +124,7 @@ public class vInventory extends JPanel {
 		textValor = new JTextField();
 		textValor.setBounds(225, 430, 150, 30);
 		textValor.setColumns(10);
-		textValor.setEnabled(false);
+		textValor.setEditable(false);
 		add(textValor);
 		
 		lblMasCategoria = new JLabel("Cate. mas popular");
@@ -125,7 +135,7 @@ public class vInventory extends JPanel {
 		textMasCategoria = new JTextField();
 		textMasCategoria.setBounds(425, 430, 150, 30);
 		textMasCategoria.setColumns(10);
-		textMasCategoria.setEnabled(false);
+		textMasCategoria.setEditable(false);
 		add(textMasCategoria);
 		
 		lblMenosCategoria = new JLabel("Cate. menos popular");
@@ -136,7 +146,7 @@ public class vInventory extends JPanel {
 		textMenosCategoria = new JTextField();
 		textMenosCategoria.setBounds(625, 430, 150, 30);
 		textMenosCategoria.setColumns(10);
-		textMenosCategoria.setEnabled(false);
+		textMenosCategoria.setEditable(false);
 		add(textMenosCategoria);
 		
 		lblUltIngreso = new JLabel("Ultimo ingreso");
@@ -147,7 +157,7 @@ public class vInventory extends JPanel {
 		textUltIngreso = new JTextField();
 		textUltIngreso.setBounds(825, 430, 150, 30);
 		textUltIngreso.setColumns(10);
-		textUltIngreso.setEnabled(false);
+		textUltIngreso.setEditable(false);
 		add(textUltIngreso);
 		
 		lblUtlSalida = new JLabel("Ultima salida");
@@ -158,7 +168,7 @@ public class vInventory extends JPanel {
 		textUtlSalida = new JTextField();
 		textUtlSalida.setBounds(1024, 430, 150, 30);
 		textUtlSalida.setColumns(10);
-		textUtlSalida.setEnabled(false);
+		textUtlSalida.setEditable(false);
 		add(textUtlSalida);
 		
 	}

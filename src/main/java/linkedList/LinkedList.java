@@ -1,8 +1,8 @@
 package linkedList;
 
 public class LinkedList {
-	private Node head;
-	private Node tail;
+	public Node head;
+	public Node tail;
 	public LinkedList() {
 		head = null;
 		tail = null;
@@ -96,4 +96,37 @@ public class LinkedList {
         //si el indice es mayor
         throw new IndexOutOfBoundsException("indice fuera de rango: " + index);
     }
+	
+	//para reemplazar un valor por posicion
+	public void set(int index, Object data) {
+		Node actual = head;
+		int contador = 0;
+		//recorremos hasta encontrar
+		while (actual != null && contador < index) {
+			actual = actual.next;
+			contador++;
+        }
+		//si es null
+		if (actual == null) {
+            System.out.println("indice fuera de rango");
+            return;
+        }
+		//se reemplaza el valor, en este caso un obj
+		actual.data = data;
+	}
+	
+	public Node getNode(int pos) {
+		Node actual = head;
+        int cont = 0;
+        //iteramos
+        while (actual != null) {
+            if (cont == pos) {
+                return actual;
+            }
+            actual = actual.next;
+            cont++;
+        }
+        return actual;
+	}
+	
 }
