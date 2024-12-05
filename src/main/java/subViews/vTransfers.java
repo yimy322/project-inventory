@@ -17,24 +17,23 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.JList;
+import RSMaterialComponent.RSButtonMaterialIconDos;
+import rojeru_san.efectos.ValoresEnum.ICONS;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 public class vTransfers extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	JLabel lblProducto;
-	JComboBox<String> cbProducto;
-	JLabel lblTipo;
-	JComboBox<String> cbTipo;
-	JLabel lblFechaIni;
-	JDateChooser calendarIni;
-	JLabel lblFechaFin;
-	JDateChooser calendarFin;
-	JButton btnBuscar;
-	JTable jTableTranslados;
+	private JLabel lblProductName;
+	public JTable jTableTranslados;
 	DefaultTableModel model;
 	JButton btnReport;
-	JLabel lblGanancias;
-	JTextField txtGanancias;
+	public JTextField txtProductName, txtProductDescription;
+	public JList list;
+	private JLabel lblNewLabel;
 
 	/**
 	 * Create the panel.
@@ -43,49 +42,15 @@ public class vTransfers extends JPanel {
 		setLocation(0, 0);
 		setBackground(new Color(228, 233, 232));
 		setSize(1200, 480);
-		setLayout(null);
 		setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
 		"Translados"));
+		setLayout(null);
 
-		lblProducto = new JLabel("Producto");
-		lblProducto.setBounds(30, 47, 80, 15);
-		lblProducto.setHorizontalAlignment(SwingConstants.CENTER);
-		add(lblProducto);
-
-		cbProducto= new JComboBox<String>();
-		cbProducto.setBounds(120, 40, 130, 30);
-		add(cbProducto);
-		
-		lblTipo = new JLabel("Tipo");
-		lblTipo.setBounds(270, 47, 80, 15);
-		lblTipo.setHorizontalAlignment(SwingConstants.CENTER);
-		add(lblTipo);
-
-		cbTipo= new JComboBox<String>();
-		cbTipo.setBounds(340, 40, 130, 30);
-		add(cbTipo);
-
-		lblFechaIni = new JLabel("Fecha Inicio");
-		lblFechaIni.setBounds(500, 47, 100, 15);
-		lblFechaIni.setHorizontalAlignment(SwingConstants.CENTER);
-		add(lblFechaIni);
-
-		calendarIni= new JDateChooser();
-		calendarIni.setBounds(600, 40, 120, 30);
-		add(calendarIni);
-		
-		lblFechaFin = new JLabel("Fecha Fin");
-		lblFechaFin.setBounds(740, 47, 100, 15);
-		lblFechaFin.setHorizontalAlignment(SwingConstants.CENTER);
-		add(lblFechaFin);
-
-		calendarFin= new JDateChooser();
-		calendarFin.setBounds(840, 40, 120, 30);
-		add(calendarFin);
-
-		btnBuscar= new JButton("Buscar");
-		btnBuscar.setBounds(1030, 40, 120, 30);
-		add(btnBuscar);
+		lblProductName = new JLabel("NOMBRE DEL PRODUCTO:");
+		lblProductName.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblProductName.setBounds(40, 29, 203, 30);
+		lblProductName.setHorizontalAlignment(SwingConstants.LEFT);
+		add(lblProductName);
 		
 		jTableTranslados = new JTable();
 		model = new DefaultTableModel();
@@ -100,27 +65,87 @@ public class vTransfers extends JPanel {
 
 		jTableTranslados.setPreferredScrollableViewportSize(new Dimension(610, 335));
 		JScrollPane sp = new JScrollPane(jTableTranslados);
-		sp.setBounds(538, 90, 632, 320);
+		sp.setBounds(528, 37, 632, 383);
 		sp.setVisible(true);
 		add(sp);
-
-		lblGanancias = new JLabel("Ganancias diarias");
-		lblGanancias.setBounds(30, 440, 150, 15);
-		lblGanancias.setHorizontalAlignment(SwingConstants.CENTER);
-		add(lblGanancias);
-
-		txtGanancias= new JTextField();
-		txtGanancias.setBounds(180, 430, 100, 30);
-		txtGanancias.setEnabled(false);
-		add(txtGanancias);
-		txtGanancias.setColumns(10);
 
 		btnReport = new JButton("Generar reporte diario", new ImageIcon(getClass().getResource("/images/pdf.png")));
 		btnReport.setBounds(940, 430, 230, 25);
 		add(btnReport);
 		
+		txtProductName = new JTextField();
+		txtProductName.setBounds(40, 58, 165, 30);
+		add(txtProductName);
+		txtProductName.setColumns(10);
+		
+		JLabel lblProductDescription = new JLabel("DESCRIPCION:");
+		lblProductDescription.setHorizontalAlignment(SwingConstants.LEFT);
+		lblProductDescription.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblProductDescription.setBounds(40, 106, 129, 30);
+		add(lblProductDescription);
+		
+		txtProductDescription = new JTextField();
+		txtProductDescription.setColumns(10);
+		txtProductDescription.setBounds(40, 134, 412, 30);
+		add(txtProductDescription);
+		
+		JLabel lblSupliers = new JLabel("PROVEEDORES:");
+		lblSupliers.setHorizontalAlignment(SwingConstants.LEFT);
+		lblSupliers.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblSupliers.setBounds(40, 174, 129, 30);
+		add(lblSupliers);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(40, 205, 285, 121);
+		add(scrollPane);
+		
+		list = new JList();
+		scrollPane.setViewportView(list);
+		
+		lblNewLabel = new JLabel("0");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 24));
+		lblNewLabel.setBounds(335, 230, 117, 75);
+		add(lblNewLabel);
+		
+		RSButtonMaterialIconDos btnmtrlcndsSumar = new RSButtonMaterialIconDos();
+		btnmtrlcndsSumar.setText("SUMAR");
+		btnmtrlcndsSumar.setIcons(ICONS.ADD);
+		btnmtrlcndsSumar.backgroundHover = new Color(51, 191, 11);
+		btnmtrlcndsSumar.setBackgroundHover(new Color(128, 255, 0));
+		btnmtrlcndsSumar.setBackground(new Color(51, 191, 11));
+		btnmtrlcndsSumar.setBounds(43, 405, 200, 50);
+		add(btnmtrlcndsSumar);
+		
+		RSButtonMaterialIconDos btnmtrlcndsRestar = new RSButtonMaterialIconDos();
+		btnmtrlcndsRestar.setText("RESTAR");
+		btnmtrlcndsRestar.setIcons(ICONS.DELETE);
+		btnmtrlcndsRestar.backgroundHover = new Color(240, 34, 50);
+		btnmtrlcndsRestar.setBackgroundHover(new Color(255, 0, 0));
+		btnmtrlcndsRestar.setBackground(new Color(240, 34, 50));
+		btnmtrlcndsRestar.setBounds(266, 405, 200, 50);
+		add(btnmtrlcndsRestar);
+		
+		JLabel lblCantidad = new JLabel("CANTIDAD:");
+		lblCantidad.setHorizontalAlignment(SwingConstants.LEFT);
+		lblCantidad.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblCantidad.setBounds(40, 344, 129, 30);
+		add(lblCantidad);
+		
+		JSpinner spinner = new JSpinner();
+		spinner.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+		spinner.setFont(new Font("Tahoma", Font.BOLD, 24));
+		spinner.setBounds(211, 336, 117, 50);
+		add(spinner);
+		
+		JLabel lblX = new JLabel("X");
+		lblX.setForeground(new Color(255, 0, 0));
+		lblX.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblX.setFont(new Font("Tahoma", Font.BOLD, 24));
+		lblX.setBounds(384, 336, 68, 50);
+		add(lblX);
+		
 		
 
 	}
-
 }
