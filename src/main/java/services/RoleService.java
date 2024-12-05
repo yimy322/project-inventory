@@ -33,7 +33,7 @@ public class RoleService {
 	        
 	        int rowsAffected = pstmt.executeUpdate();
 	        if (rowsAffected > 0) {
-	            JOptionPane.showMessageDialog(null, "Roles eliminados correctamente");
+	            JOptionPane.showMessageDialog(null, "Reasignacion de roles completada");
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();

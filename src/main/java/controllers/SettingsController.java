@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import RSMaterialComponent.RSButtonMaterialIconDos;
+import extras.Input;
 import hashTable.Node;
 import linkedList.LinkedList;
 import models.Category;
@@ -46,9 +47,11 @@ public class SettingsController implements ActionListener {
 		this.form.cbxUsers.addActionListener(this);
 		init();
 	}
-	//LoginController loginAction = new LoginController();
-	//loginAction.desencryptor(LoginController.USER.getPassword(), 5)
 	public void init() {
+		Input.onlyNumbers(this.form.txtTelefonoUsuario);
+		Input.onlyNumbers(this.form.txtUPhone);
+		Input.validateMaxLength(this.form.txtTelefonoUsuario, 9);
+		Input.validateMaxLength(this.form.txtUPhone, 9);
 		this.form.txtNombreUsuario.setText(LoginController.USER.getUsername());
 		this.form.txtPasswordUsuario.setText(LoginController.USER.getPassword());
 		this.form.txtFirstName.setText(LoginController.USER.getFirstName());
@@ -111,24 +114,26 @@ public class SettingsController implements ActionListener {
 		boolean opcion = this.form.btnAccountEditar.getText().toString().toLowerCase().equals("editar");
 
 		if (opcion) {
-			this.form.btnAccountEditar.setText("Guardar");
+			this.form.btnAccountEditar.setText("GUARDAR");
 			this.form.btnAccountEditar.setIcons(ICONS.SAVE);
 		} else {
-			this.form.btnAccountEditar.setText("Editar");
+			this.form.btnAccountEditar.setText("EDITAR");
 			this.form.btnAccountEditar.setIcons(ICONS.EDIT);
 		}
 	}
 
 	// PERMITE HABILITAR LA EDICION DE LA CAJA DE TEXTO DEPENDIENDO DEL ESTADO
 	public void enableTextAccount() {
-		boolean opcion = this.form.btnAccountEditar.getText().toString().equals("Editar");
+		boolean opcion = this.form.btnAccountEditar.getText().toString().toUpperCase().equals("EDITAR");
 		List<JTextField> txtFields = Arrays.asList(this.form.txtNombreUsuario, this.form.txtPasswordUsuario,
 				this.form.txtFirstName, this.form.txtLastName, this.form.txtTelefonoUsuario, this.form.txtEmailUsuario);
 		txtFields.forEach(field -> field.setEditable(!opcion));
-		if(!opcion)
+		if(!opcion) {
 			this.form.txtPasswordUsuario.setText(loginController.desencryptor(LoginController.USER.getPassword(), 5));
-		else
+		}
+		else {
 			this.form.txtPasswordUsuario.setText(LoginController.USER.getPassword());
+		}
 	}
 
 	// PERMITE OBTENER COMO ARREGLO DE STRING LAS CAJAS DE TEXTO DE LA DATA ACTUAL
@@ -145,7 +150,7 @@ public class SettingsController implements ActionListener {
 
 	// PERMITE COMPARA LOS DATOS ANTIGUOS Y LOS NUEVOS PARA VERIFICAR SI HAY CAMBIOS
 	public boolean isModified(String[] usOld, String[] usNew) {
-		boolean opcion = this.form.btnAccountEditar.getText().toString().equals("Editar");
+		boolean opcion = this.form.btnAccountEditar.getText().toString().toUpperCase().equals("EDITAR");
 	    for (int i = 1; i < usNew.length; i++) {
 	        if (!Objects.equals(usOld[i], usNew[i])) {
 	            return true;
@@ -162,19 +167,24 @@ public class SettingsController implements ActionListener {
 
 	//PERMITE VERIFICAR LOS CAMBIOS, DE HABERLOS LOS GUARDA EN LA BASE DE DATOS
 	public void saveModified() {
-		boolean opcion = this.form.btnAccountEditar.getText().toString().toLowerCase().equals("editar");
+		boolean opcion = this.form.btnAccountEditar.getText().toString().toUpperCase().equals("EDITAR");
 		if(opcion) {
 			usOld = getUserActive();
+			if(usOld[1].equals("ADMIN")) {
+				JOptionPane.showMessageDialog(null, "No puede editar a SUPER USUARIO");
+				return;
+			}
 		}else {
 			String[] usNew = getUserActive();
 			if(isModified(usOld, usNew)) {
 				if(!usOld[1].equals("ADMIN")) {
 					userServiceSQL.updateUser(getUserAccount());
+					LoginController.USER = getUserAccount();
 				}
+			}else {
+				JOptionPane.showMessageDialog(null, "No se encontraron cambios");
 			}
-			usOld = getUserActive();
 		}
-		usOld = getUserActive();
 		editNameButtonn();
 		enableTextAccount();
 		loadUserTable();
@@ -247,9 +257,23 @@ public class SettingsController implements ActionListener {
 			if(password.equals(user.getPassword())) {
 				userServiceSQL.insertUser(user);
 				insertRole("ROLE_USER");
+				clearUsers();
+			}else {
+				JOptionPane.showMessageDialog(null, "Confirmacion incorrecta, digite sus credenciales nuevamente porfavor!");
+				this.form.txtUPassword.selectAll();
+				this.form.txtUPassword.requestFocus();
 			}
+		}else {
+			JOptionPane.showMessageDialog(null, "Complete todos los campos por favor!");
 		}
 		loadUserTable();
+		init();
+	}
+	
+	//PERMITE LIMPIAR LAS CASILLAS DE INSERCCION DE DATOS DESPUES DE GUARDAR LA SELECCION
+	public void clearUsers() {
+		List<JTextField> textField = Arrays.asList(this.form.txtUNickName, this.form.txtUPassword, this.form.txtUFirstName, this.form.txtULastName, this.form.txtUPhone, this.form.txtUEmail);
+		textField.forEach(field -> field.setText(""));
 	}
 	
 	//PERMITE REASIGNAR PERMISOS DE USUARIOS (ADMIN, USER)
@@ -259,11 +283,14 @@ public class SettingsController implements ActionListener {
 	
 	//PERMITE ELIMINAR UN USUARIO DADO SU ID
 	public void deleteUser() {
-		if(this.form.tableUsers.getSelectedRow()<0)
+		if(this.form.tableUsers.getSelectedRow()<0) {
+			clearUsers();
 			return;
+		}
 		LinkedList usuarios = userServiceSQL.findAll();
 		
 		int opcion = JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar la seleccion?", "Alerta", JOptionPane.YES_NO_OPTION);
+		
 		if(opcion == JOptionPane.YES_OPTION) {
 			int idDelete = this.form.tableUsers.getSelectedRow();
 			User user = (User) usuarios.get(idDelete);
@@ -271,10 +298,19 @@ public class SettingsController implements ActionListener {
 				JOptionPane.showMessageDialog(null, "El elemento no se encuentra en la lista");
 				return;
 			}else {
+				if(user.getIdUser() == LoginController.USER.getIdUser()) {
+					JOptionPane.showMessageDialog(null, "No puede eliminar el USER ACTIVO");
+					return;
+				}
+				if(user.getUsername().equals("ADMIN")) {
+					JOptionPane.showMessageDialog(null, "No puede eliminar el SUPER USER");
+					return;
+				}
 				deleteRoles("ROLE_USER", user.getIdUser());
 				deleteRoles("ROLE_ADMIN", user.getIdUser());
 				userServiceSQL.deleteUser(user.getIdUser());
 				loadUserTable();
+				init();
 			}
 		}
 	}
@@ -324,6 +360,7 @@ public class SettingsController implements ActionListener {
 	
 	//PERMITE OBTENER EL OBJETO QUE HACE REFERENCIA AL ITEM DEL COMBO BOX
 	public User getSelectedCbxUser() {
+		if(this.form.cbxUsers.getSelectedItem() == null) return null;
 		if (this.form.cbxUsers.getSelectedIndex() == 0)
 			return null;
 		LinkedList users = userServiceSQL.findAll();
@@ -337,6 +374,8 @@ public class SettingsController implements ActionListener {
 	
 	//PERMITE OBTENER UN ARREGLO DE BOOLEANOS QUE QUE VALIDAD SI LOS ROLES ADMIN O USER ESTAN ACTIVOS
 	public boolean[] getRolesUser() {
+		if(this.form.cbxUsers.getSelectedIndex() == 0)return null;
+		
 		boolean[] roles = {
 				this.form.chckbxRoleAdmin.isSelected(),		//estado administrador si es true
 				this.form.chckbxRoleUser.isSelected()		//estado usuarios si es true
@@ -346,31 +385,34 @@ public class SettingsController implements ActionListener {
 	
 	//PERMITE IDENTIFICAR SI SE HA MODIFICADO LOS PERMISOS
 	public boolean isModifiedRoles(boolean[] rolsOld, boolean[] rolsNew) {
-		if(rolsNew[0] != rolsOld[0] || rolsNew[1] != rolsOld[1])
+		if(rolsNew[0] != rolsOld[0])
+			return true;
+		if( rolsNew[1] != rolsOld[1])
 			return true;
 		return false;
 	}
 	
 	//PERMITE ALMACENCAR EN LA BD LOS NUEVOS ROLES DEL USUARIOS, SI HAY MODIFICACIONES
 	public void saveModifiedRole() {
-		if(rolOld == null) return;
+		if(rolOld == null) {
+			JOptionPane.showMessageDialog(null, "Debe Seleccionar un usuario");
+			return;
+		};
+		
 		boolean[] rolNew = getRolesUser();
+		if(rolNew == null) {
+			JOptionPane.showMessageDialog(null, "Debe Seleccionar un usuario");
+			return;
+		}
 		if(isModifiedRoles(rolOld, rolNew)) {
-			if(rolNew[0]==false && rolNew[0]==false) {
-				JOptionPane.showMessageDialog(null, "Seleccione al menos un rol para el usuario");
+			if(!rolNew[0] && !rolNew[1]) {
+				JOptionPane.showMessageDialog(null, "Debe seleccionar un rol para el usuario");
 				return;
-			}	
-			String rolAdmin = "";
+			}
+			
+			String rolAdmin = rolNew[0] ? "ROLE_ADMIN" : "" ;
+			String rolUser = rolNew[1] ? "ROLE_USER" : "";
 			User user = getSelectedCbxUser();
-			
-			if(rolNew[0] != rolOld[0]) {
-				rolAdmin = rolNew[0] ? "ROLE_ADMIN" : "";
-			}
-			
-			String rolUser = "";
-			if(rolNew[1] != rolOld[1]) {
-				rolUser = rolNew[1] ? "ROLE_USER" : "";
-			}
 			
 			if(!rolAdmin.isEmpty()) {
 				roleServiceSQL.insertRole(new Roles(0, rolAdmin, user.getIdUser()));
@@ -383,7 +425,18 @@ public class SettingsController implements ActionListener {
 			}else {
 				roleServiceSQL.deleteRole("ROLE_USER", user.getIdUser());
 			}
+			clearRoles();
+			loadCbxRole();
+		}else {
+			JOptionPane.showMessageDialog(null, "No se registraron cambios");
 		}
+	}
+	
+	//PERMITE LIMPIAR DESPUES DEL CAMBIO DE ROLES
+	public void clearRoles() {
+		this.form.chckbxRoleAdmin.setSelected(false);
+		this.form.chckbxRoleUser.setSelected(false);
+		this.form.cbxUsers.setSelectedIndex(0);
 	}
 	
 	//PERMITE VISUALIZAR UN VIDEO EXPLICATICO A YOUTUBE SOBRE EL FUNCIONAMIENTO DEL PROGRAMA

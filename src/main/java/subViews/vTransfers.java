@@ -100,7 +100,7 @@ public class vTransfers extends JPanel {
 
 		jTableTranslados.setPreferredScrollableViewportSize(new Dimension(610, 335));
 		JScrollPane sp = new JScrollPane(jTableTranslados);
-		sp.setBounds(30, 90, 1140, 320);
+		sp.setBounds(538, 90, 632, 320);
 		sp.setVisible(true);
 		add(sp);
 
