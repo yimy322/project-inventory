@@ -23,17 +23,19 @@ import RSMaterialComponent.RSButtonMaterialIconDos;
 import rojeru_san.efectos.ValoresEnum.ICONS;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class vTransfers extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JLabel lblProductName;
-	public JTable jTableTranslados;
-	DefaultTableModel model;
-	JButton btnReport;
+	public JTable tableTransfers;
+	public JButton btnReport;
 	public JTextField txtProductName, txtProductDescription;
-	public JList list;
-	private JLabel lblNewLabel;
+	public JList listSuppliers;
+	public JLabel lblTotal, lblIndicador;
+	public RSButtonMaterialIconDos btnPlus, btnLess;
+	public JSpinner spnQuantity;
 
 	/**
 	 * Create the panel.
@@ -46,34 +48,30 @@ public class vTransfers extends JPanel {
 		"Translados"));
 		setLayout(null);
 
-		lblProductName = new JLabel("NOMBRE DEL PRODUCTO:");
+		JLabel lblProductName = new JLabel("NOMBRE DEL PRODUCTO:");
 		lblProductName.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblProductName.setBounds(40, 29, 203, 30);
 		lblProductName.setHorizontalAlignment(SwingConstants.LEFT);
 		add(lblProductName);
 		
-		jTableTranslados = new JTable();
-		model = new DefaultTableModel();
-		model.addColumn("ID");
-		model.addColumn("Producto");
-		model.addColumn("Tipo");
-		model.addColumn("Fecha");
-		model.addColumn("Proveedor");
-		model.addColumn("Cantidad");
-		model.addColumn("Cliente");
-		jTableTranslados.setModel(model);
+		tableTransfers = new JTable();
 
-		jTableTranslados.setPreferredScrollableViewportSize(new Dimension(610, 335));
-		JScrollPane sp = new JScrollPane(jTableTranslados);
-		sp.setBounds(528, 37, 632, 383);
+		tableTransfers.setPreferredScrollableViewportSize(new Dimension(610, 335));
+		JScrollPane sp = new JScrollPane(tableTransfers);
+		sp.setBounds(528, 37, 642, 383);
 		sp.setVisible(true);
 		add(sp);
 
-		btnReport = new JButton("Generar reporte diario", new ImageIcon(getClass().getResource("/images/pdf.png")));
+		btnReport = new JButton("Generar reporte diario", new ImageIcon(getClass().getResource("/images/excel.png")));
 		btnReport.setBounds(940, 430, 230, 25);
 		add(btnReport);
 		
 		txtProductName = new JTextField();
+		txtProductName.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+		});
 		txtProductName.setBounds(40, 58, 165, 30);
 		add(txtProductName);
 		txtProductName.setColumns(10);
@@ -99,32 +97,32 @@ public class vTransfers extends JPanel {
 		scrollPane.setBounds(40, 205, 285, 121);
 		add(scrollPane);
 		
-		list = new JList();
-		scrollPane.setViewportView(list);
+		listSuppliers = new JList();
+		scrollPane.setViewportView(listSuppliers);
 		
-		lblNewLabel = new JLabel("0");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 24));
-		lblNewLabel.setBounds(335, 230, 117, 75);
-		add(lblNewLabel);
+		lblTotal = new JLabel("0");
+		lblTotal.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblTotal.setFont(new Font("Tahoma", Font.BOLD, 24));
+		lblTotal.setBounds(335, 230, 117, 75);
+		add(lblTotal);
 		
-		RSButtonMaterialIconDos btnmtrlcndsSumar = new RSButtonMaterialIconDos();
-		btnmtrlcndsSumar.setText("SUMAR");
-		btnmtrlcndsSumar.setIcons(ICONS.ADD);
-		btnmtrlcndsSumar.backgroundHover = new Color(51, 191, 11);
-		btnmtrlcndsSumar.setBackgroundHover(new Color(128, 255, 0));
-		btnmtrlcndsSumar.setBackground(new Color(51, 191, 11));
-		btnmtrlcndsSumar.setBounds(43, 405, 200, 50);
-		add(btnmtrlcndsSumar);
+		btnPlus = new RSButtonMaterialIconDos();
+		btnPlus.setText("SUMAR");
+		btnPlus.setIcons(ICONS.ADD);
+		btnPlus.backgroundHover = new Color(51, 191, 11);
+		btnPlus.setBackgroundHover(new Color(67, 194, 12));
+		btnPlus.setBackground(new Color(51, 191, 11));
+		btnPlus.setBounds(43, 405, 200, 50);
+		add(btnPlus);
 		
-		RSButtonMaterialIconDos btnmtrlcndsRestar = new RSButtonMaterialIconDos();
-		btnmtrlcndsRestar.setText("RESTAR");
-		btnmtrlcndsRestar.setIcons(ICONS.DELETE);
-		btnmtrlcndsRestar.backgroundHover = new Color(240, 34, 50);
-		btnmtrlcndsRestar.setBackgroundHover(new Color(255, 0, 0));
-		btnmtrlcndsRestar.setBackground(new Color(240, 34, 50));
-		btnmtrlcndsRestar.setBounds(266, 405, 200, 50);
-		add(btnmtrlcndsRestar);
+		btnLess = new RSButtonMaterialIconDos();
+		btnLess.setText("RESTAR");
+		btnLess.setIcons(ICONS.DELETE);
+		btnLess.backgroundHover = new Color(240, 34, 50);
+		btnLess.setBackgroundHover(new Color(255, 0, 0));
+		btnLess.setBackground(new Color(240, 34, 50));
+		btnLess.setBounds(266, 405, 200, 50);
+		add(btnLess);
 		
 		JLabel lblCantidad = new JLabel("CANTIDAD:");
 		lblCantidad.setHorizontalAlignment(SwingConstants.LEFT);
@@ -132,20 +130,17 @@ public class vTransfers extends JPanel {
 		lblCantidad.setBounds(40, 344, 129, 30);
 		add(lblCantidad);
 		
-		JSpinner spinner = new JSpinner();
-		spinner.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
-		spinner.setFont(new Font("Tahoma", Font.BOLD, 24));
-		spinner.setBounds(211, 336, 117, 50);
-		add(spinner);
+		spnQuantity = new JSpinner();
+		spnQuantity.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+		spnQuantity.setFont(new Font("Tahoma", Font.BOLD, 24));
+		spnQuantity.setBounds(211, 336, 117, 50);
+		add(spnQuantity);
 		
-		JLabel lblX = new JLabel("X");
-		lblX.setForeground(new Color(255, 0, 0));
-		lblX.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblX.setFont(new Font("Tahoma", Font.BOLD, 24));
-		lblX.setBounds(384, 336, 68, 50);
-		add(lblX);
-		
-		
-
+		lblIndicador = new JLabel("X");
+		lblIndicador.setForeground(new Color(255, 0, 0));
+		lblIndicador.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblIndicador.setFont(new Font("Tahoma", Font.BOLD, 24));
+		lblIndicador.setBounds(384, 336, 68, 50);
+		add(lblIndicador);
 	}
 }

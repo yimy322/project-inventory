@@ -62,6 +62,17 @@ CREATE TABLE roles (
     id_user INT,
     FOREIGN KEY (id_user) REFERENCES users(id_user)
 );
+CREATE TABLE transfers (
+    id_transfers INT AUTO_INCREMENT PRIMARY KEY,
+    quantity INT NOT NULL,
+    date_transfers DATETIME,
+    type_transfers VARCHAR(8) NOT NULL,
+    total INT NOT NULL,
+    id_product INT,
+    id_user INT,
+	FOREIGN KEY (id_product) REFERENCES products(id_product),
+    FOREIGN KEY (id_user) REFERENCES users(id_user)
+);
 INSERT INTO users(username, password, first_name, last_name, phone, email) values("ADMIN", "3b40b2f", "Yanina", "Manrique", 912367226, "yanina322@gmail.com");
 INSERT INTO roles(rol, id_user) values("ROLE_USER", 1);
 INSERT INTO roles(rol, id_user) values("ROLE_ADMIN", 1);
@@ -74,3 +85,5 @@ INSERT INTO categories(name, description) values("Medicamentos", "Productos farm
 INSERT INTO categories(name, description) values("Materiales", "Materiales de Construcción");
 
 UPDATE users u SET u.password = "SNRIF" WHERE u.id_user = 1;
+
+ALTER TABLE products ADD constraint product_name_unique unique (name);

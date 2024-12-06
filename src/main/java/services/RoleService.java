@@ -12,7 +12,6 @@ public class RoleService {
 	private static final String SQL_DELETE = "DELETE FROM roles WHERE rol = ? AND id_user = ?";
 	private static final String SQL_SELECT = "SELECT * FROM roles";
 	
-;
 	//METODO PERMITE LLAMAR A SQL Y GARDAR EL NUEVO ROL DEL USUARIO
 	public void insertRole(Roles role) {
 		try (Connection conn = ConnectionDB.getConnection(); PreparedStatement pstmt = conn.prepareStatement(SQL_INSERT)) {

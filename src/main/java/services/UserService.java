@@ -64,6 +64,9 @@ public class UserService {
 			pstmt.setString(6, user.getEmail());
 			pstmt.executeUpdate();
 			JOptionPane.showMessageDialog(null, "Usuario agregado correctamente");
+		}catch(java.sql.SQLIntegrityConstraintViolationException e1) {
+			JOptionPane.showMessageDialog(null, "Los nombres de los usuarios deben ser unicos", "Advertencia",
+					JOptionPane.ERROR_MESSAGE);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

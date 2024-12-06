@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.JOptionPane;
+
 import connection.ConnectionDB;
 import linkedList.LinkedList;
 import models.Product;
@@ -71,8 +73,13 @@ public class ProductService {
 			stmt.setInt(6, producto.getIdSupplier());
 			// se ejecuta y listo
 			registros = stmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Se actualizo correctamente", "Productos",
+					JOptionPane.INFORMATION_MESSAGE);
+		}catch(java.sql.SQLIntegrityConstraintViolationException e1) {
+			JOptionPane.showMessageDialog(null, "Los nombres de los productos deben ser unicos", "Advertencia",
+					JOptionPane.ERROR_MESSAGE);
+		} catch (SQLException e2) {
+			e2.printStackTrace();
 		} finally {
 			ConnectionDB.close(conn);
 		}

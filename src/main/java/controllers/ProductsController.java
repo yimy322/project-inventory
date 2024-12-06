@@ -125,8 +125,6 @@ public class ProductsController implements ActionListener, MouseListener {
 					productService.update(producto);
 					clear();
 					refreshTable();
-					JOptionPane.showMessageDialog(null, "Se actualizo correctamente", "Productos",
-							JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		} else {
