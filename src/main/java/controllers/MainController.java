@@ -31,6 +31,7 @@ public class MainController implements ActionListener {
 	
 	public void init() {
 		this.form.lblActiveUser.setText(LoginController.USER.getUsername());
+		showSales();
 	}
 	
 	public void showSales(){

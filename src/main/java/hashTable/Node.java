@@ -13,6 +13,6 @@ public class Node {
 	}
 	@Override
 	public String toString() {
-		return value != null ? value.toString() : "null";
+		return "Node [key=" + key + ", value=" + value + ", next=" + next + "]";
 	}
 }

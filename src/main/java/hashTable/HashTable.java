@@ -33,7 +33,7 @@ public class HashTable {
 		if(actual == null) {
 			return null;
 		}
-		while(actual.next != null) {
+		while(actual != null) {
 			if(actual.key == clave) {
 				nuevo.key = actual.key;
 				nuevo.value = actual.value;
