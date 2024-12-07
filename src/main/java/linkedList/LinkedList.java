@@ -31,7 +31,7 @@ public class LinkedList {
 	public void update(Object data, Object nuevaData) {
 		Node actual = head;
 		while (actual != null) {
-			if(actual.data == data) {
+			if(actual.data.equals(data)) {
 				actual.data = nuevaData;
 			}
 			actual = actual.next;

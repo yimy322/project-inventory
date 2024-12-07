@@ -36,6 +36,8 @@ public class SalesController implements ActionListener {
 	LinkedList productos = productService.findAll();
 	int cantidad = 0;
 	int cantidadElegida = 0;
+	int cantidadTotal = 0;
+	double totalNeto = 0.00;
 	
 	public SalesController(vSales form) {
 		this.form = form;
@@ -56,6 +58,8 @@ public class SalesController implements ActionListener {
 		loadSuppliers();
 		// un default para el combo
 		this.form.cbProducto.addItem(nodeDefault);
+		this.form.txtCantidadProd.setText(cantidadTotal+"");
+		this.form.txtTotalProd.setText(totalNeto+"");
 	}
 
 	public void searchCustomer() {
@@ -187,21 +191,81 @@ public class SalesController implements ActionListener {
 		cantidadElegida = cantidadActual;
 		//logica para agregar el producto
 		int idProducto = searchIdCbm(form.cbProducto.getSelectedItem());
-		Product nuevoProducto = productService.selectById(idProducto);
+		//capturar desde la lista
+		Product nuevoProducto = searchProductById(idProducto);
 		addProducts(nuevoProducto);
+		loadProducts();
+		this.form.txtCantidad.setText("");
+	}
+	
+	public Product searchProductById(int idProducto) {
+		for (int i = 0; i < productos.size(); i++) {
+			Product producto = (Product) productos.get(i);
+			if(producto.getIdProduct()==idProducto) {
+				return producto;
+			}
+		}
+		return null;
 	}
 	
 	public void addProducts(Product prod) {
+		//se creo una copia del nuevo producto
+		Product nuevoProducto = new Product(prod);
+		//se calcula el total
 		double total = prod.getPrice() * cantidadElegida;
-		Object ob[] = new Object[8];
-		ob[0] = prod.getIdProduct();
-		ob[1] = prod.getName();
-		ob[2] = prod.getDescription();
-		ob[3] = prod.getPrice();
-		ob[4] = cantidadElegida;
-		ob[5] = total;
-		this.form.model.addRow(ob);
+		//se calcula la cantidad restante
+		cantidad= prod.getQuantity() - cantidadElegida;
+		//aca se actualiza la cantidad del producto
+		nuevoProducto.setQuantity(cantidad);
+		productos.update(prod, nuevoProducto);
+		productos.print();	
+		//-------
+		this.form.lblMaximo.setText("Max. "+cantidad);
+		//verificamos que en caso el producto exista se incremente la cantidad
+		boolean productoExistente = existProduct(prod);
+		//---
+		if(!productoExistente) {
+			Object ob[] = new Object[8];
+			ob[0] = prod.getIdProduct();
+			ob[1] = prod.getName();
+			ob[2] = prod.getDescription();
+			ob[3] = prod.getPrice();
+			ob[4] = cantidadElegida;
+			ob[5] = total;
+			this.form.model.addRow(ob);
+		}
 		this.form.jTableProducts.setModel(this.form.model);
+		//actualiza la cantidad
+		updateQuantity(cantidadElegida);
+		updateTotal();
+	}
+	
+	public boolean existProduct(Product prod) {
+		for (int i = 0; i < this.form.model.getRowCount(); i++) {
+	        int idProductoTabla = (int) this.form.model.getValueAt(i, 0); // capturamos el id en la primera columna
+	        if (idProductoTabla == prod.getIdProduct()) {
+	            //si existe se incremente la cantidad
+	            int cantidadExistente = (int) this.form.model.getValueAt(i, 4);
+	            this.form.model.setValueAt(cantidadExistente + cantidadElegida, i, 4); //actualizamos la cantidad
+	            this.form.model.setValueAt((cantidadExistente + cantidadElegida) * prod.getPrice(), i, 5); //actualizamos el total
+	            return true;
+	        }
+	    }
+		return false;
+	}
+	
+	public void updateQuantity(int cant) {
+		cantidadTotal+=cant;
+		this.form.txtCantidadProd.setText(cantidadTotal+"");
+	}
+	
+	public void updateTotal() {
+		totalNeto = 0.00;
+		for (int i = 0; i < this.form.model.getRowCount(); i++) {
+			double totalPorProducto = (double) this.form.model.getValueAt(i, 5);
+			totalNeto += totalPorProducto;
+	    }
+		this.form.txtTotalProd.setText(totalNeto+"");
 	}
 	
 	@Override

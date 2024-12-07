@@ -43,6 +43,16 @@ public class Product {
 		sName = sname;
 		sLastName = slastName;
 	}
+	
+	public Product(Product product) {
+		this.idProduct = product.getIdProduct();
+		this.name = product.getName();
+		this.description = product.getDescription();
+		this.price = product.getPrice();
+		this.quantity = product.getQuantity();
+		this.idCategory = product.getIdCategory();
+		this.idSupplier = product.getIdSupplier();
+	}
 
 	public int getIdProduct() {
 		return idProduct;
@@ -127,6 +137,27 @@ public class Product {
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+	        return true;
+	    }
+	    if (obj == null || getClass() != obj.getClass()) {
+	        return false; 
+	    }
+	    Product other = (Product) obj;
+	    return idProduct == other.idProduct &&  
+	            name.equals(other.name) &&       
+	            description.equals(other.description) && 
+	            Double.compare(price, other.price) == 0 &&  
+	            quantity == other.quantity &&      
+	            idCategory == other.idCategory &&  
+	            idSupplier == other.idSupplier &&  
+	            category.equals(other.category) && 
+	            sName.equals(other.sName) &&       
+	            sLastName.equals(other.sLastName);
 	}
 
 }
