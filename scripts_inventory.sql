@@ -86,4 +86,5 @@ INSERT INTO categories(name, description) values("Materiales", "Materiales de Co
 
 UPDATE users u SET u.password = "SNRIF" WHERE u.id_user = 1;
 
-ALTER TABLE products ADD constraint product_name_unique unique (name);
+-- NUEVA COLUMNA PARA CLIENTES
+ALTER TABLE customers ADD COLUMN dni INT UNIQUE NOT NULL;

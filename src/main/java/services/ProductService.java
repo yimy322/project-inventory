@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 import javax.swing.JOptionPane;
 
@@ -56,7 +57,7 @@ public class ProductService {
 		return productos;
 	}
 
-	public int save(Product producto) {
+	public int save(Product producto){
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		int registros = 0;
@@ -73,11 +74,6 @@ public class ProductService {
 			stmt.setInt(6, producto.getIdSupplier());
 			// se ejecuta y listo
 			registros = stmt.executeUpdate();
-			JOptionPane.showMessageDialog(null, "Se actualizo correctamente", "Productos",
-					JOptionPane.INFORMATION_MESSAGE);
-		}catch(java.sql.SQLIntegrityConstraintViolationException e1) {
-			JOptionPane.showMessageDialog(null, "Los nombres de los productos deben ser unicos", "Advertencia",
-					JOptionPane.ERROR_MESSAGE);
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		} finally {

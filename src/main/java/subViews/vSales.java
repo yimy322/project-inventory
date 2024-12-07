@@ -2,8 +2,12 @@ package subViews;
 
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.awt.Dimension;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -11,118 +15,221 @@ import javax.swing.SwingConstants;
 import javax.swing.JSpinner;
 import RSMaterialComponent.RSButtonIconDos;
 import RSMaterialComponent.RSButtonMaterialIconDos;
+import hashTable.Node;
 import rojeru_san.efectos.ValoresEnum.ICONS;
+
+import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+
 import rojeru_san.complementos.RSButtonHover;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTable;
 
 public class vSales extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField txt_productId;
-	private JLabel lblCantidad;
-	private JTextField txt_price;
-	private JTable table;
-	private JTextField textField;
-	private JTextField textField_1;
+	public JLabel lblDni;
+	public JTextField txtDni;
+	public JLabel lblNombres;
+	public JTextField txtNombres;
+	public JLabel lblApellidos;
+	public JTextField txtApellidos;
+	public JLabel lblTelefono;
+	public JTextField txtTelefono;
+	public JLabel lblEmail;
+	public JTextField txtEmail;
+	public JButton btnBuscarCliente;
+	public JLabel lblCategoria;
+	public JComboBox<Node> cbCategoria;
+	public JLabel lblProveedor;
+	public JComboBox<Node> cbProveedor;
+	public JLabel lblProducto;
+	public JComboBox<Node> cbProducto;
+	public JLabel lblCantidad;
+	public JTextField txtCantidad;
+	public JLabel lblMaximo;
+	public JButton btnAgregarProducto;
+	public JTable jTableProducts;
+	public DefaultTableModel model;
+	public JButton btnExcel;
+	public JLabel lblCantidadProd;
+	public JTextField txtCantidadProd;
+	public JLabel lblTotalProd;
+	public JTextField txtTotalProd;
 
 	/**
 	 * Create the panel.
 	 */
 	public vSales() {
+		
 		setBackground(new Color(228, 233, 232));
 		setSize(1186, 518);
 		setLocation(0, 0);
-		setBorder(new TitledBorder(null, "Realizar ventas", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		setBackground(new Color(228, 233, 232));
+		setSize(1200, 480);
 		setLayout(null);
+		setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
+				"Venta"));
+
+		Border roundedBorder = BorderFactory.createLineBorder(Color.BLACK, 1);
 		
-		JLabel lblNewLabel = new JLabel("Codigo del Producto:");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblNewLabel.setBounds(67, 35, 147, 28);
-		add(lblNewLabel);
+		lblDni = new JLabel("DNI");
+		lblDni.setBounds(30, 47, 40, 15);
+		lblDni.setHorizontalAlignment(SwingConstants.CENTER);
+		add(lblDni);
+
+		txtDni = new JTextField();
+		txtDni.setBounds(75, 40, 100, 30);
+		txtDni.setBorder(roundedBorder);
+		add(txtDni);
+		txtDni.setColumns(10);
 		
-		txt_productId = new JTextField();
-		txt_productId.setBounds(224, 36, 178, 28);
-		add(txt_productId);
-		txt_productId.setColumns(10);
+		btnBuscarCliente = new JButton(new ImageIcon(getClass().getResource("/images/lupa.png")));
+		btnBuscarCliente.setBounds(185, 40, 50, 30);
+		add(btnBuscarCliente);
 		
-		JSpinner spn_quantity = new JSpinner();
-		spn_quantity.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		spn_quantity.setBounds(536, 35, 46, 28);
-		add(spn_quantity);
+		lblNombres = new JLabel("Nombres");
+		lblNombres.setBounds(285, 47, 70, 15);
+		lblNombres.setHorizontalAlignment(SwingConstants.CENTER);
+		add(lblNombres);
+
+		txtNombres = new JTextField();
+		txtNombres.setBounds(365, 40, 120, 30);
+		txtNombres.setColumns(10);
+		txtNombres.setEditable(false);
+		add(txtNombres);
+
+		lblApellidos = new JLabel("Apellidos");
+		lblApellidos.setBounds(515, 47, 70, 15);
+		lblApellidos.setHorizontalAlignment(SwingConstants.CENTER);
+		add(lblApellidos);
+
+		txtApellidos = new JTextField();
+		txtApellidos.setBounds(595, 40, 120, 30);
+		txtApellidos.setColumns(10);
+		txtApellidos.setEditable(false);
+		add(txtApellidos);
+
+		lblTelefono = new JLabel("Telefono");
+		lblTelefono.setBounds(745, 47, 70, 15);
+		lblTelefono.setHorizontalAlignment(SwingConstants.CENTER);
+		add(lblTelefono);
 		
-		JLabel lblCantidad_1 = new JLabel("Cantidad:");
-		lblCantidad_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblCantidad_1.setBounds(446, 35, 80, 28);
-		add(lblCantidad_1);
+		txtTelefono = new JTextField();
+		txtTelefono.setBounds(820, 40, 120, 30);
+		txtTelefono.setColumns(10);
+		txtTelefono.setEditable(false);
+		add(txtTelefono);
 		
-		JLabel lblCantidad_1_1 = new JLabel("Precio:   S/.");
-		lblCantidad_1_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblCantidad_1_1.setBounds(633, 34, 80, 28);
-		add(lblCantidad_1_1);
+		lblEmail = new JLabel("Email");
+		lblEmail.setBounds(950, 47, 70, 15);
+		lblEmail.setHorizontalAlignment(SwingConstants.CENTER);
+		add(lblEmail);
+
+		txtEmail = new JTextField();
+		txtEmail.setBounds(1015, 40, 150, 30);
+		txtEmail.setColumns(10);
+		txtEmail.setEditable(false);
+		add(txtEmail);
 		
-		txt_price = new JTextField();
-		txt_price.setColumns(10);
-		txt_price.setBounds(723, 35, 125, 28);
-		add(txt_price);
+		JSeparator separator = new JSeparator();
+		separator.setBounds(10, 90, 1180, 15);
+		separator.setForeground(Color.BLACK);
+		add(separator);
 		
-		RSButtonMaterialIconDos btnSales = new RSButtonMaterialIconDos();
-		btnSales.backgroundHover = new Color(22, 160, 133);
-		btnSales.setBackgroundHover(new Color(115, 198, 182));
-		btnSales.setText("REGISTRAR");
-		btnSales.setIcons(ICONS.ADD);
-		btnSales.setForegroundText(Color.BLACK);
-		btnSales.setForegroundIconHover(Color.WHITE);
-		btnSales.setForegroundIcon(Color.BLACK);
-		btnSales.setForegroundHover(Color.WHITE);
-		btnSales.setForeground(Color.WHITE);
-		btnSales.setBackground(new Color(125, 206, 160));
-		btnSales.setBounds(932, 24, 170, 50);
-		add(btnSales);
+		lblCategoria = new JLabel("Categoria");
+		lblCategoria.setBounds(43, 108, 70, 15);
+		lblCategoria.setHorizontalAlignment(SwingConstants.CENTER);
+		add(lblCategoria);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(52, 102, 1088, 245);
-		add(scrollPane);
+		cbCategoria = new JComboBox<Node>();
+		cbCategoria.setBounds(131, 103, 150, 24);
+		cbCategoria.setEditable(false);
+		add(cbCategoria);
 		
-		table = new JTable();
-		scrollPane.setViewportView(table);
+		lblProveedor = new JLabel("Proveedor");
+		lblProveedor.setBounds(320, 108, 90, 15);
+		lblProveedor.setHorizontalAlignment(SwingConstants.CENTER);
+		add(lblProveedor);
 		
-		JLabel lblCantidad_1_2 = new JLabel("TOTAL UNIDADES");
-		lblCantidad_1_2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCantidad_1_2.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblCantidad_1_2.setBounds(162, 369, 139, 28);
-		add(lblCantidad_1_2);
+		cbProveedor = new JComboBox<Node>();
+		cbProveedor.setBounds(420, 103, 150, 24);
+		cbProveedor.setEditable(false);
+		add(cbProveedor);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(140, 408, 178, 28);
-		add(textField);
+		lblProducto = new JLabel("Producto");
+		lblProducto.setBounds(605, 108, 90, 15);
+		lblProducto.setHorizontalAlignment(SwingConstants.CENTER);
+		add(lblProducto);
 		
-		JLabel lblCantidad_1_2_1 = new JLabel("TOTAL DINERO");
-		lblCantidad_1_2_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCantidad_1_2_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblCantidad_1_2_1.setBounds(516, 369, 139, 28);
-		add(lblCantidad_1_2_1);
+		cbProducto = new JComboBox<Node>();
+		cbProducto.setBounds(705, 103, 150, 24);
+		cbProducto.setEditable(false);
+		add(cbProducto);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(494, 408, 178, 28);
-		add(textField_1);
+		lblCantidad = new JLabel("Cantidad");
+		lblCantidad.setBounds(890, 108, 70, 15);
+		lblCantidad.setHorizontalAlignment(SwingConstants.CENTER);
+		add(lblCantidad);
 		
-		RSButtonMaterialIconDos btnmtrlcndsVender = new RSButtonMaterialIconDos();
-		btnmtrlcndsVender.setText("VENDER");
-		btnmtrlcndsVender.setIcons(ICONS.SHOP_TWO);
-		btnmtrlcndsVender.setForegroundText(Color.BLACK);
-		btnmtrlcndsVender.setForegroundIconHover(Color.WHITE);
-		btnmtrlcndsVender.setForegroundIcon(Color.BLACK);
-		btnmtrlcndsVender.setForegroundHover(Color.WHITE);
-		btnmtrlcndsVender.setForeground(Color.WHITE);
-		btnmtrlcndsVender.backgroundHover = new Color(22, 160, 133);
-		btnmtrlcndsVender.setBackgroundHover(new Color(22, 160, 133));
-		btnmtrlcndsVender.setBackground(new Color(125, 206, 160));
-		btnmtrlcndsVender.setBounds(970, 379, 170, 50);
-		add(btnmtrlcndsVender);
+		txtCantidad = new JTextField();
+		txtCantidad.setBounds(975, 103, 50, 30);
+		txtCantidad.setColumns(10);
+		add(txtCantidad);
+		
+		lblMaximo = new JLabel("Max. 24");
+		lblMaximo.setBounds(1020, 108, 70, 15);
+		lblMaximo.setHorizontalAlignment(SwingConstants.CENTER);
+		add(lblMaximo);
+		
+		btnAgregarProducto = new JButton(new ImageIcon(getClass().getResource("/images/add.png")));
+		btnAgregarProducto.setBounds(1116, 103, 50, 30);
+		add(btnAgregarProducto);
+		
+		jTableProducts = new JTable();
+		model = new DefaultTableModel();
+		model.addColumn("ID");
+        model.addColumn("Nombre");
+        model.addColumn("Descripcion");
+        model.addColumn("Precio");
+        model.addColumn("Cantidad");
+        model.addColumn("Categoria");
+        model.addColumn("Proveedor");
+        jTableProducts.setModel(model);
+        
+        jTableProducts.setPreferredScrollableViewportSize(new Dimension(610, 335));
+        JScrollPane sp = new JScrollPane(jTableProducts);
+        sp.setBounds(50, 165, 1100, 250);
+        sp.setVisible(true);
+        add(sp);
+        
+        lblCantidadProd = new JLabel("Cantidad Total");
+        lblCantidadProd.setBounds(43, 437, 120, 15);
+        lblCantidadProd.setHorizontalAlignment(SwingConstants.CENTER);
+		add(lblCantidadProd);
+
+		txtCantidadProd = new JTextField();
+		txtCantidadProd.setBounds(170, 430, 150, 30);
+		txtCantidadProd.setColumns(10);
+		txtCantidadProd.setEditable(false);
+		add(txtCantidadProd);
+		
+		lblTotalProd = new JLabel("Total S/.");
+		lblTotalProd.setBounds(320, 437, 120, 15);
+		lblTotalProd.setHorizontalAlignment(SwingConstants.CENTER);
+		add(lblTotalProd);
+
+		txtTotalProd = new JTextField();
+		txtTotalProd.setBounds(420, 430, 150, 30);
+		txtTotalProd.setColumns(10);
+		txtTotalProd.setEditable(false);
+		add(txtTotalProd);
+        
+        btnExcel = new JButton("Venta", new ImageIcon(getClass().getResource("/images/camion.png")));
+        btnExcel.setBounds(1020, 430, 130, 25);
+		add(btnExcel);
+		
 	}
 }
