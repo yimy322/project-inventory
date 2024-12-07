@@ -16,6 +16,7 @@ public class ProductService {
 	private static final String SQL_SELECT = "SELECT p.*, c.name as category, s.name as s_name, s.last_name as s_last_name from products p join categories c on p.id_category = c.id_category join suppliers s on p.id_supplier = s.id_supplier";
 	private static final String SQL_INSERT = "INSERT INTO products(name, description, price, quantity, id_category, id_supplier) VALUES (?,?,?,?,?,?)";
 	private static final String SQL_UPDATE = "UPDATE products SET name = ?,description = ?,price = ?,quantity = ? WHERE id_product= ?";
+	private static final String SQL_SELECT_BY_ID = "SELECT * FROM products WHERE id_product=?";
 
 	// traera en una lista enlazada toda la consulta de la tabla
 	public LinkedList findAll() {
@@ -105,4 +106,32 @@ public class ProductService {
 		return registros;
 	}
 
+	public Product selectById(int id) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		Product producto = null;
+		try {
+			// obtenemos la conexion
+			conn = ConnectionDB.getConnection();
+			stmt = conn.prepareStatement(SQL_SELECT_BY_ID);
+			stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+            rs.next();
+            int idProduct = rs.getInt("id_product");
+			String name = rs.getString("name");
+			String description = rs.getString("description");
+			double price = rs.getDouble("price");
+			int quantity = rs.getInt("quantity");
+			int idCategory = rs.getInt("id_category");
+			int idSupplier = rs.getInt("id_supplier");
+			producto = new Product(idProduct, name, description, price, quantity, idCategory, idSupplier);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionDB.close(conn);
+		}
+		return producto;
+	}
+	
 }

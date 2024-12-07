@@ -19,7 +19,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import extras.Input;
 import hashTable.HashTable;
-import hashTable.Node;
+import hashTable.NodeHash;
 import linkedList.LinkedList;
 import models.Category;
 import models.Product;
@@ -36,8 +36,8 @@ public class ProductsController implements ActionListener, MouseListener {
 	SupplierService supplierService = new SupplierService();
 	ProductService productService = new ProductService();
 	// un default para el combo
-	Node nodeDefault = new Node(0, "<SELECCIONAR>");
-	Node noEditable = new Node(0, "No editable");
+	NodeHash nodeDefault = new NodeHash(0, "<SELECCIONAR>");
+	NodeHash noEditable = new NodeHash(0, "No editable");
 
 	public ProductsController(vProducts form) {
 		this.form = form;
@@ -66,7 +66,7 @@ public class ProductsController implements ActionListener, MouseListener {
 		for (int i = 0; i < categorias.size(); i++) {
 			Category categoria = (Category) categorias.get(i);
 			// se crea el nodo
-			Node nodeCategoria = new Node(categoria.getIdCategory(), categoria);
+			NodeHash nodeCategoria = new NodeHash(categoria.getIdCategory(), categoria);
 			// se agrega el nodo al combo, como tiene to string imprimira el tostring del
 			// value en este caso del category
 			form.cbCategoria.addItem(nodeCategoria);
@@ -81,14 +81,14 @@ public class ProductsController implements ActionListener, MouseListener {
 		for (int i = 0; i < proveedores.size(); i++) {// Itera la lista de proveedores
 			Supplier proveedor = (Supplier) proveedores.get(i); // Retorna objeto de tipo proveedor
 			// se crea el nodo
-			Node nodeProveedor = new Node(proveedor.getIdSupplier(), proveedor);
+			NodeHash nodeProveedor = new NodeHash(proveedor.getIdSupplier(), proveedor);
 			form.cbProveedor.addItem(nodeProveedor); // Se agrega cada proveedor al combo
 		}
 	}
 
 	// retorna el key del valor del parametro
 	public int searchIdCbm(Object obj) {
-		Node selectedItem = (Node) obj;
+		NodeHash selectedItem = (NodeHash) obj;
 		return selectedItem.key;
 	}
 

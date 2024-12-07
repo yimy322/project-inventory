@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import RSMaterialComponent.RSButtonMaterialIconDos;
 import extras.Input;
-import hashTable.Node;
+import hashTable.NodeHash;
 import linkedList.LinkedList;
 import models.Category;
 import models.Roles;
@@ -36,8 +36,8 @@ public class SettingsController implements ActionListener {
 	LoginController loginController = new LoginController();
 	UserService userServiceSQL = new UserService();
 	RoleService roleServiceSQL = new RoleService();
-	Node nodeDefault = new Node(0, "<SELECCIONAR>");
-	Node noEditable = new Node(0, "No editable");
+	NodeHash nodeDefault = new NodeHash(0, "<SELECCIONAR>");
+	NodeHash noEditable = new NodeHash(0, "No editable");
 	
 	public SettingsController(vSettings form) {
 		this.form = form;
@@ -326,7 +326,7 @@ public class SettingsController implements ActionListener {
 		for (int i = 1; i < users.size(); i++) {
 			User user = (User) users.get(i);
 			// se crea el nodo
-			Node nodeUser = new Node(user.getIdUser(), user.getUsername());
+			NodeHash nodeUser = new NodeHash(user.getIdUser(), user.getUsername());
 			// se agrega el nodo al combo, como tiene to string imprimira el tostring
 			this.form.cbxUsers.addItem(nodeUser);
 		}

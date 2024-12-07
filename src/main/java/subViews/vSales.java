@@ -15,7 +15,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JSpinner;
 import RSMaterialComponent.RSButtonIconDos;
 import RSMaterialComponent.RSButtonMaterialIconDos;
-import hashTable.Node;
+import hashTable.NodeHash;
 import rojeru_san.efectos.ValoresEnum.ICONS;
 
 import javax.swing.border.Border;
@@ -42,11 +42,11 @@ public class vSales extends JPanel {
 	public JTextField txtEmail;
 	public JButton btnBuscarCliente;
 	public JLabel lblCategoria;
-	public JComboBox<Node> cbCategoria;
+	public JComboBox<NodeHash> cbCategoria;
 	public JLabel lblProveedor;
-	public JComboBox<Node> cbProveedor;
+	public JComboBox<NodeHash> cbProveedor;
 	public JLabel lblProducto;
-	public JComboBox<Node> cbProducto;
+	public JComboBox<NodeHash> cbProducto;
 	public JLabel lblCantidad;
 	public JTextField txtCantidad;
 	public JLabel lblMaximo;
@@ -58,6 +58,8 @@ public class vSales extends JPanel {
 	public JTextField txtCantidadProd;
 	public JLabel lblTotalProd;
 	public JTextField txtTotalProd;
+	public JButton btnEliminarUltimo;
+	public JButton btnEliminarTodo;
 
 	/**
 	 * Create the panel.
@@ -144,7 +146,7 @@ public class vSales extends JPanel {
 		lblCategoria.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblCategoria);
 		
-		cbCategoria = new JComboBox<Node>();
+		cbCategoria = new JComboBox<NodeHash>();
 		cbCategoria.setBounds(131, 103, 150, 24);
 		cbCategoria.setEditable(false);
 		add(cbCategoria);
@@ -154,7 +156,7 @@ public class vSales extends JPanel {
 		lblProveedor.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblProveedor);
 		
-		cbProveedor = new JComboBox<Node>();
+		cbProveedor = new JComboBox<NodeHash>();
 		cbProveedor.setBounds(420, 103, 150, 24);
 		cbProveedor.setEditable(false);
 		add(cbProveedor);
@@ -164,7 +166,7 @@ public class vSales extends JPanel {
 		lblProducto.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblProducto);
 		
-		cbProducto = new JComboBox<Node>();
+		cbProducto = new JComboBox<NodeHash>();
 		cbProducto.setBounds(705, 103, 150, 24);
 		cbProducto.setEditable(false);
 		add(cbProducto);
@@ -177,9 +179,10 @@ public class vSales extends JPanel {
 		txtCantidad = new JTextField();
 		txtCantidad.setBounds(975, 103, 50, 30);
 		txtCantidad.setColumns(10);
+		txtCantidad.setEditable(false);
 		add(txtCantidad);
 		
-		lblMaximo = new JLabel("Max. 24");
+		lblMaximo = new JLabel("Max. 0");
 		lblMaximo.setBounds(1020, 108, 70, 15);
 		lblMaximo.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblMaximo);
@@ -188,20 +191,27 @@ public class vSales extends JPanel {
 		btnAgregarProducto.setBounds(1116, 103, 50, 30);
 		add(btnAgregarProducto);
 		
+		btnEliminarUltimo = new JButton(new ImageIcon(getClass().getResource("/images/eliminar.png")));
+		btnEliminarUltimo.setBounds(540, 140, 50, 30);
+		add(btnEliminarUltimo);
+		
+		btnEliminarTodo = new JButton(new ImageIcon(getClass().getResource("/images/tacho.png")));
+		btnEliminarTodo.setBounds(610, 140, 50, 30);
+		add(btnEliminarTodo);
+		
 		jTableProducts = new JTable();
 		model = new DefaultTableModel();
 		model.addColumn("ID");
         model.addColumn("Nombre");
         model.addColumn("Descripcion");
         model.addColumn("Precio");
-        model.addColumn("Cantidad");
-        model.addColumn("Categoria");
-        model.addColumn("Proveedor");
+        model.addColumn("Cantidad elegida");
+        model.addColumn("Valor total");
         jTableProducts.setModel(model);
         
         jTableProducts.setPreferredScrollableViewportSize(new Dimension(610, 335));
         JScrollPane sp = new JScrollPane(jTableProducts);
-        sp.setBounds(50, 165, 1100, 250);
+        sp.setBounds(50, 180, 1100, 250);
         sp.setVisible(true);
         add(sp);
         

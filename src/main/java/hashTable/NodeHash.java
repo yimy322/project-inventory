@@ -1,18 +1,18 @@
 package hashTable;
 
-public class Node {
+public class NodeHash {
 	public int key;
 	public Object value;
-	public Node next;
-	public Node() {
+	public NodeHash next;
+	public NodeHash() {
 	}
-	public Node(int key, Object value) {
+	public NodeHash(int key, Object value) {
 		this.key = key;
 		this.value = value;
 		this.next = null;
 	}
 	@Override
 	public String toString() {
-		return "Node [key=" + key + ", value=" + value + ", next=" + next + "]";
+		return value != null ? value.toString() : "null";
 	}
 }
