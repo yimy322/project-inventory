@@ -25,17 +25,21 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.AbstractListModel;
 
 public class vTransfers extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	public JTable tableTransfers;
-	public JButton btnReport;
+	public JButton btnReport, btnUpdateFinal;
 	public JTextField txtProductName, txtProductDescription;
 	public JList listSuppliers;
 	public JLabel lblTotal, lblIndicador;
 	public RSButtonMaterialIconDos btnPlus, btnLess;
 	public JSpinner spnQuantity;
+	public JScrollPane spListSupplier;
 
 	/**
 	 * Create the panel.
@@ -67,11 +71,6 @@ public class vTransfers extends JPanel {
 		add(btnReport);
 		
 		txtProductName = new JTextField();
-		txtProductName.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseExited(MouseEvent e) {
-			}
-		});
 		txtProductName.setBounds(40, 58, 165, 30);
 		add(txtProductName);
 		txtProductName.setColumns(10);
@@ -83,6 +82,7 @@ public class vTransfers extends JPanel {
 		add(lblProductDescription);
 		
 		txtProductDescription = new JTextField();
+		txtProductDescription.setEditable(false);
 		txtProductDescription.setColumns(10);
 		txtProductDescription.setBounds(40, 134, 412, 30);
 		add(txtProductDescription);
@@ -93,12 +93,12 @@ public class vTransfers extends JPanel {
 		lblSupliers.setBounds(40, 174, 129, 30);
 		add(lblSupliers);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(40, 205, 285, 121);
-		add(scrollPane);
+		spListSupplier = new JScrollPane();
+		spListSupplier.setBounds(40, 205, 285, 121);
+		add(spListSupplier);
 		
 		listSuppliers = new JList();
-		scrollPane.setViewportView(listSuppliers);
+		spListSupplier.setViewportView(listSuppliers);
 		
 		lblTotal = new JLabel("0");
 		lblTotal.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -142,5 +142,11 @@ public class vTransfers extends JPanel {
 		lblIndicador.setFont(new Font("Tahoma", Font.BOLD, 24));
 		lblIndicador.setBounds(384, 336, 68, 50);
 		add(lblIndicador);
+		
+		btnUpdateFinal = new JButton("");
+		btnUpdateFinal.setIcon(new ImageIcon(vTransfers.class.getResource("/necesario/ver1.png")));
+		btnUpdateFinal.setBackground(new Color(228, 233, 232));
+		btnUpdateFinal.setBounds(528, 433, 57, 37);
+		add(btnUpdateFinal);
 	}
 }

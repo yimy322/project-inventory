@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import connection.ConnectionDB;
 import linkedList.LinkedList;
 import models.Transfers;
+import pilas.Pilas;
 
 public class TranfersService {
 
@@ -73,8 +74,8 @@ public class TranfersService {
 	}
 	
 	//PERMITE LISTAR LOS REGISTRO EN LA BASE DE DATOS EN UNA LISTA DE ENLACE SIMPLE
-	public LinkedList findAll() {
-		LinkedList transfers = new LinkedList();
+	public Pilas findAll() {
+		Pilas transfers = new Pilas(); 
 		try (Connection conn = ConnectionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(SQL_SELECT); ResultSet rs = stmt.executeQuery()){
 			while(rs.next()) {
 				int idTransfers = rs.getInt("id_transfers");
@@ -88,7 +89,7 @@ public class TranfersService {
 				int quantityProduct = rs.getInt("quantity_product");
 				String userName = rs.getString("username");
 				Transfers transfer = new Transfers(idTransfers, quantity, total, idUser, idProduct, dateTransfers, typeTransfers, nameProduct, userName, quantityProduct);
-				transfers.addFirst(transfer);
+				transfers.push(transfer);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
