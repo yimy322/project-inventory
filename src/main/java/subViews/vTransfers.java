@@ -19,6 +19,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+
 import RSMaterialComponent.RSButtonMaterialIconDos;
 import rojeru_san.efectos.ValoresEnum.ICONS;
 import javax.swing.JSpinner;
@@ -28,6 +30,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractListModel;
+import javax.swing.event.AncestorListener;
+import javax.swing.event.AncestorEvent;
 
 public class vTransfers extends JPanel {
 

@@ -34,7 +34,7 @@ public class Pilas {
 	}
 	
 	//permite obtener el objeto que se encuantra a la cabeza de la cola, es decir el ultimo elemento que se agrego
-	public Object peak() {
+	public Object peek() {
 		if(head == null) {
 			JOptionPane.showMessageDialog(null,"La pila esta vacio!");
 			return null;

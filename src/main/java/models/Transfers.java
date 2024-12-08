@@ -7,6 +7,8 @@ public class Transfers {
 	private String nameProduct, userName;
 	private int quantityProduct;
 	
+	private String nameSupplier;
+	
 	public Transfers(int idTransfers, int quantity, int total, int idUser, int idProduct, String fecha,
 			String typeTransfers) {
 		this.idTransfers = idTransfers;
@@ -19,7 +21,7 @@ public class Transfers {
 	}
 	
 	public Transfers(int idTransfers, int quantity, int total, int idUser, int idProduct, String fecha,
-			String typeTransfers, String nameProduct, String userName, int quantityProduct) {
+			String typeTransfers, String nameProduct, String userName, int quantityProduct, String nameSupplier) {
 		this.idTransfers = idTransfers;
 		this.quantity = quantity;
 		this.total = total;
@@ -30,6 +32,15 @@ public class Transfers {
 		this.nameProduct = nameProduct;
 		this.userName = userName;
 		this.quantityProduct = quantityProduct;
+		this.nameSupplier = nameSupplier;
+	}
+
+	public String getNameSupplier() {
+		return nameSupplier;
+	}
+
+	public void setNameSupplier(String nameSupplier) {
+		this.nameSupplier = nameSupplier;
 	}
 
 	public String getNameProduct() {

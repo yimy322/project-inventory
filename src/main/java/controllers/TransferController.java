@@ -11,8 +11,12 @@ import java.util.Arrays;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import RSMaterialComponent.RSButtonMaterialIconDos;
 import linkedList.LinkedList;
@@ -23,8 +27,10 @@ import services.ProductService;
 import services.SupplierService;
 import services.TranfersService;
 import subViews.vTransfers;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
-public class TransferController implements ActionListener, KeyListener, MouseListener {
+public class TransferController implements ActionListener, KeyListener, MouseListener, ChangeListener {
 	
 	private vTransfers form;
 	TranfersService transfersServiceSQL = new TranfersService();
@@ -39,7 +45,7 @@ public class TransferController implements ActionListener, KeyListener, MouseLis
 		buttons2.forEach(button -> button.addActionListener(this));
 		this.form.listSuppliers.addMouseListener(this);
 		this.form.txtProductName.addKeyListener(this);
-		this.form.spListSupplier.addKeyListener(this);
+		this.form.spnQuantity.addChangeListener(this);;
 		init();
 	}
 	
@@ -50,7 +56,7 @@ public class TransferController implements ActionListener, KeyListener, MouseLis
 	
 	//PERMITE CARGAR LA TABLA DE PRODUCTOS ACTUALIADOS
 	public void loadTable(){
-		DefaultTableModel model1 = new DefaultTableModel(new String[] {"Nombre Producto", "Cantidad", "Movimiento", "Total", "Fecha", "Tipo", "Usuario"},0);
+		DefaultTableModel model1 = new DefaultTableModel(new String[] {"Nombre Producto", "Cantidad", "Movimiento", "Total", "Proveedor", "Fecha", "Tipo", "Usuario"},0);
 		Pilas transfers = transfersServiceSQL.findAll();
 		
 		for(int i=0; i<transfers.size(); i++) {
@@ -60,6 +66,7 @@ public class TransferController implements ActionListener, KeyListener, MouseLis
 						t.getQuantityProduct(),
 						t.getQuantity(),
 						t.getTotal(),
+						t.getNameSupplier(),
 						t.getFecha(),
 						t.getTypeTransfers(),
 						t.getUserName()
@@ -70,34 +77,36 @@ public class TransferController implements ActionListener, KeyListener, MouseLis
 	
 	//PERMITE ACTUALIZAR ULTIMO ELEMENTO AGREGADO
 	public Transfers getTransfersFinal() {
-		Pilas transfers = new Pilas();
+		Pilas transfers = transfersServiceSQL.findAll();
 		if(transfers.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "No hay registro aun, la pila esta vacia");
 			return null;
 		}else {
-			return (Transfers) transfers.peak();
+			return (Transfers) transfers.peek();
 		}
 	}
 	
 	//PERMITE ESCRIBIR LOS DATOS DEL ULTIMO INGRESO EN LAS CAJAS DE TEXTO DE TRANSLADOS
 	public void fillInfoFinal() {
-		Transfers transfers = getTransfersFinal();
-		if(transfers == null) {
+		Transfers transfer = getTransfersFinal();
+		if(transfer == null) {
 			return;
 		}else {
-			this.form.txtProductName.setText(transfers.getNameProduct());
-			this.form.spnQuantity.setValue(transfers.getQuantity());
+			this.form.txtProductName.setText(transfer.getNameProduct());
+			this.form.spnQuantity.setValue(transfer.getQuantity());
+			loadListSupplier();
+			refreshIndicator();
 		}
 	}
 	
 	//PERMITE LIMPIAR LAS CAJAS DE TEXTO
 	public void clear() {
-		List<JTextField> textFields = Arrays.asList(this.form.txtProductDescription, this.form.txtProductName);
-		textFields.forEach(field -> field.setText(""));
-		this.form.listSuppliers.setModel(null);
+		this.form.txtProductName.setText("");
 		this.form.spnQuantity.setValue(0);
 		this.form.lblIndicador.setText("X");
 		this.form.lblIndicador.setForeground(new Color(255, 0, 0));
+		this.form.lblTotal.setText("0");
+		this.form.txtProductDescription.setText("");
 	}
 	
 	//VERIFICA QUE TODOS LOS CAMPOS DE LLENADO ESTEN COMPLETOS ANTES DE PROCEDER
@@ -109,9 +118,35 @@ public class TransferController implements ActionListener, KeyListener, MouseLis
 	
 	//PERMITE SUMAR A UN DETERMINADO PRODUCTO DADO SU NOMBRE UNICO Y SU PROVEEDOR
 	public void addQuantity() {
-		if(validated()) {
-			
-			JOptionPane.showMessageDialog(null, "Estoy lleno");
+		if(!validated()) {
+			JOptionPane.showMessageDialog(null, "Complete los todos los campos por favor!");
+			return;
+		}
+		if(this.form.listSuppliers.getModel() == null) {
+			return;
+		}
+		Object[] selectedItems = this.form.listSuppliers.getSelectedValues();
+		LinkedList products = productServiceSQL.findAll();
+		for(int i=0; i<selectedItems.length; i++) {
+			for (int j = 0; j < products.size(); j++) {
+				Product product = (Product) products.get(j);
+				if(this.form.txtProductName.getText().toLowerCase().equals(product.getName().toLowerCase()) && selectedItems[i].toString().toLowerCase().equals(product.getSname().toLowerCase().toString())) {
+					String nameP = this.form.txtProductName.getText();
+					int cant = (int) this.form.spnQuantity.getValue();
+					
+					//permite encontrar la hora y fecha actual en formato mysql
+					LocalDateTime currentDateTime = LocalDateTime.now();
+					Timestamp sqlTimestamp = Timestamp.valueOf(currentDateTime);
+					//ISNTANCIAMOS LA CLASE TRANSEFERS Y LLENAMOS CON DATOS
+					Transfers transfers = new Transfers(0, cant, (cant+product.getQuantity()), LoginController.USER.getIdUser(), product.getIdProduct(), sqlTimestamp.toString(), "INGRESO", product.getName(), LoginController.USER.getUsername(), product.getQuantity(), product.getSname());
+					//INGRESAMOS LOS DATOS A LA BASE DE DATOS, REGISTRO DE TRANSLADOS
+					transfersServiceSQL.insert(transfers);
+					//PERMITE SUMAR O ACTUALIZAR LOS DATOS EN BASE DE DATOS RESPECTO A UN PRODUCTO
+					transfersServiceSQL.plusQuantity(nameP, cant, product.getIdSupplier());
+					clear();
+					loadTable();
+				}
+			}
 		}
 	}
 	
@@ -133,6 +168,8 @@ public class TransferController implements ActionListener, KeyListener, MouseLis
 				}
 			}
 			this.form.listSuppliers.setModel(listModel);
+		}else {
+			clear();
 		}
 		
 	}
@@ -142,13 +179,9 @@ public class TransferController implements ActionListener, KeyListener, MouseLis
 		if(this.form.listSuppliers.getModel() == null) {
 			return 0;
 		}
-		
 		Object[] selectedItems = this.form.listSuppliers.getSelectedValues();
-		
 		LinkedList products = productServiceSQL.findAll();
-		
 		int cantSumar = 0;
-		
 		for(int i=0; i<selectedItems.length; i++) {
 			for (int j = 0; j < products.size(); j++) {
 				Product product = (Product) products.get(j);
@@ -158,6 +191,10 @@ public class TransferController implements ActionListener, KeyListener, MouseLis
 				}
 			}
 		}
+		//PERMITE ESTABLECER UNA TAMAÑO MAXIMO DEPENDIEDO DE LA SUMA TOTAL PARA EL JsPINNER
+		SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0, 0, cantSumar, 1);
+		this.form.spnQuantity.setModel(spinnerModel);
+		
 		return cantSumar;
 	}
 	
@@ -165,7 +202,7 @@ public class TransferController implements ActionListener, KeyListener, MouseLis
 	public boolean sufficientQuantity() {
 		int total = Integer.parseInt(this.form.lblTotal.getText());
 		int actual = (int) this.form.spnQuantity.getValue();
-		if(total > actual)
+		if(actual > 0 && actual <= total)
 			return true;
 		
 		return false;
@@ -176,6 +213,9 @@ public class TransferController implements ActionListener, KeyListener, MouseLis
 		if(sufficientQuantity()) {
 			this.form.lblIndicador.setText("S");
 			this.form.lblIndicador.setForeground(new Color(0, 0, 255));
+		}else {
+			this.form.lblIndicador.setText("X");
+			this.form.lblIndicador.setForeground(new Color(255, 0, 0));
 		}
 	}
 	
@@ -190,13 +230,12 @@ public class TransferController implements ActionListener, KeyListener, MouseLis
 		}
 	}
 	
-	
-	
 	public void showView() {
 		form.setVisible(true);
 	}
 	
 
+	//permite controlar el evento que busca en tipo real los proovedores correspodientes a un producto
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
@@ -212,15 +251,10 @@ public class TransferController implements ActionListener, KeyListener, MouseLis
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		Object writeBox = e.getSource();
-		if(writeBox == this.form.txtProductName) {
-			loadListSupplier();
-		}else if(writeBox == this.form.spnQuantity) {
-			sufficientQuantity();
-		}
-		
+		loadListSupplier();
 	}
 
+	//permite controlar los eventos referentes a los clik en el Jlist
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
@@ -252,5 +286,12 @@ public class TransferController implements ActionListener, KeyListener, MouseLis
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	//controla el enevento de el JSpinner
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		// TODO Auto-generated method stub
+		refreshIndicator();
 	}
 }
