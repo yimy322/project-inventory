@@ -130,6 +130,7 @@ public class vCustomers extends JPanel {
 		model.addColumn("Apellidos");
 		model.addColumn("Telefono");
 		model.addColumn("Email");
+		model.addColumn("DNI");
 		jTableCustomers.setModel(model);
 
 		jTableCustomers.setPreferredScrollableViewportSize(new Dimension(610, 335));

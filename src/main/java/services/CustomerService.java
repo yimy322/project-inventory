@@ -8,11 +8,14 @@ import java.sql.SQLException;
 import connection.ConnectionDB;
 import linkedList.LinkedList;
 import models.Customer;
+import models.Supplier;
 
 public class CustomerService {
-	
+
 	private static final String SQL_SELECT = "SELECT * FROM customers";
-	
+	private static final String SQL_INSERT = "INSERT INTO customers(first_name, last_name, phone, email, dni) VALUES (?,?,?,?,?)";
+	private static final String SQL_UPDATE = "UPDATE customers SET first_name = ?,last_name = ?,phone = ?,email = ?, dni = ? WHERE id_customer= ?";
+
 	public LinkedList findAll() {
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -47,5 +50,53 @@ public class CustomerService {
 		// se retorna la lista
 		return clientes;
 	}
-	
+
+	// para peristir la data
+	public int save(Customer cliente) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		int registros = 0;
+		try {
+			// obtenemos la conexion
+			conn = ConnectionDB.getConnection();
+			stmt = conn.prepareStatement(SQL_INSERT);
+			// seteamos cada valor del parametro, segun el orden de los ?
+			stmt.setString(1, cliente.getFirstName());
+			stmt.setString(2, cliente.getLastName());
+			stmt.setInt(3, cliente.getPhone());
+			stmt.setString(4, cliente.getEmail());
+			stmt.setInt(5, cliente.getDni());
+			// se ejecuta y listo
+			registros = stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionDB.close(conn);
+		}
+		return registros;
+	}
+
+	// para actualizar
+	public int update(Customer cliente) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		int registros = 0;
+		try {
+			// obtenemos la conexion
+			conn = ConnectionDB.getConnection();
+			stmt = conn.prepareStatement(SQL_UPDATE);
+			stmt.setString(1, cliente.getFirstName());
+			stmt.setString(2, cliente.getLastName());
+			stmt.setInt(3, cliente.getPhone());
+			stmt.setString(4, cliente.getEmail());
+			stmt.setInt(5, cliente.getDni());
+			stmt.setInt(6, cliente.getIdCustomer());
+			registros = stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionDB.close(conn);
+		}
+		return registros;
+	}
 }
