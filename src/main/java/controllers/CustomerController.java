@@ -1,9 +1,23 @@
 package controllers;
 
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import extras.Input;
 import linkedList.LinkedList;
@@ -13,37 +27,39 @@ import services.CustomerService;
 import services.SupplierService;
 import subViews.vCustomers;
 
-public class CustomerController implements ActionListener{ //SE IMPLEMENTA LA INTERFAZ ACTIONLISTENER 
-	
+public class CustomerController implements ActionListener, MouseListener { // SE IMPLEMENTA LA INTERFAZ ACTIONLISTENER
+
 	private vCustomers form;
 	CustomerService customerService = new CustomerService();
-	LinkedList clientes = customerService.findAll(); //PARA LISTAR EN LA TABLA 
-	
+	LinkedList clientes = customerService.findAll(); // PARA LISTAR EN LA TABLA
+
 	public CustomerController(vCustomers form) {
 		this.form = form;
-		this.form.btnGuardar.addActionListener(this); //CUANDO SE LE DA CLICK AL BOTON REACCIONA A UN EVENTO 
+		this.form.btnGuardar.addActionListener(this); // CUANDO SE LE DA CLICK AL BOTON REACCIONA A UN EVENTO
 		this.form.btnLimpiar.addActionListener(this);
-		init(); //ESTAN TODOS LOS METODOS QUE SE VAN INICIAR CUANDO INICIE EL CONSTRUCTOR
+		this.form.btnExcel.addActionListener(this);
+		this.form.jTableCustomers.addMouseListener(this);
+		init(); // ESTAN TODOS LOS METODOS QUE SE VAN INICIAR CUANDO INICIE EL CONSTRUCTOR
 	}
-	
+
 	public void init() {
 		refreshTable();
 		Input.onlyNumbers(this.form.txtTelefono);
 		Input.validateMaxLength(this.form.txtTelefono, 9);
 		Input.onlyNumbers(this.form.txtDni);
 		Input.validateMaxLength(this.form.txtDni, 8);
-		
+
 	}
-	
+
 	public void save() {
-		if (validate()) { //VALIDA QUE LOS ESTEN LLENOS Y SI ES TRUE ENTRA AL IF
+		if (validate()) { // VALIDA QUE LOS ESTEN LLENOS Y SI ES TRUE ENTRA AL IF
 			Customer cliente = new Customer();
 			cliente.setFirstName(this.form.txtNombres.getText());
 			cliente.setLastName(this.form.txtApellidos.getText());
 			cliente.setPhone(Integer.parseInt(this.form.txtTelefono.getText()));
 			cliente.setEmail(this.form.txtEmail.getText());
 			cliente.setDni(Integer.parseInt(this.form.txtDni.getText()));
-			if (this.form.textId.getText().isEmpty()) { //SE VALIDA QUE LA CAJA DE TEXTO DEL ID ESTE VACIA
+			if (this.form.textId.getText().isEmpty()) { // SE VALIDA QUE LA CAJA DE TEXTO DEL ID ESTE VACIA
 				// se valida si guardar o no
 				int respuesta = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que deseas guardar el registro?",
 						"Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -56,7 +72,7 @@ public class CustomerController implements ActionListener{ //SE IMPLEMENTA LA IN
 							JOptionPane.INFORMATION_MESSAGE);
 				}
 			} else {
-				// se valida si se va a actualizar 
+				// se valida si se va a actualizar
 				int respuesta = JOptionPane.showConfirmDialog(null,
 						"¿Estás seguro de que deseas actualizar el registro?", "Confirmación",
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -73,12 +89,11 @@ public class CustomerController implements ActionListener{ //SE IMPLEMENTA LA IN
 			}
 
 		} else {
-			JOptionPane.showMessageDialog(null, "Completa todas las casillas", "Clientes",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Completa todas las casillas", "Clientes", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 	}
-	
+
 	public void refreshTable() {
 		// antes de cargar los registros, borramos al data para que no se repita
 		for (int j = 0; j < this.form.jTableCustomers.getRowCount(); j++) {
@@ -101,11 +116,10 @@ public class CustomerController implements ActionListener{ //SE IMPLEMENTA LA IN
 		// seteamos el model al jtable
 		this.form.jTableCustomers.setModel(this.form.model);
 	}
-	
-	public boolean validate() { //VALIDA QUE LAS CAJAS DE TEXTO ESTEN LLENAS ANTES DE GUARDAR
+
+	public boolean validate() { // VALIDA QUE LAS CAJAS DE TEXTO ESTEN LLENAS ANTES DE GUARDAR
 		if (!this.form.txtNombres.getText().trim().isEmpty() && !this.form.txtApellidos.getText().trim().isEmpty()
-				&& !this.form.txtTelefono.getText().trim().isEmpty()
-				&& !this.form.txtEmail.getText().trim().isEmpty()
+				&& !this.form.txtTelefono.getText().trim().isEmpty() && !this.form.txtEmail.getText().trim().isEmpty()
 				&& !this.form.txtDni.getText().trim().isEmpty()) {
 			return true;
 		} else {
@@ -113,7 +127,7 @@ public class CustomerController implements ActionListener{ //SE IMPLEMENTA LA IN
 		}
 	}
 
-	public void clear() { //PARA EL BOTON LIMPIAR
+	public void clear() { // PARA EL BOTON LIMPIAR
 		this.form.textId.setText("");
 		this.form.txtNombres.setText("");
 		this.form.txtApellidos.setText("");
@@ -121,6 +135,69 @@ public class CustomerController implements ActionListener{ //SE IMPLEMENTA LA IN
 		this.form.txtEmail.setText("");
 		this.form.txtDni.setText("");
 		this.form.btnGuardar.setText("Guardar");
+	}
+
+	public void exportExcel() {
+		try {
+			// instanciamos la clase, el JFileChooser sirve para seleccionar el directorio
+			JFileChooser chooser = new JFileChooser();
+			// el metodo showsavediaolog es el que muestra el cuadro de dialogo
+			chooser.showSaveDialog(this.form);
+			// capturamos el archivo
+			File guardar = chooser.getSelectedFile();
+			// validamos que se haya capturado una ruta
+			if (guardar != null) {
+				// le pasamos la extension al archivo, file guardara una cadena
+				guardar = new File(guardar.toString() + ".xlsx");
+				// aca creamos un libro de excel
+				Workbook wb = new XSSFWorkbook();
+				// creamos una hoja dentro el libro de excel
+				Sheet sheet = wb.createSheet("customer");
+				// se crea una fila dentro de la hoja
+				Row rowCol = sheet.createRow(0);
+				// recoremos las columnas de nuestra tabla
+				for (int i = 0; i < this.form.jTableCustomers.getColumnCount(); i++) {
+					// creamos las celdas dentro del excel
+					Cell cell = rowCol.createCell(i);
+					// asignamos un valor a las celdas
+					cell.setCellValue(this.form.jTableCustomers.getColumnName(i));
+				}
+				for (int j = 0; j < this.form.jTableCustomers.getRowCount(); j++) {
+					Row row = sheet.createRow(j);
+					for (int k = 0; k < this.form.jTableCustomers.getColumnCount(); k++) {
+						Cell cell = row.createCell(k);
+						if (this.form.jTableCustomers.getValueAt(j, k) != null) {
+							cell.setCellValue(this.form.jTableCustomers.getValueAt(j, k).toString());
+						}
+					}
+				}
+				// escribimos los resultados en un fichero excel
+				FileOutputStream out = new FileOutputStream(new File(guardar.toString()));
+				wb.write(out);
+				// aca cerramos
+				wb.close();
+				out.close();
+				openFile(guardar.toString());
+			} else {
+				// en caso de que no se haya guardado me mostrara un mensaje
+				JOptionPane.showMessageDialog(null, "Error al generar archivo", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println(e);
+		} catch (IOException ie) {
+			System.out.println(ie);
+		}
+	}
+
+	// funcion para abrir el excel una vez lo hayamos guardado
+	public void openFile(String file) {
+		try {
+			File ruta = new File(file);
+			// este metodo permite abrir e imprimir ficheros
+			Desktop.getDesktop().open(ruta);
+		} catch (IOException e) {
+			System.out.println(e);
+		}
 	}
 
 	@Override
@@ -131,13 +208,50 @@ public class CustomerController implements ActionListener{ //SE IMPLEMENTA LA IN
 		} else if (press == this.form.btnLimpiar) {
 			clear();
 		} else if (press == this.form.btnExcel) {
-			//exportExcel();
+			exportExcel();
 		}
-		
+
 	}
-	
+
 	public void showView() {
 		form.setVisible(true);
 	}
-	
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// se captura la fila y se setea la data en las cajas
+		int filaSeleccionada = this.form.jTableCustomers.getSelectedRow();
+		this.form.textId.setText(this.form.model.getValueAt(filaSeleccionada, 0).toString());
+		this.form.txtNombres.setText(this.form.model.getValueAt(filaSeleccionada, 1).toString());
+		this.form.txtApellidos.setText(this.form.model.getValueAt(filaSeleccionada, 2).toString());
+		this.form.txtTelefono.setText(this.form.model.getValueAt(filaSeleccionada, 3).toString());
+		this.form.txtEmail.setText(this.form.model.getValueAt(filaSeleccionada, 4).toString());
+		this.form.txtDni.setText(this.form.model.getValueAt(filaSeleccionada, 5).toString());
+		this.form.btnGuardar.setText("Actualizar");
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
 }
