@@ -13,10 +13,10 @@ import pilas.Pilas;
 public class TranfersService {
 
 	private static final String SQL_UPDATE_PLUS_QUANTITY = "UPDATE products SET quantity = quantity + ? WHERE name = ? AND id_supplier = ?";
-	private static final String SQL_UPDATE_LESS_QUANTITY = "UPDATE products SET quantity = quantity - ? WHERE name = ? AND quantity >= 0";
+	private static final String SQL_UPDATE_LESS_QUANTITY = "UPDATE products SET quantity = quantity - ? WHERE name = ? AND id_supplier = ? AND quantity >= 0";
 	private static final String SQL_SELECT_QUANTITY = "SELECT quantity FROM products WHERE name = ?";
-	private static final String SQL_INSERT = "INSERT INTO Transfers (quantity, date_transfers, type_transfers, total, id_product, id_user) VALUES (?,?,?,?,?,?)";
-	private static final String SQL_SELECT = "SELECT p.name, p.quantity as quantity_product, t.*, u.username, s.name as name_supplier FROM transfers t INNER JOIN products p ON t.id_product = p.id_product INNER JOIN users u ON t.id_user = u.id_user INNER JOIN suppliers s ON p.id_supplier = s.id_supplier";
+	private static final String SQL_INSERT = "INSERT INTO Transfers (quantity, date_transfers, type_transfers, quantity_old, total, id_product, id_user) VALUES (?,?,?,?,?,?,?)";
+	private static final String SQL_SELECT = "SELECT p.name, t.*, u.username, s.name as name_supplier FROM transfers t INNER JOIN products p ON t.id_product = p.id_product INNER JOIN users u ON t.id_user = u.id_user INNER JOIN suppliers s ON p.id_supplier = s.id_supplier";
 	
 	//METODO PERMITE SUMAR CANTIDAD A UN PRODUCTO DADO SU NOMBRE CARACTERISTICO
 	public void plusQuantity(String nameProduct, int quantity, int idSupplier) {
@@ -26,7 +26,6 @@ public class TranfersService {
 			pstmt.setString(2, nameProduct);
 			pstmt.setInt(3, idSupplier);
 			pstmt.executeUpdate();
-			JOptionPane.showMessageDialog(null, "Se añadio "+quantity+" al producto "+nameProduct);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -42,7 +41,6 @@ public class TranfersService {
 			pstmt.setString(2, nameProduct);
 			pstmt.setInt(3, idSupplier);
 			pstmt.executeUpdate();
-			JOptionPane.showMessageDialog(null, "Se añadio "+quantity+" al producto "+nameProduct);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -68,11 +66,11 @@ public class TranfersService {
 			pstmt.setInt(1, transfer.getQuantity());
 			pstmt.setString(2, transfer.getFecha());
 			pstmt.setString(3, transfer.getTypeTransfers());
-			pstmt.setInt(4, transfer.getTotal());
-			pstmt.setInt(5, transfer.getIdProduct());
-			pstmt.setInt(6, transfer.getIdUser());
+			pstmt.setInt(4, transfer.getQuantityProduct());
+			pstmt.setInt(5, transfer.getTotal());
+			pstmt.setInt(6, transfer.getIdProduct());
+			pstmt.setInt(7, transfer.getIdUser());
 			pstmt.executeUpdate();
-			JOptionPane.showMessageDialog(null, "Translado registrado correctamente");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -87,14 +85,14 @@ public class TranfersService {
 				int quantity = rs.getInt("quantity");
 				String dateTransfers = rs.getString("date_transfers");
 				String typeTransfers = rs.getString("type_transfers");
-				int total = rs.getInt("total");
 				int idProduct = rs.getInt("id_product");
 				int idUser = rs.getInt("id_user");
 				String nameProduct = rs.getString("name");
-				int quantityProduct = rs.getInt("quantity_product");
+				int quantityProduct = rs.getInt("quantity_old");
 				String userName = rs.getString("username");
 				String supplierName = rs.getString("name_supplier");
-				Transfers transfer = new Transfers(idTransfers, quantity, total, idUser, idProduct, dateTransfers, typeTransfers, nameProduct, userName, quantityProduct, supplierName);
+				int total = rs.getInt("total");
+				Transfers transfer = new Transfers(idTransfers, quantity, idUser, idProduct, dateTransfers, typeTransfers, nameProduct, userName, quantityProduct, supplierName, total);
 				transfers.push(transfer);
 			}
 		} catch (SQLException e) {

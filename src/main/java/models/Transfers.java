@@ -1,30 +1,29 @@
 package models;
 
 public class Transfers {
-	private int idTransfers, quantity, total, idUser, idProduct;
+	private int idTransfers, quantity, idUser, idProduct;
 	private String fecha, typeTransfers;
 	
 	private String nameProduct, userName;
 	private int quantityProduct;
 	
 	private String nameSupplier;
+	private int total;
 	
-	public Transfers(int idTransfers, int quantity, int total, int idUser, int idProduct, String fecha,
+	public Transfers(int idTransfers, int quantity, int idUser, int idProduct, String fecha,
 			String typeTransfers) {
 		this.idTransfers = idTransfers;
 		this.quantity = quantity;
-		this.total = total;
 		this.idUser = idUser;
 		this.idProduct = idProduct;
 		this.fecha = fecha;
 		this.typeTransfers = typeTransfers;
 	}
 	
-	public Transfers(int idTransfers, int quantity, int total, int idUser, int idProduct, String fecha,
-			String typeTransfers, String nameProduct, String userName, int quantityProduct, String nameSupplier) {
+	public Transfers(int idTransfers, int quantity, int idUser, int idProduct, String fecha,
+			String typeTransfers, String nameProduct, String userName, int quantityProduct, String nameSupplier, int total) {
 		this.idTransfers = idTransfers;
 		this.quantity = quantity;
-		this.total = total;
 		this.idUser = idUser;
 		this.idProduct = idProduct;
 		this.fecha = fecha;
@@ -33,6 +32,7 @@ public class Transfers {
 		this.userName = userName;
 		this.quantityProduct = quantityProduct;
 		this.nameSupplier = nameSupplier;
+		this.total = total;
 	}
 
 	public String getNameSupplier() {
@@ -79,12 +79,6 @@ public class Transfers {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	public int getTotal() {
-		return total;
-	}
-	public void setTotal(int total) {
-		this.total = total;
-	}
 	public int getIdUser() {
 		return idUser;
 	}
@@ -108,5 +102,11 @@ public class Transfers {
 	}
 	public void setTypeTransfers(String typeTransfers) {
 		this.typeTransfers = typeTransfers;
+	}
+	public int getTotal() {
+		return total;
+	}
+	public void setTotal(int total) {
+		this.total = total;
 	}
 }

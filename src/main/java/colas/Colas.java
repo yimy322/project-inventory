@@ -1,33 +1,35 @@
-package pilas;
+package colas;
 
 import javax.swing.JOptionPane;
 
-public class Pilas {
+import linkedList.Node;
+
+public class Colas {
 	public Node head;
 	public Node tail;
-	public Pilas() {
+	public Colas() {
 		head = null;
 		tail = null;
 	}
 
-	//agrega al inicio de la pila
-	public void push(Object data) {
+	//agrega al final de la pila que coincide con la cola o tail de la lista	
+	public void enqueue(Object data) {
 		Node nuevo = new Node(data);
 		if(head==null) {
 			head = tail = nuevo;
 			return;
 		}
-		nuevo.next = head;
-		head = nuevo;
+		tail.next = nuevo;
+		tail = nuevo;
 	}
 
-	//eliminar el ultimo valor ingresado, este caso coincide con la cabaza de la cola
-	public Object pop() {
+	//eliminar el primer valor ingresado, este caso coincide con la cabaza de la cola
+	public Object dequeue() {
 		if(head == null) {
-			JOptionPane.showMessageDialog(null,"La pila esta vacio!");
+			JOptionPane.showMessageDialog(null,"La cola esta vacio!");
 			return null;
 		}else {
-			Object data = head.data;
+			Object data = tail.data;
 			head = head.next;
 			return data;
 		}
@@ -39,7 +41,7 @@ public class Pilas {
 			JOptionPane.showMessageDialog(null,"La pila esta vacio!");
 			return null;
 		}else {
-			return head.data;
+			return tail.data;
 		}
 	}
 	

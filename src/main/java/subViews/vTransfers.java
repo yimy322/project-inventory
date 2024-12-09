@@ -40,7 +40,7 @@ public class vTransfers extends JPanel {
 	public JButton btnReport, btnUpdateFinal;
 	public JTextField txtProductName, txtProductDescription;
 	public JList listSuppliers;
-	public JLabel lblTotal, lblIndicador;
+	public JLabel lblTotal, lblIndicador, lblID;
 	public RSButtonMaterialIconDos btnPlus, btnLess;
 	public JSpinner spnQuantity;
 	public JScrollPane spListSupplier;
@@ -102,6 +102,7 @@ public class vTransfers extends JPanel {
 		add(spListSupplier);
 		
 		listSuppliers = new JList();
+		listSuppliers.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		spListSupplier.setViewportView(listSuppliers);
 		
 		lblTotal = new JLabel("0");
@@ -152,5 +153,17 @@ public class vTransfers extends JPanel {
 		btnUpdateFinal.setBackground(new Color(228, 233, 232));
 		btnUpdateFinal.setBounds(528, 433, 57, 37);
 		add(btnUpdateFinal);
+		
+		JLabel lblId = new JLabel("ID");
+		lblId.setHorizontalAlignment(SwingConstants.CENTER);
+		lblId.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblId.setBounds(373, 29, 79, 30);
+		add(lblId);
+		
+		lblID = new JLabel("");
+		lblID.setHorizontalAlignment(SwingConstants.CENTER);
+		lblID.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblID.setBounds(373, 66, 79, 30);
+		add(lblID);
 	}
 }
