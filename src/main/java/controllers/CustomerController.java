@@ -19,6 +19,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import arbol.Arbol;
+import arbol.Nodo;
 import extras.Input;
 import linkedList.LinkedList;
 import models.Customer;
@@ -38,6 +40,7 @@ public class CustomerController implements ActionListener, MouseListener { // SE
 		this.form.btnGuardar.addActionListener(this); // CUANDO SE LE DA CLICK AL BOTON REACCIONA A UN EVENTO
 		this.form.btnLimpiar.addActionListener(this);
 		this.form.btnExcel.addActionListener(this);
+		this.form.btnBuscar.addActionListener(this);
 		this.form.jTableCustomers.addMouseListener(this);
 		init(); // ESTAN TODOS LOS METODOS QUE SE VAN INICIAR CUANDO INICIE EL CONSTRUCTOR
 	}
@@ -199,6 +202,34 @@ public class CustomerController implements ActionListener, MouseListener { // SE
 			System.out.println(e);
 		}
 	}
+	
+	public void searchCustomer() {
+		int dni = 0;
+		String input = JOptionPane.showInputDialog(null, "Introduce el DNI:", "Clientes", JOptionPane.QUESTION_MESSAGE);
+		try {
+			dni = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Por favor, ingresa solo numeros enteros");
+            return;
+        }
+		//se crea el arbol
+		Arbol clientesArbol = new Arbol();
+		//se itera y se agrega al arbol
+		clientes = customerService.findAll();
+		Object ob[] = new Object[8];
+		for (int i = 0; i < clientes.size(); i++) {
+			Customer cliente = (Customer) clientes.get(i);
+			//crea el arbol de DNI
+			clientesArbol.insertar(cliente.getDni());
+		}
+		clientesArbol.imprimirArbol();
+		Nodo nodoCliente = clientesArbol.buscar(dni);
+		if(nodoCliente!=null){
+			JOptionPane.showMessageDialog(null, "El cliente con DNI "+ nodoCliente.valor +" si existe en el sistema", "Clientes", JOptionPane.INFORMATION_MESSAGE);
+		}else {
+			JOptionPane.showMessageDialog(null, "El DNI del cliente ingresado no existe", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {// SE EJECUTA HAY UN EVENTO EN LOS COMPONENTES DE LA INTERFAZ GRAFICA
@@ -209,6 +240,8 @@ public class CustomerController implements ActionListener, MouseListener { // SE
 			clear();
 		} else if (press == this.form.btnExcel) {
 			exportExcel();
+		}else if (press == this.form.btnBuscar) {
+			searchCustomer();
 		}
 
 	}

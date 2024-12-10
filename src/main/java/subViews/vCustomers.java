@@ -35,6 +35,7 @@ public class vCustomers extends JPanel {
 	public JButton btnExcel;
 	public JLabel lblDni;
 	public JTextField txtDni;
+	public JButton btnBuscar;
 
 	/**
 	 * Create the panel.
@@ -138,6 +139,10 @@ public class vCustomers extends JPanel {
 		sp.setBounds(50, 165, 1100, 250);
 		sp.setVisible(true);
 		add(sp);
+		
+		btnBuscar = new JButton("Verificar DNI");
+		btnBuscar.setBounds(50, 430, 150, 25);
+		add(btnBuscar);
 
 		btnExcel = new JButton("Exportar", new ImageIcon(getClass().getResource("/images/excel.png")));
 		btnExcel.setBounds(1020, 430, 130, 25);
