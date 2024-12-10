@@ -1,21 +1,33 @@
 package controllers;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import RSMaterialComponent.RSButtonMaterialIconDos;
 import colas.Colas;
 import linkedList.LinkedList;
@@ -408,6 +420,69 @@ public class TransferController implements ActionListener, KeyListener, MouseLis
 		}
 	}
 	
+	public void exportExcel() {
+		try {
+			// instanciamos la clase, el JFileChooser sirve para seleccionar el directorio
+			JFileChooser chooser = new JFileChooser();
+			// el metodo showsavediaolog es el que muestra el cuadro de dialogo
+			chooser.showSaveDialog(this.form);
+			// capturamos el archivo
+			File guardar = chooser.getSelectedFile();
+			// validamos que se haya capturado una ruta
+			if (guardar != null) {
+				// le pasamos la extension al archivo, file guardara una cadena
+				guardar = new File(guardar.toString() + ".xlsx");
+				// aca creamos un libro de excel
+				Workbook wb = new XSSFWorkbook();
+				// creamos una hoja dentro el libro de excel
+				Sheet sheet = wb.createSheet("customer");
+				// se crea una fila dentro de la hoja
+				Row rowCol = sheet.createRow(0);
+				// recoremos las columnas de nuestra tabla
+				for (int i = 0; i < this.form.tableTransfers.getColumnCount(); i++) {
+					// creamos las celdas dentro del excel
+					Cell cell = rowCol.createCell(i);
+					// asignamos un valor a las celdas
+					cell.setCellValue(this.form.tableTransfers.getColumnName(i));
+				}
+				for (int j = 0; j < this.form.tableTransfers.getRowCount(); j++) {
+					Row row = sheet.createRow(j);
+					for (int k = 0; k < this.form.tableTransfers.getColumnCount(); k++) {
+						Cell cell = row.createCell(k);
+						if (this.form.tableTransfers.getValueAt(j, k) != null) {
+							cell.setCellValue(this.form.tableTransfers.getValueAt(j, k).toString());
+						}
+					}
+				}
+				// escribimos los resultados en un fichero excel
+				FileOutputStream out = new FileOutputStream(new File(guardar.toString()));
+				wb.write(out);
+				// aca cerramos
+				wb.close();
+				out.close();
+				openFile(guardar.toString());
+			} else {
+				// en caso de que no se haya guardado me mostrara un mensaje
+				JOptionPane.showMessageDialog(null, "Error al generar archivo", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println(e);
+		} catch (IOException ie) {
+			System.out.println(ie);
+		}
+	}
+
+	// funcion para abrir el excel una vez lo hayamos guardado
+	public void openFile(String file) {
+		try {
+			File ruta = new File(file);
+			// este metodo permite abrir e imprimir ficheros
+			Desktop.getDesktop().open(ruta);
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		// TODO Auto-generated method stub
@@ -418,6 +493,8 @@ public class TransferController implements ActionListener, KeyListener, MouseLis
 			fillInfoFinal();
 		}else if(press == this.form.btnLess) {
 			subtractQuantity();
+		}else if(press == this.form.btnReport) {
+			exportExcel();
 		}
 	}
 	
