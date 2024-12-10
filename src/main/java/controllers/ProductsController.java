@@ -102,6 +102,11 @@ public class ProductsController implements ActionListener, MouseListener {
 			// se le pasa el valor del combo, y te retornara su clave
 			producto.setIdCategory(searchIdCbm(form.cbCategoria.getSelectedItem()));
 			producto.setIdSupplier(searchIdCbm(form.cbProveedor.getSelectedItem()));
+			if(validateProductSupplier(producto)) {
+				JOptionPane.showMessageDialog(null, "No se puede guardar el mismo producto con mismo proveedor", "Productos",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 			if (this.form.textId.getText().isEmpty()) {
 				// se valida si guardar o no
 				int respuesta = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que deseas guardar el registro?",
@@ -135,6 +140,18 @@ public class ProductsController implements ActionListener, MouseListener {
 		}
 	}
 
+	public boolean validateProductSupplier(Product prod) {
+		LinkedList productos = productService.findAll();
+		Object ob[] = new Object[8];
+		for (int i = 0; i < productos.size(); i++) {
+			Product producto = (Product) productos.get(i);
+			if(producto.getName().equals(prod.getName()) && producto.getIdSupplier() == prod.getIdSupplier()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void refreshTable() {
 		// antes de cargar los registros, borramos al data para que no se repita
 		for (int j = 0; j < this.form.jTableProducts.getRowCount(); j++) {
