@@ -23,7 +23,7 @@ public class vInventory extends JPanel {
 	public JLabel lblLupa;
 	public JTable jTableProducts;
 	public DefaultTableModel model;
-	public JButton btnExcel, btnCsv,btnJson;
+	public JButton btnExcel, btnJson;
 	public 	JLabel lblTotal;
 	public JTextField textTotal;
 	public 	JLabel lblValor;
@@ -78,14 +78,9 @@ public class vInventory extends JPanel {
 		btnExcel.setBounds(1118, 38, 50, 25);
 		add(btnExcel);
 		
-		ImageIcon iconCsv = new ImageIcon(getClass().getResource("/images/pdf.png"));
-		btnCsv = new JButton(iconCsv);
-		btnCsv.setBounds(1050, 38, 50, 25);
-		add(btnCsv);
-		
 		ImageIcon iconJson = new ImageIcon(getClass().getResource("/images/json.png"));
 		btnJson = new JButton(iconJson);
-		btnJson.setBounds(982, 38, 50, 25);
+		btnJson.setBounds(1050, 38, 50, 25);
 		add(btnJson);
 		
 		jTableProducts = new JTable();

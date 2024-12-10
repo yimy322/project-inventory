@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JFileChooser;
@@ -24,6 +25,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class InventoryController implements ActionListener, KeyListener {
 
 	private vInventory form;
@@ -37,6 +40,7 @@ public class InventoryController implements ActionListener, KeyListener {
 		this.form.btnOrdenar.addActionListener(this);
 		this.form.btnOrdenarId.addActionListener(this);
 		this.form.btnExcel.addActionListener(this);
+		this.form.btnJson.addActionListener(this);
 		this.form.textBusqueda.addKeyListener(this);
 		init();
 	}
@@ -175,6 +179,8 @@ public class InventoryController implements ActionListener, KeyListener {
 			sortById();
 		} else if (press == this.form.btnExcel) {
 			exportExcel();
+		}else if (press == this.form.btnJson) {
+			exportJson();
 		}
 	}
 
@@ -227,6 +233,32 @@ public class InventoryController implements ActionListener, KeyListener {
 			System.out.println(e);
 		} catch (IOException ie) {
 			System.out.println(ie);
+		}
+	}
+
+	public void exportJson() {
+		// instanciamos la clase, el JFileChooser sirve para seleccionar el directorio
+		JFileChooser chooser = new JFileChooser();
+		// el metodo showsavediaolog es el que muestra el cuadro de dialogo
+		chooser.showSaveDialog(this.form);
+		// capturamos el archivo
+		File guardar = chooser.getSelectedFile();
+		// validamos
+		if (guardar != null) {
+			try {
+				guardar = new File(guardar.toString() + ".json");
+				// se utiliza para escribir datos en el file que recibe
+				FileWriter archivoJSON = new FileWriter(guardar);
+				// se crea un objeto que convierte objetos Java en JSON y viceversa
+				ObjectMapper objectMapper = new ObjectMapper();
+				// escribe en json en el archivo
+				objectMapper.writeValue(archivoJSON, productos);
+				archivoJSON.close();
+
+				openFile(guardar.toString());// este metodo abrira el archivo
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
