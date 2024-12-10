@@ -1,8 +1,21 @@
 package controllers;
 
+import java.awt.Color;
+import java.awt.Desktop;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import extras.Input;
@@ -11,10 +24,14 @@ import hashTable.NodeHash;
 import linkedList.LinkedList;
 import models.Category;
 import models.Customer;
+import models.Order;
+import models.OrderDetail;
 import models.Product;
 import models.Supplier;
 import services.CategoryService;
 import services.CustomerService;
+import services.OrderDetailService;
+import services.OrderService;
 import services.ProductService;
 import services.SupplierService;
 import subViews.vSales;
@@ -26,6 +43,8 @@ public class SalesController implements ActionListener {
 	ProductService productService = new ProductService();
 	CategoryService categoryService = new CategoryService();
 	SupplierService supplierService = new SupplierService();
+	OrderService orderService = new OrderService();
+	OrderDetailService orderDetailService = new OrderDetailService();
 	// trae los registros de la bd
 	LinkedList clientes = customerService.findAll();
 	HashTable clientesHash = new HashTable(10);// tam del ht
@@ -38,6 +57,8 @@ public class SalesController implements ActionListener {
 	int cantidadElegida = 0;
 	int cantidadTotal = 0;
 	double totalNeto = 0.00;
+	// variables finales
+	Customer clienteFinal = null;
 
 	public SalesController(vSales form) {
 		this.form = form;
@@ -48,6 +69,7 @@ public class SalesController implements ActionListener {
 		this.form.btnAgregarProducto.addActionListener(this);
 		this.form.btnEliminarTodo.addActionListener(this);
 		this.form.btnEliminarUltimo.addActionListener(this);
+		this.form.btnVenta.addActionListener(this);
 		init();
 	}
 
@@ -72,11 +94,12 @@ public class SalesController implements ActionListener {
 		int dni = Integer.parseInt(this.form.txtDni.getText());
 		NodeHash resultProducto = clientesHash.search(dni);
 		if (resultProducto != null) {
-			Customer producto = (Customer) resultProducto.value;
-			this.form.txtNombres.setText(producto.getFirstName());
-			this.form.txtApellidos.setText(producto.getLastName());
-			this.form.txtTelefono.setText(producto.getPhone() + "");
-			this.form.txtEmail.setText(producto.getEmail());
+			Customer cliente = (Customer) resultProducto.value;
+			this.form.txtNombres.setText(cliente.getFirstName());
+			this.form.txtApellidos.setText(cliente.getLastName());
+			this.form.txtTelefono.setText(cliente.getPhone() + "");
+			this.form.txtEmail.setText(cliente.getEmail());
+			clienteFinal = cliente;
 			return;
 		}
 		JOptionPane.showMessageDialog(null, "El DNI " + dni + " no existe, por favor verificar.", "Ventas",
@@ -256,6 +279,7 @@ public class SalesController implements ActionListener {
 		return false;
 	}
 
+	// actualiza la cantidad
 	public void updateQuantity() {
 		cantidadTotal = 0;
 		for (int i = 0; i < this.form.model.getRowCount(); i++) {
@@ -265,6 +289,7 @@ public class SalesController implements ActionListener {
 		this.form.txtCantidadProd.setText(cantidadTotal + "");
 	}
 
+	// actualiza el total
 	public void updateTotal() {
 		totalNeto = 0.00;
 		for (int i = 0; i < this.form.model.getRowCount(); i++) {
@@ -274,6 +299,7 @@ public class SalesController implements ActionListener {
 		this.form.txtTotalProd.setText(totalNeto + "");
 	}
 
+	// elimina todo
 	public void deleteAll() {
 		for (int j = 0; j < this.form.jTableProducts.getRowCount(); j++) {
 			this.form.model.removeRow(j);
@@ -287,16 +313,134 @@ public class SalesController implements ActionListener {
 		this.form.txtTotalProd.setText(totalNeto + "");
 	}
 
+	// metodo para eliminar la ultima fila
 	public void deleteRow() {
 		int rowCount = this.form.model.getRowCount();
 		if (rowCount > 0) {
 			int id = (int) this.form.model.getValueAt(rowCount - 1, 0);
 			Product productoActual = searchProductById(id);
 			Product productoNuevo = productService.selectById(id);
-			productos.update(productoActual, productoNuevo);
-			updateQuantity();
-			updateTotal();
+			productos.update(productoActual, productoNuevo);// usa el update de listas enlazadas dobles
 			this.form.model.removeRow(rowCount - 1); // elimina la ultima fila
+		}
+		loadProducts();
+		updateQuantity();
+		updateTotal();
+	}
+
+	public void sales() {
+		// se valida que haya elegido el cliente
+		if (clienteFinal == null) {
+			JOptionPane.showMessageDialog(null, "Debe ingresar al cliente", "Ventas", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		// se valida que se haya elegido algun producto
+		int rowCount = this.form.model.getRowCount();
+		if (rowCount <= 0) {
+			JOptionPane.showMessageDialog(null, "Debe elegir algun producto", "Ventas", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		int respuesta = JOptionPane.showConfirmDialog(null,
+				"¿Estás seguro de que deseas realizar la venta?\n" + "- Cliente: " + clienteFinal.getFirstName() + " "
+						+ clienteFinal.getLastName() + " - " + clienteFinal.getDni() + "\n" + "- Cantidad de producto:"
+						+ cantidadTotal + "\n" + "- Total: S/." + totalNeto + "\n",
+				"Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		//para mostrar en el ticket
+		LinkedList listaProd = new LinkedList();
+		if (respuesta == JOptionPane.YES_OPTION) {
+			// se guarda la venta
+			Order venta = new Order();
+			LocalDate fechaActual = LocalDate.now();
+			venta.setOrderDate(fechaActual + "");
+			venta.setIdCustomer(clienteFinal.getIdCustomer());
+			venta.setType(1);// SALIDA
+			int idVenta = orderService.save(venta);
+			for (int i = 0; i < this.form.model.getRowCount(); i++) {
+				int id = (int) this.form.model.getValueAt(i, 0);
+				// se busca el producto en la lista enlazada
+				Product productoActual = searchProductById(id);
+				// se saca el producto de la bd
+				Product productoBD = productService.selectById(id);
+				int cantidadDiferencia = productoBD.getQuantity() - productoActual.getQuantity();
+				productoBD.setQuantity(productoActual.getQuantity());// seteamos al cantidad
+				productService.update(productoBD);// actualizamos en la bd
+				//cantidad referencia para setear en el ticket
+				productoActual.setQuantityRef(cantidadDiferencia);
+				listaProd.addLast(productoActual);//se agrega al final
+				// registramos el detalle
+				OrderDetail ventaDetalle = new OrderDetail();
+				ventaDetalle.setUnitPrice(productoActual.getPrice());
+				ventaDetalle.setQuantity(cantidadDiferencia);
+				ventaDetalle.setTotal(productoActual.getPrice() * cantidadDiferencia);
+				ventaDetalle.setIdOrder(idVenta);
+				ventaDetalle.setIdProduct(productoActual.getIdProduct());
+				ventaDetalle.setIdUser(LoginController.USER.getIdUser());
+				orderDetailService.save(ventaDetalle);
+			}
+			JOptionPane.showMessageDialog(null, "La venta se genero con exito y se genero el ticket", "Ventas",
+					JOptionPane.WARNING_MESSAGE);
+		}
+		generateTicket(totalNeto, listaProd);
+		deleteAll();
+	}
+
+	public void generateTicket(double total, LinkedList listaProd ) {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+		int ancho = 400;
+		int alto = 600;
+		// creamos una imagen
+		BufferedImage imagen = new BufferedImage(ancho, alto, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2d = imagen.createGraphics();
+
+		// color de fondo
+		g2d.setColor(Color.WHITE);
+		g2d.fillRect(0, 0, ancho, alto);
+		// color de letra
+		g2d.setColor(Color.BLACK);
+		g2d.setFont(new Font("Monospaced", Font.PLAIN, 20));// fuente
+
+		g2d.drawString("INVENTARIO", 100, 50);
+		g2d.drawString("Fecha: "+dateFormat.format(date), 50, 100);
+		g2d.drawString("---------------------------", 50, 150);
+		int yPosition = 200;
+		for (int i = 0; i < listaProd.size(); i++) {
+			Product producto = (Product) listaProd.get(i);
+			g2d.drawString(producto.getName()+"      S/."+producto.getPrice()*producto.getQuantityRef(), 50, yPosition);
+			yPosition += 30;
+		}
+		g2d.drawString("---------------------------", 50, yPosition);
+		g2d.drawString("Total:          S/."+total, 50, yPosition+30);
+		g2d.drawString("Gracias por su compra!", 50, yPosition+60);
+		g2d.dispose();
+		// instanciamos la clase, el JFileChooser sirve para seleccionar el directorio
+		JFileChooser chooser = new JFileChooser();
+		// el metodo showsavediaolog es el que muestra el cuadro de dialogo
+		chooser.showSaveDialog(this.form);
+		chooser.setDialogTitle("Guardar Ticket");
+		// capturamos el archivo
+		File guardar = chooser.getSelectedFile();
+		// validamos que se haya capturado una ruta
+		if (guardar != null) {
+			guardar = new File(guardar.toString() + ".png");
+			try {
+				ImageIO.write(imagen, "PNG", guardar);
+				System.out.println("Imagen de ticket guardada como: " + guardar.getAbsolutePath());
+			} catch (IOException e) {
+				System.out.println("Error al guardar la imagen: " + e.getMessage());
+			}
+		}
+		openFile(guardar.toString());
+	}
+
+	// funcion para abrir el excel una vez lo hayamos guardado
+	public void openFile(String file) {
+		try {
+			File ruta = new File(file);
+			// este metodo permite abrir e imprimir ficheros
+			Desktop.getDesktop().open(ruta);
+		} catch (IOException e) {
+			System.out.println(e);
 		}
 	}
 
@@ -322,6 +466,8 @@ public class SalesController implements ActionListener {
 			deleteAll();
 		} else if (press == this.form.btnEliminarUltimo) {
 			deleteRow();
+		} else if (press == this.form.btnVenta) {
+			sales();
 		}
 	}
 

@@ -12,6 +12,7 @@ public class Product {
 	private String category;
 	private String sName;
 	private String sLastName;
+	private int quantityRef;//trasient
 
 	public Product() {
 		super();
@@ -132,6 +133,14 @@ public class Product {
 
 	public void setSlastName(String slastName) {
 		sLastName = slastName;
+	}
+
+	public int getQuantityRef() {
+		return quantityRef;
+	}
+
+	public void setQuantityRef(int quantityRef) {
+		this.quantityRef = quantityRef;
 	}
 
 	@Override

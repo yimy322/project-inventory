@@ -53,7 +53,7 @@ public class vSales extends JPanel {
 	public JButton btnAgregarProducto;
 	public JTable jTableProducts;
 	public DefaultTableModel model;
-	public JButton btnExcel;
+	public JButton btnVenta;
 	public JLabel lblCantidadProd;
 	public JTextField txtCantidadProd;
 	public JLabel lblTotalProd;
@@ -237,9 +237,9 @@ public class vSales extends JPanel {
 		txtTotalProd.setEditable(false);
 		add(txtTotalProd);
         
-        btnExcel = new JButton("Venta", new ImageIcon(getClass().getResource("/images/camion.png")));
-        btnExcel.setBounds(1020, 430, 130, 25);
-		add(btnExcel);
+        btnVenta = new JButton("Venta", new ImageIcon(getClass().getResource("/images/camion.png")));
+        btnVenta.setBounds(1020, 430, 130, 25);
+		add(btnVenta);
 		
 	}
 }
