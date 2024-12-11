@@ -150,6 +150,7 @@ public class InventoryController implements ActionListener, KeyListener {
 	// metodo de busqueda binaria
 	public int search(String valor) {
 		productos = productService.findAll();
+		//se ordena con shell
 		shell();
 		int central, bajo, alto;
 		Product valorCentral;
@@ -158,7 +159,8 @@ public class InventoryController implements ActionListener, KeyListener {
 		while (bajo <= alto) {
 			central = (bajo + alto) / 2;
 			valorCentral = (Product) productos.get(central);
-			if (valorCentral.getName().matches("(?i)(.*)" + valor + "(.*)"))
+			//verifica si el getname tiene alguna palabra con VALOR, es como un like de sql
+			if (valorCentral.getName().matches("(?i)(.*)" + valor + "(.*)"))//esa expresion ignora mayus o minus
 				return central;
 			else if (valor.compareTo(valorCentral.getName()) < 0)
 				alto = central - 1;
